@@ -37,17 +37,17 @@ function getStyles(name, selectedAmenities) {
 }
 
 const RoomsPage = () => {
-  const isAdmin = true;
   const [roomsData, setRoomsData] = useState([]); // State for rooms data
   const [capacity, setCapacity] = useState("");
   const [isAvailable, setIsAvailable] = useState("all"); // Default to 'all'
   const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [amenitiesList, setAmenitiesList] = useState([]);
 
   // Fetch room data function
   const fetchRoomsData = async () => {
     try {
-      const response = await axios.get("api/v1/rooms/all-rooms"); // Update with actual API endpoint
-      console.log(response.data.data.rooms);
+      const response = await axios.get("api/v1/rooms/all-rooms");
+      // console.log(response.data.data.rooms);
       toast.success("Room Fetched Successfully");
       setRoomsData(response.data.data.rooms);
     } catch (error) {
@@ -57,18 +57,18 @@ const RoomsPage = () => {
   };
 
   // Fetch amenities data function (Commented as per instructions)
-  // const fetchAmenitiesData = async () => {
-  //   try {
-  //     const response = await fetch("/api/amenities"); // Update with actual API endpoint
-  //     const data = await response.json();
-  //     setAmenitiesList(data);
-  //   } catch (error) {
-  //     console.error("Error fetching amenities data:", error);
-  //   }
-  // };
-
+  const fetchAmenitiesData = async () => {
+    try {
+      const response = await axios.get("/api/v1/amenity/get-all-amenities");
+      const names = response.data.data.roomAmenities.map((item) => item.name);
+      setAmenitiesList(names);
+    } catch (error) {
+      console.error("Error fetching amenities data:", error);
+    }
+  };
   useEffect(() => {
     fetchRoomsData();
+    fetchAmenitiesData();
   }, []);
 
   // Handle capacity change
@@ -133,13 +133,13 @@ const RoomsPage = () => {
               )}
               MenuProps={MenuProps}
             >
-              {amenitiesList.map((name) => (
+              {amenitiesList.map((item, index) => (
                 <MenuItem
-                  key={name}
-                  value={name}
-                  style={getStyles(name, selectedAmenities)}
+                  key={index}
+                  value={item}
+                  style={getStyles(item, selectedAmenities)}
                 >
-                  {name}
+                  {item}
                 </MenuItem>
               ))}
             </Select>

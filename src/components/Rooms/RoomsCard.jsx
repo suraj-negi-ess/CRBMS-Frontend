@@ -16,10 +16,12 @@ import MicOutlinedIcon from "@mui/icons-material/MicOutlined";
 import SpeakerOutlinedIcon from "@mui/icons-material/SpeakerOutlined";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
 import { useNavigate } from "react-router-dom";
+import roomPic from "../../assets/Images/room.jpg";
 
 const RoomsCard = ({ room }) => {
   const [elevation, setElevation] = useState(6);
   const navigate = useNavigate();
+
   const handleCardClick = () => {
     navigate(`/rooms/${room.id}`);
   };
@@ -47,38 +49,38 @@ const RoomsCard = ({ room }) => {
       onClick={handleCardClick}
     >
       <CardActionArea height="200">
-        <img
-          src={`http://localhost:9000/${room.roomImagePath}`}
-          alt={room.name}
-          height="100"
-          style={{ width: "100%", objectFit: "cover" }}
+        <CardMedia
+          component="img"
+          height="150"
+          image={roomPic}
+          alt="green iguana"
         />
 
         <CardContent>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
+            {/* <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            > */}
             <Typography variant="h6" component="div">
-              {room.roomName}
+              {room.name}
             </Typography>
             <Typography
               variant="body2"
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                // justifyContent: "center",
                 gap: 1,
               }}
             >
               <GroupsOutlinedIcon />
               {room.capacity} People
             </Typography>
-          </div>
+          {/* </div> */}
           <Typography
             variant="body2"
             sx={{ color: "text.secondary", fontSize: 14 }}
@@ -98,16 +100,11 @@ const RoomsCard = ({ room }) => {
             <LocationOnOutlinedIcon />
             {room.location}
           </Typography>
-          <Typography variant="body2" sx={{ mt: 1, display: "flex", gap: 1 }}>
+          <ul>
             {room.amenities.map((amenity, index) => (
-              <React.Fragment key={index}>
-                {amenity === "Projector" && <LiveTvOutlinedIcon />}
-                {amenity === "Microphone" && <MicOutlinedIcon />}
-                {amenity === "Sound System" && <SpeakerOutlinedIcon />}
-                {amenity === "WiFi" && <WifiOutlinedIcon />}
-              </React.Fragment>
+              <li>{amenity}</li>
             ))}
-          </Typography>
+          </ul>
           <Typography
             variant="body2"
             sx={{ mt: 1, color: room.isAvailable ? "green" : "red" }}
@@ -117,7 +114,7 @@ const RoomsCard = ({ room }) => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
+      {/* <CardActions>
         <Button
           fullWidth
           size="small"
@@ -127,10 +124,9 @@ const RoomsCard = ({ room }) => {
             color: "white",
           }}
         >
-          {/* {room.isAvailable ? "Book Now" : "Unavailable"} */}
           Book Now
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };

@@ -48,8 +48,6 @@ const MembersPage = () => {
         toast.success(
           `User ${isBlocked ? "unblocked" : "blocked"} successfully!`
         );
-
-        // Update the users state with the new block status
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
             user.id === id ? { ...user, isBlocked: !isBlocked } : user

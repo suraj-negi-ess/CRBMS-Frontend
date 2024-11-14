@@ -71,7 +71,7 @@ const VerifyEmail = () => {
 
   const handleSubmit = async (e) => {
     console.log(verifyLoginEmail);
-    
+
     if (e) e.preventDefault();
     const verificationCode = otp.join("");
 
@@ -92,11 +92,12 @@ const VerifyEmail = () => {
       );
 
       if (response.data.success) {
-        const username = response.data.data?.user?.username || "User";
+        const fullname = response.data.data?.user?.fullname || "User";
         navigate("/home");
-        toast.success(`Welcome Back, ${username}`);
+        toast.success(`Welcome Back, ${fullname}`);
+        console.log(response);
         // Clear stored email after successful verification
-        localStorage.removeItem("verifyLoginEmail"); 
+        localStorage.removeItem("verifyLoginEmail");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Wrong OTP");
