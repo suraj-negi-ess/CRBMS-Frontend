@@ -1,0 +1,45 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  font-family: "Poppins", sans-serif !important;
+}
+
+body {
+  font-family: "Poppins", sans-serif !important;
+  background: #ebe9e9 !important;
+}
+
+.sidebarWrapper {
+  width: 20%;
+  flex: 0 0 20%;
+  transition: all 0.3s ease-in-out;
+}
+
+.content {
+  width: 80%;
+  flex: 0 0 80%;
+}
+
+::-webkit-scrollbar {
+  width: 5px; /* Sets the thickness for the vertical scrollbar */
+  height: 8px; /* Sets the thickness for the horizontal scrollbar */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0858f7 !important;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent !important;
+  border-radius: 10px;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+/* Scrollbar Thumb on Hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker color when hovering */
+}

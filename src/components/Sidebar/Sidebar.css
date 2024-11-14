@@ -1,0 +1,103 @@
+.sidebar {
+  width: 20%;
+  height: 100vh;
+  position: fixed;
+  top: 70px;
+  left: 0px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: calc(100% - 70px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.sidebar ul {
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar ul li {
+  list-style: none;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.sidebar ul li .button {
+  color: #292929 !important;
+  text-align: left !important;
+  justify-content: start !important;
+  border-radius: 0px !important;
+  padding: 15px 15px !important;
+  text-transform: capitalize !important;
+  font-family: "Poppins" !important;
+  font-size: large;
+  border-radius: 10px;
+}
+
+.sidebar ul li .button:hover {
+  background-color: #649fe2 !important;
+}
+
+.sidebar ul li .button .icon {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.sidebar ul li .button .icon svg {
+  color: #292929c5 !important;
+}
+
+.sidebar ul li .button .arrow {
+  margin-left: auto;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar ul li .button .arrow svg {
+  color: #292929c5 !important;
+}
+
+.subMenu {
+  padding: 0px 50px !important;
+  position: relative;
+}
+.subMenu::before {
+  content: "";
+  width: 3px;
+  height: 70px;
+  position: absolute;
+  top: 0px;
+  left: 25px;
+  background: rgba(12, 12, 12, 0.541);
+}
+
+.subMenu:hover::before {
+  background: #0858f7 !important;
+}
+
+.subMenu li a {
+  color: #5e5d72 !important;
+  text-decoration: none !important;
+  display: block;
+  padding: 6px 0px;
+  font-size: medium;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.subMenu li a:hover {
+  color: #0858f7 !important;
+}
+
+.logout {
+  margin-bottom: 50px;
+}

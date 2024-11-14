@@ -1,0 +1,23 @@
+.roomHeader {
+  /* width: calc(100vw - 100px); */
+  width: 100vw;
+  height: 50px;
+  background-color: #fff;
+  /* position: fixed; */
+  margin-left: 10px;
+  border-radius: 100px 10px;
+  padding-left: 20px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  z-index: 10;
+}
+
+.cardBox {
+  position: relative;
+  top: 10px;
+}
+
+.right-content {
+  position: relative;
+}
