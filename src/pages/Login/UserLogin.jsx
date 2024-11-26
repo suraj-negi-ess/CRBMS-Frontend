@@ -48,30 +48,6 @@ const UserLogin = () => {
 
   return (
     <div className="authWrapper">
-      <FloatingShapes
-        color={"#2232c5"}
-        width={"256px"}
-        height={"256px"}
-        top={"-5%"}
-        left={"10%"}
-        delay={0}
-      />
-      <FloatingShapes
-        color={"#2232c5"}
-        width={"192px"}
-        height={"192px"}
-        top={"70%"}
-        left={"80%"}
-        delay={5}
-      />
-      <FloatingShapes
-        color={"#2232c5"}
-        width={"128px"}
-        height={"128px"}
-        top={"40%"}
-        left={"-10%"}
-        delay={2}
-      />
       <motion.div
         className="userLogin"
         initial={{ opacity: 0, y: 20 }}
@@ -134,9 +110,11 @@ const UserLogin = () => {
             gap: 5,
           }}
         >
-          <i>powered by</i>
+          <b>
+            <i>powered by</i>
+          </b>
           <div style={{ objectFit: "cover", width: "75px", height: "40px" }}>
-            <img src={ebizLogo} style={{ mixBlendMode: "color-burn" }} />
+            <img src={ebizLogo} style={{ borderRadius: "10px" }} />
           </div>
         </div>
       </motion.div>

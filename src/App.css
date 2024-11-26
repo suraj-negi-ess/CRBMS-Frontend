@@ -43,3 +43,21 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Darker color when hovering */
 }
+
+.spinner-parent {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+.spinner-border {
+  width: 5rem;
+  height: 5rem;
+}

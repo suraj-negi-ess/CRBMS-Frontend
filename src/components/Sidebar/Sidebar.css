@@ -101,3 +101,59 @@
 .logout {
   margin-bottom: 50px;
 }
+
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s ease; /* Smooth rotation */
+}
+
+.arrow.rotate {
+  transform: rotate(90deg); /* Rotate the arrow down */
+}
+
+/* Submenu wrapper for smooth height transition */
+.subMenuWrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.subMenuWrapper.open {
+  max-height: 300px; /* Adjust based on submenu content height */
+  opacity: 1;
+}
+
+/* Submenu styles */
+.subMenu {
+  padding: 0px 50px !important;
+  position: relative;
+}
+
+.subMenu::before {
+  content: "";
+  width: 3px;
+  height: 70px;
+  position: absolute;
+  top: 0px;
+  left: 25px;
+  background: rgba(12, 12, 12, 0.541);
+}
+
+.subMenu:hover::before {
+  background: #0858f7 !important;
+}
+
+.subMenu li a {
+  color: #5e5d72 !important;
+  text-decoration: none !important;
+  display: block;
+  padding: 6px 0px;
+  font-size: medium;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.subMenu li a:hover {
+  color: #0858f7 !important;
+}

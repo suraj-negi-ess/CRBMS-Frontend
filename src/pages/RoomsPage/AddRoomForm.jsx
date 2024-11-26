@@ -31,6 +31,27 @@ const FormWrapper = styled(Paper)(({ theme }) => ({
 const AddRoomForm = () => {
   const [roomImagePreview, setRoomImagePreview] = useState(null);
   const [amenitiesList, setAmenitiesList] = useState([]);
+  const [roomImageError, setRoomImageError] = useState("");
+
+  const validateImage = (file) => {
+    // Allowed image types
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+
+    // Max file size (2MB)
+    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+
+    // Check file type
+    if (!allowedTypes.includes(file.type)) {
+      return "Only JPEG, PNG, GIF, and WEBP images are allowed.";
+    }
+
+    // Check file size
+    if (file.size > maxSize) {
+      return "Image must be smaller than 2MB.";
+    }
+
+    return null;
+  };
 
   useEffect(() => {
     const fetchAmenities = async () => {
@@ -55,17 +76,12 @@ const AddRoomForm = () => {
       location: "",
       capacity: "",
       roomImage: "",
-      password: "",
+      // password: "",
       description: "",
       sanitationStatus: false,
       isAvailable: true,
       amenities: [],
     },
-    // validationSchema: null,
-    // location,
-    // capacity,
-    // roomImagePath,
-    // amenities,
     validationSchema: Yup.object({
       name: Yup.string().required("Room Name is required"),
       location: Yup.string().required("Location is required"),
@@ -73,11 +89,8 @@ const AddRoomForm = () => {
         .required("Capacity is required")
         .positive()
         .integer(),
-      password: Yup.string().required("Password is required"),
+      // password: Yup.string().required("Password is required"),
       description: Yup.string(),
-      // amenities: Yup.array()
-      //   .of(Yup.string())
-      //   .required("Select at least one amenity"),
     }),
     onSubmit: async (values, { resetForm }) => {
       console.log("Form Submitted:", values);
@@ -87,7 +100,7 @@ const AddRoomForm = () => {
         formData.append("location", values.location);
         formData.append("capacity", values.capacity);
         formData.append("description", values.description);
-        formData.append("password", values.password);
+        // formData.append("password", values.password);
         formData.append("amenities", JSON.stringify(values.amenities));
         if (values.roomImage) formData.append("roomImage", values.roomImage);
 
@@ -98,6 +111,7 @@ const AddRoomForm = () => {
         toast.success("Room added successfully");
         resetForm();
         setRoomImagePreview(null);
+        setRoomImageError("");
       } catch (error) {
         toast.error(error.response?.data?.message || "An error occurred");
         console.error("Error adding room:", error);
@@ -108,6 +122,21 @@ const AddRoomForm = () => {
   const handleRoomImageChange = (event) => {
     const file = event.currentTarget.files[0];
     if (file) {
+      // Reset previous error
+      setRoomImageError("");
+
+      // Validate image
+      const validationError = validateImage(file);
+
+      if (validationError) {
+        // Set error and clear image
+        setRoomImageError(validationError);
+        setRoomImagePreview(null);
+        formik.setFieldValue("roomImage", "");
+        return;
+      }
+
+      // If validation passes
       formik.setFieldValue("roomImage", file);
       setRoomImagePreview(URL.createObjectURL(file));
     }
@@ -157,7 +186,7 @@ const AddRoomForm = () => {
               size="small"
               style={{ marginRight: 8, flex: 1 }}
             />
-            <TextField
+            {/* <TextField
               label="Password"
               name="password"
               margin="normal"
@@ -170,7 +199,7 @@ const AddRoomForm = () => {
               style={{ flex: 1 }}
               fullWidth
               mb={2}
-            />
+            /> */}
           </Box>
           <TextField
             label="Description"
@@ -238,6 +267,17 @@ const AddRoomForm = () => {
               </IconButton>
             </label>
           </Box>
+
+          {roomImageError && (
+            <Typography
+              color="error"
+              variant="body2"
+              align="center"
+              style={{ marginBottom: 16 }}
+            >
+              {roomImageError}
+            </Typography>
+          )}
           <Box mt={2} display="flex" justifyContent="flex-end">
             <Button type="submit" variant="contained" color="primary">
               Add Room

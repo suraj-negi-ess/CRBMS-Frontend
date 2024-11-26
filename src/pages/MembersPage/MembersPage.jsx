@@ -1,24 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
+import { Box, Paper, styled, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import "./MembersPage.css";
-import { Paper, styled, Button } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-
-import { Link } from "react-router-dom";
-import axios from "axios";
 import toast from "react-hot-toast";
-import dayjs from "dayjs";
-
-const AdminRow = styled("div")({
-  backgroundColor: "lightgreen",
-  "&:hover": {
-    backgroundColor: "#b2fab4", // Adjust shade on hover
-  },
-});
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import DeleteModal from "./DeleteModal";
+import "./MembersPage.css";
+import {
+  AddCircleOutlineOutlined,
+  CircleRounded,
+  PersonAddAlt1Rounded,
+} from "@mui/icons-material";
 
 const UserListWrapper = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -34,107 +29,29 @@ const UserListWrapper = styled(Paper)(({ theme }) => ({
 const MembersPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
+  const [showDeleted, setShowDeleted] = useState(true);
+  const navigate = useNavigate();
+  const filteredUsers = users.filter((user) =>
+    showDeleted ? true : !user.deletedAt
+  );
 
-  const handleBlockStatusChange = async (id, isBlocked) => {
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        `/api/v1/user/block-status`,
-        { userId: id, isBlocked: !isBlocked },
-        { withCredentials: true }
-      );
-
-      if (response.status === 200) {
-        toast.success(
-          `User ${isBlocked ? "unblocked" : "blocked"} successfully!`
-        );
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user.id === id ? { ...user, isBlocked: !isBlocked } : user
-          )
-        );
-      }
-    } catch (error) {
-      console.error("Failed to update block status", error);
-      toast.error("An error occurred while updating the block status");
-    } finally {
-      setLoading(false);
-    }
+  const addMember = () => {
+    navigate("/add-member");
   };
-
-  const columns = [
-    { field: "id", headerName: "ID", width: 90 },
-    {
-      field: "avatarPath",
-      headerName: "Avatar",
-      width: 100,
-      renderCell: (params) => (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <img
-            src={`http://localhost:9000/${params.value}`}
-            alt="avatar"
-            style={{ width: "45px", height: "45px", borderRadius: "50%" }}
-          />
-        </Box>
-      ),
-    },
-    { field: "fullname", headerName: "Full Name", width: 150 },
-    { field: "email", headerName: "Email", width: 200 },
-    { field: "phoneNumber", headerName: "Phone Number", width: 150 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 100,
-      renderCell: (params) => {
-        // Calculate if the user is "active" or "inactive"
-        const lastLoggedIn = dayjs(params.row.lastLoggedIn);
-        const now = dayjs();
-        const isActive = now.diff(lastLoggedIn, "second") <= 10; // Change to "day" and "30" for production
-
-        return (
-          <Box display="flex" alignItems="center" justifyContent="center">
-            <FiberManualRecordIcon
-              sx={{
-                color: isActive ? "green" : "red",
-                fontSize: 16,
-                marginRight: 1,
-              }}
-            />
-            {isActive ? "Active" : "Inactive"}
-          </Box>
-        );
-      },
-    },
-  ];
-
   const fetchUsers = async () => {
     try {
       setLoading(true);
       const response = await axios.get(`/api/v1/user/users?page=1&limit=10`);
+      console.log(response.data.data.users.rows);
 
       if (response.data.success) {
-        const formattedUsers = response.data.data.users.rows.map((user) => ({
-          id: user.id,
-          avatarPath: user.avatarPath,
-          fullname: user.fullname,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-          isAdmin: user.isAdmin,
-          isBlocked: user.isBlocked, // Make sure this field is included
-        }));
-        setUsers(formattedUsers);
+        setUsers(response.data.data.users.rows);
       }
     } catch (error) {
+      console.error("Error fetching users:", error);
       toast.error("Failed to fetch users");
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -144,25 +61,117 @@ const MembersPage = () => {
     fetchUsers();
   }, []);
 
-  const handleDelete = (id) => {
-    alert(`${id} is Deleted`);
+  const handleOpen = (id) => {
+    setDeleteId(id);
+    setOpen(true);
   };
 
-  const actionColumns = [
+  const handleClose = () => {
+    setOpen(false);
+    setDeleteId(null);
+  };
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.delete(
+        `/api/v1/user/soft-delete/${deleteId}`
+      );
+      console.log(response);
+      if (response.status === 200) {
+        toast.success("User deleted successfully");
+        setUsers((prevUsers) =>
+          prevUsers.filter((user) => user.id !== deleteId)
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user");
+    } finally {
+      setLoading(false);
+      handleClose(); // Close modal after delete
+    }
+  };
+
+  // Block/unblock user
+  const handleBlockStatusChange = async (id, isBlocked) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `/api/v1/user/block-status`,
+        { userId: id, isBlocked: !isBlocked },
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        toast.success(
+          `User ${isBlocked ? "unblocked" : "blocked"} successfully`
+        );
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === id ? { ...user, isBlocked: !isBlocked } : user
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Failed to update block status:", error);
+      toast.error("An error occurred while updating the block status");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Columns for DataGrid
+  const columns = [
+    // { field: "id", headerName: "ID", width: 90 },
+    {
+      field: "avatarPath",
+      headerName: "Avatar",
+      width: 100,
+      renderCell: (params) => (
+        <img
+          src={`http://localhost:9000/${params.value}`}
+          alt="avatar"
+          style={{ width: "45px", height: "45px", borderRadius: "50%" }}
+        />
+      ),
+    },
+    { field: "fullname", headerName: "Full Name", width: 150 },
+    { field: "email", headerName: "Email", width: 200 },
+    { field: "phoneNumber", headerName: "Phone Number", width: 150 },
+    // {
+    //   field: "status",
+    //   headerName: "Status",
+    //   width: 100,
+    //   renderCell: (params) => {
+    //     const isActive =
+    //       dayjs().diff(dayjs(params.row.lastLoggedIn), "day") <= 30; // Active if last login is within 30 days
+    //     return (
+    //       <Box display="flex" alignItems="center">
+    //         <FiberManualRecordIcon
+    //           sx={{ color: isActive ? "green" : "red", fontSize: 16, mr: 1 }}
+    //         />
+    //         {isActive ? "Active" : "Inactive"}
+    //       </Box>
+    //     );
+    //   },
+    // },
     {
       field: "action",
       headerName: "Action",
       width: 200,
       renderCell: (params) => (
-        <div className="action">
+        <div style={{ display: "flex", gap: "10px" }}>
           <Link to={`/edit/${params.id}`}>
             <EditOutlinedIcon color="success" />
           </Link>
           <Link to={`/view/${params.id}`}>
             <VisibilityOutlinedIcon color="secondary" />
           </Link>
-          <div className="delete" onClick={() => handleDelete(params.id)}>
-            <DeleteOutlineOutlinedIcon color="error" />
+          <div className="delete">
+            <DeleteOutlineOutlinedIcon
+              color="error"
+              onClick={() => handleOpen(params.id)}
+            />
           </div>
         </div>
       ),
@@ -172,26 +181,16 @@ const MembersPage = () => {
       headerName: "Block Status",
       width: 150,
       renderCell: (params) => (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-          }}
+        <Button
+          variant="contained"
+          color={params.row.isBlocked ? "success" : "error"}
+          onClick={() =>
+            handleBlockStatusChange(params.row.id, params.row.isBlocked)
+          }
+          disabled={loading}
         >
-          <Button
-            variant="contained"
-            color={params.row.isBlocked ? "success" : "error"}
-            onClick={() =>
-              handleBlockStatusChange(params.row.id, params.row.isBlocked)
-            }
-            disabled={loading}
-          >
-            {params.row.isBlocked ? "Unblock" : "Block"}
-          </Button>
-        </Box>
+          {params.row.isBlocked ? "Unblock" : "Block"}
+        </Button>
       ),
     },
   ];
@@ -199,12 +198,47 @@ const MembersPage = () => {
   return (
     <div className="right-content w-100">
       <UserListWrapper>
+        <div className="legendWrapper">
+          <div className="legends">
+            <div className="legendAdmin">
+              <CircleRounded color="success" />
+              <p className="legendText">Admins</p>
+            </div>
+            <div className="legendDeleted">
+              <CircleRounded color="error" />
+              <p className="legendText">Deleted Members</p>
+            </div>
+          </div>
+          <div className="buttonWrapper">
+            <Button
+              variant="contained"
+              onClick={() => setShowDeleted(!showDeleted)}
+            >
+              {showDeleted ? "Hide Deleted" : "Show Deleted"}
+            </Button>
+            <Button variant="contained" color="success">
+              <Link
+                to="/add-member"
+                style={{
+                  textDecoration: "none",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "5px",
+                }}
+              >
+                <PersonAddAlt1Rounded /> Add User
+              </Link>
+            </Button>
+          </div>
+        </div>
         <Box sx={{ width: "100%" }}>
           <DataGrid
             showCellVerticalBorder
             showColumnVerticalBorder
-            rows={users}
-            columns={[...columns, ...actionColumns]}
+            rows={filteredUsers}
+            columns={[...columns]}
             loading={loading}
             initialState={{
               pagination: {
@@ -219,12 +253,23 @@ const MembersPage = () => {
                 outline: "none",
               },
             }}
-            getRowClassName={(params) =>
-              params.row.isAdmin ? "admin-row" : ""
-            }
+            getRowClassName={(params) => {
+              if (params.row.deletedAt) {
+                return "delete-row";
+              }
+              if (params.row.isAdmin) {
+                return "admin-row";
+              }
+              return "";
+            }}
           />
         </Box>
       </UserListWrapper>
+      <DeleteModal
+        open={open}
+        onClose={handleClose}
+        onDeleteConfirm={handleDelete}
+      />
     </div>
   );
 };

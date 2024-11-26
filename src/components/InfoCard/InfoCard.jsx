@@ -14,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: "15px",
 }));
 
-const InfoCard = ({ color }) => {
+const InfoCard = ({ color, tittle, count }) => {
   const [elevation, setElevation] = useState(2);
   return (
     <div className="homepageCardBox">
@@ -28,8 +28,8 @@ const InfoCard = ({ color }) => {
       >
         <div className="d-flex w-100">
           <div className="col1">
-            <h4 className="text-white ">Card Title</h4>
-            <span className="number text-white">121</span>
+            <h4 className="text-white ">{tittle}</h4>
+            <span className="number text-white">{count}</span>
           </div>
           <div className="ms-auto">
             <span className="iconContainer">

@@ -12,29 +12,14 @@ import {
   Select,
   Box,
   Button,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
-import "./RoomsPage.css";
+import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 import axios from "axios";
 import toast from "react-hot-toast";
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-const amenitiesList = ["Projector", "Microphone", "Sound System", "WiFi"];
-
-function getStyles(name, selectedAmenities) {
-  return {
-    fontWeight: selectedAmenities.includes(name) ? 600 : 400,
-  };
-}
+import "./RoomsPage.css";
 
 const RoomsPage = () => {
   const [roomsData, setRoomsData] = useState([]); // State for rooms data
@@ -42,21 +27,23 @@ const RoomsPage = () => {
   const [isAvailable, setIsAvailable] = useState("all"); // Default to 'all'
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [amenitiesList, setAmenitiesList] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(dayjs()); // For date filter
+  const [meetingStartTime, setMeetingStartTime] = useState(null); // For start time filter
+  const [meetingEndingTime, setMeetingEndingTime] = useState(null); // For end time filter
 
-  // Fetch room data function
+  // Fetch room data
   const fetchRoomsData = async () => {
     try {
       const response = await axios.get("api/v1/rooms/all-rooms");
-      // console.log(response.data.data.rooms);
-      toast.success("Room Fetched Successfully");
       setRoomsData(response.data.data.rooms);
+      toast.success("Room Fetched Successfully");
     } catch (error) {
       toast.error("Something Went Wrong");
       console.error("Error fetching room data:", error);
     }
   };
 
-  // Fetch amenities data function (Commented as per instructions)
+  // Fetch amenities data
   const fetchAmenitiesData = async () => {
     try {
       const response = await axios.get("/api/v1/amenity/get-all-amenities");
@@ -66,6 +53,7 @@ const RoomsPage = () => {
       console.error("Error fetching amenities data:", error);
     }
   };
+
   useEffect(() => {
     fetchRoomsData();
     fetchAmenitiesData();
@@ -89,7 +77,16 @@ const RoomsPage = () => {
     setIsAvailable(event.target.value);
   };
 
-  // Filtering rooms based on the selected filters
+  // Handle Start Time Change
+  const handleStartTimeChange = (newStartTime) => {
+    setMeetingStartTime(newStartTime);
+
+    // Auto-select one hour later for ending time
+    const autoEndTime = newStartTime.add(1, "hour");
+    setMeetingEndingTime(autoEndTime);
+  };
+
+  // Filter rooms based on the selected filters
   const filteredRooms = roomsData.filter((room) => {
     // Filter by availability
     const availabilityFilter =
@@ -106,51 +103,86 @@ const RoomsPage = () => {
         ? selectedAmenities.every((amenity) => room.amenities.includes(amenity))
         : true;
 
-    return availabilityFilter && capacityFilter && amenitiesFilter;
+    // Filter by date and time
+    const timeFilter =
+      meetingStartTime && meetingEndingTime
+        ? dayjs(room.availableFrom).isBefore(meetingStartTime) &&
+          dayjs(room.availableTo).isAfter(meetingEndingTime)
+        : true;
+
+    return (
+      availabilityFilter && capacityFilter && amenitiesFilter && timeFilter
+    );
   });
 
   return (
     <div className="right-content container w-100">
       <div className="row w-100">
-        <div className="roomHeader col-xl-12 w-100">
-          <FormControl sx={{ m: 1, width: 400 }} size="small">
-            <InputLabel id="demo-multiple-chip-label">Amenities</InputLabel>
+        <div className="roomHeader col-xl-12 w-100" style={{ gap: "8px" }}>
+          <DatePicker
+            value={selectedDate}
+            onChange={(newValue) => setSelectedDate(newValue)}
+            format="DD-MM-YYYY"
+            disablePast
+            sx={{
+              "& .MuiInputBase-root": {
+                fontSize: "16px", // Adjust font size
+                height: "40px", // Adjust input height
+              },
+            }}
+          />
+          <TimePicker
+            value={meetingStartTime}
+            onChange={handleStartTimeChange}
+            defaultValue={dayjs(Date.now())}
+            sx={{
+              "& .MuiInputBase-root": {
+                fontSize: "16px",
+                height: "40px",
+              },
+            }}
+          />
+          <TimePicker
+            value={meetingEndingTime}
+            onChange={(newValue) => setMeetingEndingTime(newValue)}
+            sx={{
+              "& .MuiInputBase-root": {
+                fontSize: "16px",
+                height: "40px",
+              },
+            }}
+          />
+          <FormControl sx={{ width: 300 }} size="small">
+            <InputLabel id="demo-multiple-checkbox-label">Amenities</InputLabel>
             <Select
-              labelId="demo-multiple-chip-label"
-              id="demo-multiple-chip"
+              labelId="demo-multiple-checkbox-label"
+              id="demo-multiple-checkbox"
               multiple
               value={selectedAmenities}
               onChange={handleChangeAmenities}
-              input={
-                <OutlinedInput id="select-multiple-chip" label="Amenities" />
-              }
+              input={<OutlinedInput label="Amenities" />}
               renderValue={(selected) => (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                <Box sx={{ display: "flex", gap: 0.5 }}>
                   {selected.map((value) => (
                     <Chip key={value} label={value} size="small" />
                   ))}
                 </Box>
               )}
-              MenuProps={MenuProps}
             >
               {amenitiesList.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  value={item}
-                  style={getStyles(item, selectedAmenities)}
-                >
-                  {item}
+                <MenuItem key={index} value={item}>
+                  <Checkbox checked={selectedAmenities.includes(item)} />
+                  <ListItemText primary={item} />
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+          <FormControl sx={{ marginRight: "10px", minWidth: 100 }} size="small">
             <InputLabel id="demo-select-small-label">Seats</InputLabel>
             <Select
               labelId="demo-select-small-label"
               id="demo-select-small"
               value={capacity}
-              label="Capacity"
               onChange={handleChangeCapacity}
             >
               <MenuItem value="">
@@ -161,29 +193,9 @@ const RoomsPage = () => {
               <MenuItem value={30}>30+</MenuItem>
             </Select>
           </FormControl>
-          <FormControl>
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-              value={isAvailable}
-              onChange={handleAvailabilityChange}
-            >
-              <FormControlLabel value="all" control={<Radio />} label="All" />
-              <FormControlLabel
-                value="available"
-                control={<Radio />}
-                label="Available"
-              />
-              <FormControlLabel
-                value="notAvailable"
-                control={<Radio />}
-                label="Not Available"
-              />
-            </RadioGroup>
-          </FormControl>
         </div>
       </div>
+
       <div className="cardBox row w-100">
         {filteredRooms.map((room, index) => (
           <div

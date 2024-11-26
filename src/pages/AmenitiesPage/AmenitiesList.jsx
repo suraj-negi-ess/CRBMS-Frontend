@@ -13,7 +13,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import "./Amenities.css";
 
-// Styled wrapper for the data grid
 const DataGridWrapper = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   color: theme.palette.text.secondary,
@@ -26,7 +25,6 @@ const DataGridWrapper = styled(Paper)(({ theme }) => ({
 const AmenitiesList = () => {
   const [amenities, setAmenities] = useState([]);
 
-  // Fetch all amenities on component mount
   useEffect(() => {
     const fetchAmenities = async () => {
       try {

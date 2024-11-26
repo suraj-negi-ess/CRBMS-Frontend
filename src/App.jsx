@@ -22,13 +22,30 @@ import ForgotPassword from "./pages/Login/ForgotPassword";
 import ResetPassword from "./pages/Login/ResetPassword";
 import AddMemberForm from "./pages/MembersPage/AddMemberForm";
 import AddRoomForm from "./pages/RoomsPage/AddRoomForm";
+import UpdateMemberForm from "./pages/MembersPage/UpdateMemberForm";
+import CommitteeManagementMUI from "./pages/CommitteePage/CommitteePage";
+import AddCommitteeForm from "./pages/CommitteePage/AddCommitteeForm";
+import CommitteeMemberList from "./pages/CommitteePage/CommitteeMemberList";
+import ViewMember from "./pages/MembersPage/ViewMember";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import MyCommitteePage from "./pages/CommitteePage/MyCommitteePage";
+import MeetingForm from "./pages/MeetingPage/MeetingForm";
 
 axios.defaults.baseURL = "http://localhost:9000";
 axios.defaults.withCredentials = true;
 
 function App() {
+  const { loading } = useSelector((state) => state.alerts);
+  const { user } = useSelector((state) => state.user);
+  const isAdmin = user?.isAdmin;
   return (
     <BrowserRouter>
+      {loading && (
+        <div className="spinner-parent">
+          <div className="spinner-border text-primary" role="status"></div>
+        </div>
+      )}
       <Toaster
         position="top-center"
         reverseOrder={false}
@@ -93,16 +110,31 @@ function App() {
             </ProtectedRoutes>
           }
         >
-          <Route path="/home" element={<HomePage />} />
+          {isAdmin ? (
+            <Route path="/home" element={<HomePage />} />
+          ) : (
+            <Route path="/home" element={<RoomsPage />} />
+          )}
+          {/* <Route path="/home" element={<HomePage />} /> */}
           <Route path="/rooms" element={<RoomsPage />} />
           <Route path="/rooms/:id" element={<DetailRoomPage />} />
           <Route path="/members" element={<MembersPage />} />
           <Route path="/meetings" element={<MainMeetingPage />} />
-          <Route path="/calendar" element={<CalenderPage />} />
+          <Route path="/meeting-calendar" element={<CalenderPage />} />
+          <Route path="/my-committee" element={<MyCommitteePage />} />
           <Route path="/add-amenity" element={<AmenitiesAdd />} />
           <Route path="/amenities" element={<AmenitiesList />} />
           <Route path="/add-member" element={<AddMemberForm />} />
           <Route path="/add-room" element={<AddRoomForm />} />
+          <Route path="/edit/:id" element={<UpdateMemberForm />} />
+          <Route path="/committee" element={<CommitteeManagementMUI />} />
+          <Route path="/add-committee" element={<AddCommitteeForm />} />
+          <Route path="/book-meeting" element={<MeetingForm />} />
+          <Route
+            path="/view-committee/:committeeId"
+            element={<CommitteeMemberList />}
+          />
+          <Route path="/view/:id" element={<ViewMember />} />
         </Route>
       </Routes>
     </BrowserRouter>
@@ -110,16 +142,24 @@ function App() {
 }
 
 const MainLayout = () => {
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarVisible((prev) => !prev);
+  };
   return (
     <>
-      <Header />
-      <div className="main d-flex">
+      <Header toggleSidebar={toggleSidebar} />
+      <div className="main d-flex ">
         <div className="sidebarWrapper">
-          <Sidebar />
+          <Sidebar
+            sidebarVisible={sidebarVisible}
+            toggleSidebar={toggleSidebar}
+          />
         </div>
-        <div className="content">
+        <main className="content">
           <Outlet />
-        </div>
+        </main>
       </div>
     </>
   );

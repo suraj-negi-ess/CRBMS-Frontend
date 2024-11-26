@@ -11,7 +11,7 @@ import {
   Autocomplete,
   InputAdornment,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
@@ -19,43 +19,50 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+// Styled component for form container
 const FormWrapper = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   color: theme.palette.text.secondary,
-  height: "100%",
-  width: "100%",
-  lineHeight: "60px",
   borderRadius: "20px",
   padding: "15px",
   marginTop: "10px",
+  width: "100%",
 }));
 
 const AddMemberForm = () => {
-  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null); // Avatar preview
+  const [committees, setCommittees] = useState([]); // List of available committees
+  const [showPassword, setShowPassword] = useState(false); // Password visibility toggle
 
-  const committees = [
-    "Finance",
-    "Operations",
-    "Events",
-    "Membership",
-    "Marketing",
-    "Information Technology",
-    "Hiring",
-    "Agriculture",
-  ];
-
-  const [showPassword, setShowPassword] = useState(false);
-
+  // Toggle password visibility
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => event.preventDefault();
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  // Fetch committees on mount
+  useEffect(() => {
+    const fetchCommittees = async () => {
+      try {
+        const response = await axios.get("/api/v1/committee/committees");
+        setCommittees(response.data.data.committees || []); // Store committees
+      } catch (error) {
+        toast.error("Failed to fetch committees");
+        console.error("Error fetching committees:", error);
+      }
+    };
+
+    fetchCommittees();
+  }, []);
+
+  // Handle avatar change and preview
+  const handleAvatarChange = (event) => {
+    const file = event.currentTarget.files[0];
+    if (file) {
+      formik.setFieldValue("avatar", file); // Update Formik field
+      setAvatarPreview(URL.createObjectURL(file)); // Set preview URL
+    }
   };
 
-  const handleMouseUpPassword = (event) => {
-    event.preventDefault();
-  };
-
+  // Formik setup
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -63,30 +70,24 @@ const AddMemberForm = () => {
       email: "",
       role: "User",
       phoneNumber: "",
-      committee: [],
+      committee: [], // Array of committee IDs
       avatar: "",
       password: "",
     },
     validationSchema: Yup.object({
       username: Yup.string().required("Username is required"),
-      fullname: Yup.string().required("Name is required"),
+      fullname: Yup.string().required("Full name is required"),
       email: Yup.string()
         .email("Invalid email format")
         .required("Email is required"),
       role: Yup.string().required("Role is required"),
-      phoneNumber: Yup.string()
-        .matches(/^\d+$/, "Phone number must contain only digits")
-        .required("Phone number is required")
-        .length(10),
+      phoneNumber: Yup.string().required("Phone number is required"),
       password: Yup.string().required("Password is required"),
       committee: Yup.array()
-        .of(Yup.string())
-        .required("Select at least one committee"), // Add committee validation
+        .of(Yup.string().required("Committee ID is required"))
+        .min(1, "Select at least one committee"),
     }),
     onSubmit: async (values, { resetForm }) => {
-      console.log("Form Submitted");
-      console.log(formik.errors);
-      console.log(formik.values);
       try {
         const formData = new FormData();
         formData.append("username", values.username);
@@ -94,38 +95,26 @@ const AddMemberForm = () => {
         formData.append("email", values.email);
         formData.append("role", values.role);
         formData.append("phoneNumber", values.phoneNumber);
-        formData.append("committee", values.committee);
         formData.append("password", values.password);
+        formData.append("committee", JSON.stringify(values.committee)); // Stringify the array
 
         if (values.avatar) {
           formData.append("avatar", values.avatar);
         }
 
-        const response = await axios.post("api/v1/user/register", formData, {
+        await axios.post("/api/v1/user/register", formData, {
           withCredentials: true,
         });
 
-        console.log(response);
-
-        toast.success("User added successfully");
-
-        // Reset the form on success
-        resetForm(); // Resets all form fields to their initial state
-        setAvatarPreview(null); // Reset the avatar preview if applicable
+        toast.success("User registered and added to committees successfully");
+        resetForm();
+        setAvatarPreview(null); // Clear avatar preview
       } catch (error) {
         toast.error(error.response?.data?.message || "An error occurred");
-        console.error(error);
+        console.error("Error during form submission:", error);
       }
     },
   });
-
-  const handleAvatarChange = (event) => {
-    const file = event.currentTarget.files[0];
-    if (file) {
-      formik.setFieldValue("avatar", file);
-      setAvatarPreview(URL.createObjectURL(file));
-    }
-  };
 
   return (
     <div className="right-content w-100">
@@ -135,12 +124,11 @@ const AddMemberForm = () => {
             Add New Member
           </Typography>
 
-          {/* Row with Username and Name fields */}
-          <Box display="flex" justifyContent="space-between">
+          {/* Username and Full Name */}
+          <Box display="flex" justifyContent="space-between" mb={2}>
             <TextField
               label="Username"
               name="username"
-              margin="normal"
               value={formik.values.username}
               onChange={formik.handleChange}
               error={formik.touched.username && Boolean(formik.errors.username)}
@@ -149,9 +137,8 @@ const AddMemberForm = () => {
               size="small"
             />
             <TextField
-              label="Name"
+              label="Full Name"
               name="fullname"
-              margin="normal"
               value={formik.values.fullname}
               onChange={formik.handleChange}
               error={formik.touched.fullname && Boolean(formik.errors.fullname)}
@@ -161,46 +148,34 @@ const AddMemberForm = () => {
             />
           </Box>
 
-          {/* Email field */}
+          {/* Email and Password */}
           <Box display="flex" justifyContent="space-between" mb={2}>
             <TextField
               label="Email"
               name="email"
-              margin="normal"
               value={formik.values.email}
               onChange={formik.handleChange}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
-              size="small"
               style={{ marginRight: 8, flex: 1 }}
-              fullWidth
+              size="small"
             />
             <TextField
               label="Password"
               name="password"
-              margin="normal"
-              // Assuming you have formik values for password here
               value={formik.values.password}
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
-              size="small"
-              style={{ marginRight: 8, flex: 1 }}
-              fullWidth
               type={showPassword ? "text" : "password"}
+              size="small"
+              style={{ flex: 1 }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label={
-                        showPassword
-                          ? "hide the password"
-                          : "display the password"
-                      }
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
-                      onMouseUp={handleMouseUpPassword}
-                      edge="end"
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
@@ -209,13 +184,13 @@ const AddMemberForm = () => {
               }}
             />
           </Box>
-          {/* Row with Role and Phone fields */}
+
+          {/* Role and Phone Number */}
           <Box display="flex" justifyContent="space-between" mb={2}>
             <TextField
               label="Role"
               name="role"
               select
-              margin="normal"
               value={formik.values.role}
               onChange={formik.handleChange}
               error={formik.touched.role && Boolean(formik.errors.role)}
@@ -224,42 +199,42 @@ const AddMemberForm = () => {
               size="small"
             >
               <MenuItem value="User">User</MenuItem>
-              <MenuItem value="Admin">Visitor</MenuItem>
+              <MenuItem value="Admin">Admin</MenuItem>
             </TextField>
             <TextField
               label="Phone Number"
               name="phoneNumber"
-              margin="normal"
               value={formik.values.phoneNumber}
               onChange={formik.handleChange}
-              style={{ flex: 1 }}
               error={
                 formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
               }
               helperText={
                 formik.touched.phoneNumber && formik.errors.phoneNumber
               }
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">+91 - </InputAdornment>
-                  ),
-                },
-              }}
               size="small"
+              style={{ flex: 1 }}
             />
           </Box>
 
-          {/* Committee Field */}
+          {/* Committee Selection */}
           <Autocomplete
             multiple
             id="committee"
-            name="committee"
-            options={committees}
-            value={formik.values.committee}
-            onChange={(_, newValue) =>
-              formik.setFieldValue("committee", newValue)
+            options={committees} // Committees fetched from the backend
+            getOptionLabel={(option) => option.name || option.id} // Show name if available, otherwise ID
+            value={
+              committees.filter((committee) =>
+                formik.values.committee.includes(committee.id)
+              ) // Match the selected IDs with options
             }
+            onChange={(_, selectedOptions) => {
+              formik.setFieldValue(
+                "committee",
+                selectedOptions.map((option) => option.id) // Extract only IDs
+              );
+            }}
+            isOptionEqualToValue={(option, value) => option.id === value.id} // Ensure correct matching
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -270,24 +245,11 @@ const AddMemberForm = () => {
                 helperText={formik.touched.committee && formik.errors.committee}
               />
             )}
-            disableCloseOnSelect
-            isOptionEqualToValue={(option, value) => option === value}
-            ListboxProps={{
-              style: {
-                maxHeight: 200, // height of the dropdown menu
-                overflowY: "auto", // enable scrolling
-              },
-            }}
+            style={{ marginBottom: 16 }}
           />
 
-          {/* Avatar Section at the Bottom */}
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            mt={4}
-            mb={3}
-          >
+          {/* Avatar */}
+          <Box display="flex" justifyContent="center" mb={3}>
             <input
               accept="image/*"
               style={{ display: "none" }}
@@ -298,7 +260,7 @@ const AddMemberForm = () => {
             <label htmlFor="avatar-upload">
               <IconButton component="span">
                 <Avatar
-                  sx={{ width: 100, height: 100 }} // Larger size for Avatar
+                  sx={{ width: 100, height: 100 }}
                   src={avatarPreview}
                   alt="Avatar Preview"
                 >
@@ -308,8 +270,8 @@ const AddMemberForm = () => {
             </label>
           </Box>
 
-          {/* Action Buttons */}
-          <Box mt={2} display="flex" justifyContent="flex-end">
+          {/* Submit Button */}
+          <Box display="flex" justifyContent="flex-end">
             <Button type="submit" variant="contained" color="primary">
               Add Member
             </Button>

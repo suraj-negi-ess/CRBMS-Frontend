@@ -15,8 +15,8 @@
 .userLogin {
   max-width: 448px;
   width: 100%;
-  background-color: rgba(164, 177, 196, 0.5);
-  backdrop-filter: blur(24px);
+  background-color: rgba(221, 226, 226, 0.24);
+  backdrop-filter: blur(12px);
   border-radius: 16px;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
   overflow: hidden;

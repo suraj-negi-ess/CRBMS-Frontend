@@ -53,7 +53,7 @@ const Sidebar = () => {
   const menuToBeRendered = isAdmin ? adminSideBarData : userSideBarData;
 
   const handleSubMenuToggle = (id) => {
-    setOpenSubMenu((prevOpenId) => (prevOpenId === id ? null : id));
+    setOpenSubMenu((prevOpenId) => (prevOpenId === id ? null : id)); // Toggle submenu visibility
   };
 
   const handleLogout = async () => {
@@ -86,19 +86,29 @@ const Sidebar = () => {
               <Button
                 className="button"
                 fullWidth
-                onClick={() => item.subMenu && isAdmin && handleSubMenuToggle(item.id)}
+                onClick={() =>
+                  item.subMenu && isAdmin && handleSubMenuToggle(item.id)
+                }
               >
                 <span className="icon">{React.createElement(item.icon)}</span>
                 {item.name}
                 {item.subMenu && isAdmin && (
-                  <span className="arrow">
+                  <span
+                    className={`arrow ${
+                      openSubMenu === item.id ? "rotate" : ""
+                    }`}
+                  >
                     <ArrowCircleRightOutlinedIcon />
                   </span>
                 )}
               </Button>
             </NavLink>
-            {item.subMenu && isAdmin && openSubMenu === item.id && (
-              <div className="subMenuWrapper">
+            {item.subMenu && isAdmin && (
+              <div
+                className={`subMenuWrapper ${
+                  openSubMenu === item.id ? "open" : ""
+                }`}
+              >
                 <ul className="subMenu">
                   {item.subMenu.map((subItem, idx) => (
                     <li key={idx}>

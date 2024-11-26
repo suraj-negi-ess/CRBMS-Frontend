@@ -58,9 +58,51 @@
 }
 
 .admin-row {
-  background-color: rgba(252, 0, 0, 0.5) !important;
+  background-color: rgba(4, 224, 34, 0.603) !important;
 }
 
-.admin-row:hover {
-  background-color: "red" !important;
+.delete-row {
+  background-color: rgba(211, 20, 14, 0.589) !important;
+  color: grey;
+}
+
+.legendWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px;
+}
+
+.legends {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.legendAdmin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 5px;
+}
+.legendDeleted {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.legendText {
+  margin-bottom: 0;
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }

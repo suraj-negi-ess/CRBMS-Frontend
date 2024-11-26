@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Header.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // Images
 import logo from "../../assets/Images/logo.webp";
@@ -22,12 +22,17 @@ import FullscreenOutlinedIcon from "@mui/icons-material/FullscreenOutlined";
 import FullscreenExitOutlinedIcon from "@mui/icons-material/FullscreenExitOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import axios from "axios";
 
-const Header = () => {
+const Header = ({ toggleSidebar }) => {
   const { user } = useSelector((state) => state.user);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const navigate = useNavigate();
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -63,6 +68,27 @@ const Header = () => {
     setIsFullScreen(!isFullScreen); // Toggle the state
   };
 
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        `/api/v1/user/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        toast.success("User Logged Out");
+        navigate("/login");
+      } else {
+        toast.error("Logout Failed");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "An error occurred");
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <header className="d-flex align-items-center">
@@ -76,7 +102,7 @@ const Header = () => {
             </div>
 
             <div className="col-sm-3 col-xs-3 d-flex align-items-center gap-5 part2">
-              <Button className="rounded-circle">
+              <Button className="rounded-circle" onClick={toggleSidebar}>
                 <MenuOpenIcon />
               </Button>
               <SearchBox />
@@ -168,7 +194,7 @@ const Header = () => {
                   </ListItemIcon>
                   Reset Password
                 </MenuItem>
-                <MenuItem onClick={handleClose} sx={{ color: "red" }}>
+                <MenuItem onClick={handleLogout} sx={{ color: "red" }}>
                   <ListItemIcon>
                     <Logout fontSize="small" sx={{ color: "red" }} />
                   </ListItemIcon>

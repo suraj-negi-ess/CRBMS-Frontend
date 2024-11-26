@@ -4,7 +4,8 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
-
+import LaptopMacIcon from "@mui/icons-material/LaptopMac";
+import Diversity2Icon from "@mui/icons-material/Diversity2";
 import ChairOutlinedIcon from "@mui/icons-material/ChairOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
@@ -49,18 +50,6 @@ export const adminSideBarData = [
       { name: "Add Amenity", path: "/add-amenity" },
     ],
   },
-  // {
-  //   id: 4,
-  //   name: "Meeting",
-  //   icon: EventNoteOutlinedIcon,
-  //   path: "/meetings",
-  // },
-  // {
-  //   id: 5,
-  //   name: "Calendar",
-  //   icon: CalendarMonthOutlinedIcon,
-  //   path: "/calendar",
-  // },
   {
     id: 5,
     name: "Rooms",
@@ -76,39 +65,21 @@ export const adminSideBarData = [
 export const userSideBarData = [
   {
     id: 1,
-    name: "Dashboard",
-    icon: DashboardOutlinedIcon,
-    path: "/home",
-  },
-  {
-    id: 2,
-    name: "Rooms",
+    name: "Book A Room",
     icon: MeetingRoomOutlinedIcon,
     path: "/rooms",
   },
-  // {
-  //   id: 3,
-  //   name: "Users",
-  //   icon: Groups2OutlinedIcon,
-  //   path: "/members",
-  // },
+  {
+    id: 2,
+    name: "My Meeting", //MY Meetings
+    icon: LaptopMacIcon,
+    path: "/meeting-calendar",
+  },
   {
     id: 3,
-    name: "Meeting",
-    icon: EventNoteOutlinedIcon,
-    path: "/meetings",
-  },
-  {
-    id: 4,
-    name: "Calendar",
-    icon: CalendarMonthOutlinedIcon,
-    path: "/calendar",
-  },
-  {
-    id: 5,
-    name: "Community",
-    icon: CalendarMonthOutlinedIcon,
-    path: "/calendar",
+    name: "My Committee",
+    icon: Diversity2Icon,
+    path: "/my-committee",
   },
 ];
 
