@@ -65,7 +65,6 @@ const AddMemberForm = () => {
   // Formik setup
   const formik = useFormik({
     initialValues: {
-      username: "",
       fullname: "",
       email: "",
       role: "User",
@@ -75,7 +74,6 @@ const AddMemberForm = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string().required("Username is required"),
       fullname: Yup.string().required("Full name is required"),
       email: Yup.string()
         .email("Invalid email format")
@@ -90,7 +88,6 @@ const AddMemberForm = () => {
     onSubmit: async (values, { resetForm }) => {
       try {
         const formData = new FormData();
-        formData.append("username", values.username);
         formData.append("fullname", values.fullname);
         formData.append("email", values.email);
         formData.append("role", values.role);
@@ -124,18 +121,8 @@ const AddMemberForm = () => {
             Add New Member
           </Typography>
 
-          {/* Username and Full Name */}
+          {/*Full Name */}
           <Box display="flex" justifyContent="space-between" mb={2}>
-            <TextField
-              label="Username"
-              name="username"
-              value={formik.values.username}
-              onChange={formik.handleChange}
-              error={formik.touched.username && Boolean(formik.errors.username)}
-              helperText={formik.touched.username && formik.errors.username}
-              style={{ marginRight: 8, flex: 1 }}
-              size="small"
-            />
             <TextField
               label="Full Name"
               name="fullname"

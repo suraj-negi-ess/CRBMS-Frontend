@@ -125,7 +125,7 @@ const Header = ({ toggleSidebar }) => {
                 <div className="profileImage">
                   <span className="profilePhoto">
                     <img
-                      src={`http://localhost:9000/${user.avatarPath}`}
+                      src={`http://localhost:9000/${user?.avatarPath}` || ""}
                       alt="My Pic"
                     />{" "}
                     {/* DP is your default image */}
@@ -134,8 +134,8 @@ const Header = ({ toggleSidebar }) => {
 
                 <div className="myAcc d-flex align-items-center">
                   <div className="userInfo">
-                    <h4>{user.fullname}</h4>
-                    <p className="mb-0">{user.username || ""}</p>
+                    <h4>{user?.fullname}</h4>
+                    <p className="mb-0">{user?.username || ""}</p>
                   </div>
                 </div>
               </Button>
@@ -176,7 +176,7 @@ const Header = ({ toggleSidebar }) => {
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
-                <MenuItem onClick={handleClose} sx={{ color: "green" }}>
+                {/* <MenuItem onClick={handleClose} sx={{ color: "green" }}>
                   <ListItemIcon>
                     <PersonOutlineOutlinedIcon
                       fontSize="small"
@@ -193,7 +193,7 @@ const Header = ({ toggleSidebar }) => {
                     />
                   </ListItemIcon>
                   Reset Password
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={handleLogout} sx={{ color: "red" }}>
                   <ListItemIcon>
                     <Logout fontSize="small" sx={{ color: "red" }} />

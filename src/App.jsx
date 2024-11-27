@@ -129,7 +129,7 @@ function App() {
           <Route path="/edit/:id" element={<UpdateMemberForm />} />
           <Route path="/committee" element={<CommitteeManagementMUI />} />
           <Route path="/add-committee" element={<AddCommitteeForm />} />
-          <Route path="/book-meeting" element={<MeetingForm />} />
+          <Route path="/book-meeting/:id" element={<MeetingForm />} />
           <Route
             path="/view-committee/:committeeId"
             element={<CommitteeMemberList />}

@@ -17,6 +17,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 const FormWrapper = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -31,16 +32,19 @@ const FormWrapper = styled(Paper)(({ theme }) => ({
 
 const MeetingForm = () => {
   const [emailsList, setEmailsList] = useState([]);
+  const { id } = useParams(); // Room id
+  console.log(id);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("/api/v1/user/getAllUsers");
-        const emails = response.data.data.map((user) => ({
+        const response = await axios.get("/api/v1/user/users");
+        const emails = response.data.data.users.rows.map((user) => ({
           email: user.email,
           id: user.id,
         }));
         setEmailsList(emails);
+        // console.log(response.data.data.users.rows);
       } catch (error) {
         toast.error("Failed to load users");
         console.error("Error fetching users:", error);
@@ -52,6 +56,7 @@ const MeetingForm = () => {
 
   const formik = useFormik({
     initialValues: {
+      roomId: id,
       title: "",
       agenda: "",
       startTime: null,
@@ -82,7 +87,7 @@ const MeetingForm = () => {
         };
 
         const response = await axios.post(
-          "/api/v1/meetings/add-meeting",
+          "/api/v1/meeting/add-meeting",
           payload,
           {
             withCredentials: true,
@@ -133,7 +138,13 @@ const MeetingForm = () => {
           />
 
           {/* Date */}
-          <Box display="flex" justifyContent="space-between" marginBottom={1}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            marginTop={1}
+            marginBottom={3}
+            gap={5}
+          >
             <DatePicker
               label="Meeting Date"
               value={formik.values.date}
@@ -151,7 +162,7 @@ const MeetingForm = () => {
             />
 
             {/* Start Time & End Time */}
-            <Box display="flex" justifyContent="space-around" gap={5}>
+            <Box display="flex" justifyContent="space-around" gap={1}>
               <TimePicker
                 label="Start Time"
                 value={formik.values.startTime}
