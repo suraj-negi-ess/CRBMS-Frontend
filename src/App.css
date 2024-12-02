@@ -1,3 +1,4 @@
+
 * {
   margin: 0px;
   padding: 0px;
@@ -9,7 +10,7 @@ body {
   background: #ebe9e9 !important;
 }
 
-.sidebarWrapper {
+/* .sidebarWrapper {
   width: 20%;
   flex: 0 0 20%;
   transition: all 0.3s ease-in-out;
@@ -18,7 +19,7 @@ body {
 .content {
   width: 80%;
   flex: 0 0 80%;
-}
+} */
 
 ::-webkit-scrollbar {
   width: 5px; /* Sets the thickness for the vertical scrollbar */
@@ -44,7 +45,7 @@ a {
   background-color: #555; /* Darker color when hovering */
 }
 
-.spinner-parent {
+/* .spinner-parent {
   display: flex;
   justify-content: center;
   height: 100%;
@@ -60,4 +61,4 @@ a {
 .spinner-border {
   width: 5rem;
   height: 5rem;
-}
+} */

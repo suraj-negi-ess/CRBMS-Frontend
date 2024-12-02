@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { hideLoading, showLoading } from "../../Redux/alertSlicer";
 
 const DetailRoom = () => {
-  const { id } = useParams(); // Get the room id from URL parameters
-  const [room, setRoom] = useState(null); // State to hold room data
-  const [error, setError] = useState(null); // State to hold error if fetch fails
+  const { id } = useParams();
+  const [room, setRoom] = useState(null);
+  const [error, setError] = useState(null);
 
   const fetchData = async () => {
     try {
+      showLoading();
       const response = await axios.get(`/api/v1/rooms/:${id}`);
-      setRoom(response.data.data.room); // Assuming API returns { room: {...} }
-      console.log(response.data.data.rom);
+      setRoom(response.data.data.room);
+      // console.log(response.data.data.rom);
+      hideLoading();
     } catch (error) {
       setError("Failed to fetch room data.");
       console.error(error);

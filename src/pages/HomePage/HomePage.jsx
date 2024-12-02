@@ -10,6 +10,7 @@ import RadarChartBox from "../../components/Charts/RadarChartBox";
 // LineChartBox
 
 const HomePage = () => {
+  
   return (
     <div className="right-content w-100">
       <div className="row homePageWrapperRow">

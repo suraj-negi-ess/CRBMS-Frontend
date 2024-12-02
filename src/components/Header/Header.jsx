@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
 
 // Images
 import logo from "../../assets/Images/logo.webp";
-import DP from "../../assets/Images/DP.jpg";
+
 // MUI
 import { Badge, Button, ListItemIcon, Menu, MenuItem } from "@mui/material";
 
@@ -16,7 +16,7 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import { Logout, PersonAdd, Settings } from "@mui/icons-material";
+import { Logout, MenuOutlined, PersonAdd, Settings } from "@mui/icons-material";
 import PrivacyTipOutlinedIcon from "@mui/icons-material/PrivacyTipOutlined";
 import FullscreenOutlinedIcon from "@mui/icons-material/FullscreenOutlined";
 import FullscreenExitOutlinedIcon from "@mui/icons-material/FullscreenExitOutlined";
@@ -24,8 +24,10 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import axios from "axios";
+// import { MyContext } from "../../App";
 
-const Header = ({ toggleSidebar }) => {
+const Header = () => {
+  // const context = useContext(MyContext);
   const { user } = useSelector((state) => state.user);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -88,22 +90,31 @@ const Header = ({ toggleSidebar }) => {
       console.log(error);
     }
   };
+  console.log(user);
+  console.log(user.avatarPath);
 
   return (
     <>
-      <header className="d-flex align-items-center">
+      <header>
         <div className="container-fluid w-100">
-          <div className="row d-flex flex-row align-items-center ">
+          <div className="row d-flex flex-row align-items-center">
             <div className="col-sm-2 col-xs-3 part1">
-              <Link to={"/"} className="d-flex align-items-center logo ">
+              <Link
+                to={"/home"}
+                className="d-flex align-items-center logo gap-2"
+              >
                 <img src={logo} alt="logo" />
                 <span>Harambee</span>
               </Link>
             </div>
 
             <div className="col-sm-3 col-xs-3 d-flex align-items-center gap-5 part2">
-              <Button className="rounded-circle" onClick={toggleSidebar}>
+              <Button
+                className="rounded-circle"
+                // onClick={context.setIsSidebarVisible(!context.isSidebarVisible)}/
+              >
                 <MenuOpenIcon />
+                {/* {context.isSidebarVisible ? <MenuOpenIcon /> : <MenuOutlined />} */}
               </Button>
               <SearchBox />
             </div>
@@ -112,11 +123,11 @@ const Header = ({ toggleSidebar }) => {
               <Button className="rounded-circle">
                 <LightModeOutlinedIcon />
               </Button>
-              {/* <Button className="rounded-circle">
+              <Button className="rounded-circle">
                 <Badge badgeContent={4} color="error">
                   <NotificationsOutlinedIcon />
                 </Badge>
-              </Button> */}
+              </Button>
               <Button className="rounded-circle" onClick={handleFullScreen}>
                 <FullscreenOutlinedIcon />
               </Button>
@@ -128,7 +139,6 @@ const Header = ({ toggleSidebar }) => {
                       src={`http://localhost:9000/${user?.avatarPath}` || ""}
                       alt="My Pic"
                     />{" "}
-                    {/* DP is your default image */}
                   </span>
                 </div>
 
@@ -176,7 +186,7 @@ const Header = ({ toggleSidebar }) => {
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
-                {/* <MenuItem onClick={handleClose} sx={{ color: "green" }}>
+                <MenuItem onClick={handleClose} sx={{ color: "green" }}>
                   <ListItemIcon>
                     <PersonOutlineOutlinedIcon
                       fontSize="small"
@@ -193,7 +203,7 @@ const Header = ({ toggleSidebar }) => {
                     />
                   </ListItemIcon>
                   Reset Password
-                </MenuItem> */}
+                </MenuItem>
                 <MenuItem onClick={handleLogout} sx={{ color: "red" }}>
                   <ListItemIcon>
                     <Logout fontSize="small" sx={{ color: "red" }} />

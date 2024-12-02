@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import toast from "react-hot-toast";
 import "./RoomsPage.css";
+import { ContentHeader, MainContainer, RightContent } from "../../Style";
 
 const RoomsPage = () => {
   const [roomsData, setRoomsData] = useState([]); // State for rooms data
@@ -36,7 +37,9 @@ const RoomsPage = () => {
     try {
       const response = await axios.get("api/v1/rooms/all-rooms");
       setRoomsData(response.data.data.rooms);
-      toast.success("Room Fetched Successfully");
+      // toast.success("Room Fetched Successfully");
+      // console.log(response.data.data.rooms);
+      
     } catch (error) {
       toast.error("Something Went Wrong");
       console.error("Error fetching room data:", error);
@@ -116,97 +119,96 @@ const RoomsPage = () => {
   });
 
   return (
-    <div className="right-content container w-100">
-      <div className="row w-100">
-        <div className="roomHeader col-xl-12 w-100" style={{ gap: "8px" }}>
-          <DatePicker
-            value={selectedDate}
-            onChange={(newValue) => setSelectedDate(newValue)}
-            format="DD-MM-YYYY"
-            disablePast
-            sx={{
-              "& .MuiInputBase-root": {
-                fontSize: "16px", // Adjust font size
-                height: "40px", // Adjust input height
-              },
-            }}
-          />
-          <TimePicker
-            value={meetingStartTime}
-            onChange={handleStartTimeChange}
-            defaultValue={dayjs(Date.now())}
-            sx={{
-              "& .MuiInputBase-root": {
-                fontSize: "16px",
-                height: "40px",
-              },
-            }}
-          />
-          <TimePicker
-            value={meetingEndingTime}
-            onChange={(newValue) => setMeetingEndingTime(newValue)}
-            sx={{
-              "& .MuiInputBase-root": {
-                fontSize: "16px",
-                height: "40px",
-              },
-            }}
-          />
-          <FormControl sx={{ width: 300 }} size="small">
-            <InputLabel id="demo-multiple-checkbox-label">Amenities</InputLabel>
-            <Select
-              labelId="demo-multiple-checkbox-label"
-              id="demo-multiple-checkbox"
-              multiple
-              value={selectedAmenities}
-              onChange={handleChangeAmenities}
-              input={<OutlinedInput label="Amenities" />}
-              renderValue={(selected) => (
-                <Box sx={{ display: "flex", gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} size="small" />
-                  ))}
-                </Box>
-              )}
-            >
-              {amenitiesList.map((item, index) => (
-                <MenuItem key={index} value={item}>
-                  <Checkbox checked={selectedAmenities.includes(item)} />
-                  <ListItemText primary={item} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl sx={{ marginRight: "10px", minWidth: 100 }} size="small">
-            <InputLabel id="demo-select-small-label">Seats</InputLabel>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              value={capacity}
-              onChange={handleChangeCapacity}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>10+</MenuItem>
-              <MenuItem value={20}>20+</MenuItem>
-              <MenuItem value={30}>30+</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-      </div>
-
-      <div className="cardBox row w-100">
-        {filteredRooms.map((room, index) => (
-          <div
-            className="col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 mb-4"
-            key={index}
+    <MainContainer>
+      <ContentHeader elevation="8">
+        <DatePicker
+          value={selectedDate}
+          onChange={(newValue) => setSelectedDate(newValue)}
+          format="DD-MM-YYYY"
+          disablePast
+          sx={{
+            "& .MuiInputBase-root": {
+              fontSize: "16px", // Adjust font size
+              height: "40px", // Adjust input height
+            },
+          }}
+        />
+        <TimePicker
+          value={meetingStartTime}
+          onChange={handleStartTimeChange}
+          defaultValue={dayjs(Date.now())}
+          sx={{
+            "& .MuiInputBase-root": {
+              fontSize: "16px",
+              height: "40px",
+            },
+          }}
+        />
+        <TimePicker
+          value={meetingEndingTime}
+          onChange={(newValue) => setMeetingEndingTime(newValue)}
+          sx={{
+            "& .MuiInputBase-root": {
+              fontSize: "16px",
+              height: "40px",
+            },
+          }}
+        />
+        <FormControl sx={{ width: 300 }} size="small">
+          <InputLabel id="demo-multiple-checkbox-label">Amenities</InputLabel>
+          <Select
+            labelId="demo-multiple-checkbox-label"
+            id="demo-multiple-checkbox"
+            multiple
+            value={selectedAmenities}
+            onChange={handleChangeAmenities}
+            input={<OutlinedInput label="Amenities" />}
+            renderValue={(selected) => (
+              <Box sx={{ display: "flex", gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} size="small" />
+                ))}
+              </Box>
+            )}
           >
-            <RoomsCard room={room} />
-          </div>
-        ))}
-      </div>
-    </div>
+            {amenitiesList.map((item, index) => (
+              <MenuItem key={index} value={item}>
+                <Checkbox checked={selectedAmenities.includes(item)} />
+                <ListItemText primary={item} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl sx={{ marginRight: "10px", minWidth: 100 }} size="small">
+          <InputLabel id="demo-select-small-label">Seats</InputLabel>
+          <Select
+            labelId="demo-select-small-label"
+            id="demo-select-small"
+            value={capacity}
+            onChange={handleChangeCapacity}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value={10}>10+</MenuItem>
+            <MenuItem value={20}>20+</MenuItem>
+            <MenuItem value={30}>30+</MenuItem>
+          </Select>
+        </FormControl>
+      </ContentHeader>
+      <RightContent>
+        <div className="cardBox row w-100">
+          {filteredRooms.map((room, index) => (
+            <div
+              className="col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 mb-4"
+              key={index}
+            >
+              <RoomsCard room={room} />
+            </div>
+          ))}
+        </div>
+      </RightContent>
+    </MainContainer>
   );
 };
 

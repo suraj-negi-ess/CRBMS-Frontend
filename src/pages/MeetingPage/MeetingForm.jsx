@@ -11,6 +11,7 @@ import {
   Radio,
   styled,
   Paper,
+  Chip,
 } from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { useFormik } from "formik";
@@ -42,6 +43,7 @@ const MeetingForm = () => {
         const emails = response.data.data.users.rows.map((user) => ({
           email: user.email,
           id: user.id,
+          name: user.fullname,
         }));
         setEmailsList(emails);
         // console.log(response.data.data.users.rows);
@@ -215,7 +217,29 @@ const MeetingForm = () => {
             onChange={(_, newValue) =>
               formik.setFieldValue("attendees", newValue)
             }
-            getOptionLabel={(option) => option.email}
+            getOptionLabel={(option) => option.name}
+            renderOption={(props, option) => (
+              <Box
+                component="li"
+                {...props}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                {/* Render the attendee's name */}
+                <span>{option.name}</span>
+
+                {/* Render a hardcoded Chip for availability */}
+                {option.id === "15b8126b-8ce7-443c-a231-007179da901a" ? ( // Example: Render based on id for hardcoded logic
+                  <Chip label="Unavailable" color="error" size="small" />
+                ) : (
+                  <Chip label="Available" color="success" size="small" />
+                )}
+              </Box>
+            )}
             renderInput={(params) => (
               <TextField
                 {...params}

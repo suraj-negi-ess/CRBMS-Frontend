@@ -186,6 +186,18 @@ const AddRoomForm = () => {
               size="small"
               style={{ marginRight: 8, flex: 1 }}
             />
+            <TextField
+              label="Sanitation Time"
+              name="Sanitation Time"
+              margin="normal"
+              type="number"
+              // value={formik.values.Sanitation Time}
+              onChange={formik.handleChange}
+              // error={formik.touched.Sanitation Time && Boolean(formik.errors.Sanitation Time)}
+              // helperText={formik.touched.Sanitation Time && formik.errors.Sanitation Time}
+              size="small"
+              style={{ marginRight: 8, flex: 1 }}
+            />
             {/* <TextField
               label="Password"
               name="password"

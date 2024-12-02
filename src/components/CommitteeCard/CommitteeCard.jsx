@@ -23,19 +23,21 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PeopleIcon from "@mui/icons-material/People";
+import { useSelector } from "react-redux";
+import { hideLoading, showLoading } from "../../Redux/alertSlicer";
 
 const CommitteeCard = ({ committee, onDelete }) => {
-  const memberCount = committee.CommitteeMembers?.length || 0;
   const navigate = useNavigate();
-
-  console.log("committee", committee);
+  const { user } = useSelector((state) => state.user);
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this committee?")) {
       try {
+        showLoading();
         await axios.delete(`/api/v1/committee/committees/${committee.id}`);
         onDelete(committee.id);
         toast.success("Committee deleted successfully!"); // Optional notification
+        hideLoading();
       } catch (error) {
         console.error("Error deleting committee:", error);
         toast.error("Failed to delete committee. Please try again."); // Optional notification
@@ -68,13 +70,17 @@ const CommitteeCard = ({ committee, onDelete }) => {
             <Typography variant="h6" component="h2">
               {committee.name}
             </Typography>
-            <Chip
-              label={`${committee.memberCount}`}
-              size="large"
-              color="primary"
-              variant="filled"
-              icon={<PeopleIcon />}
-            />
+            {user?.isAdmin ? (
+              <Chip
+                label={`${committee.memberCount}`}
+                size="large"
+                color="primary"
+                variant="filled"
+                icon={<PeopleIcon />}
+              />
+            ) : (
+              ""
+            )}
           </Box>
           <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
             {committee.description}
@@ -126,15 +132,19 @@ const CommitteeCard = ({ committee, onDelete }) => {
           >
             View Members
           </Button>
-          <Button
-            size="medium"
-            startIcon={<DeleteOutline />}
-            color="error"
-            onClick={handleDelete}
-            variant="contained"
-          >
-            Delete Committee
-          </Button>
+          {user?.isAdmin ? (
+            <Button
+              size="medium"
+              startIcon={<DeleteOutline />}
+              color="error"
+              onClick={handleDelete}
+              variant="contained"
+            >
+              Delete Committee
+            </Button>
+          ) : (
+            ""
+          )}
         </CardActions>
       </CardActionArea>
     </Card>

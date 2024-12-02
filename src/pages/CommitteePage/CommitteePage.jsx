@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import CommitteeCard from "../../components/CommitteeCard/CommitteeCard";
+import { ContentHeader, RightContent } from "../../Style";
 
 // Styled component for the card wrapper
 const CardWrapper = styled(Paper)(({ theme }) => ({
@@ -74,12 +75,9 @@ const CommitteeManagementMUI = () => {
   };
 
   return (
-    <div className="right-content container w-100">
-      <div
-        className="roomHeader col-xl-12 w-100"
-        style={{ justifyContent: "space-between" }}
-      >
-        <Typography variant="h4" component="h2" sx={{ marginRight: "20px" }}>
+    <RightContent>
+      <ContentHeader elevation={8}>
+        <Typography variant="h6" component="h6" sx={{ marginRight: "20px" }}>
           Committee Management
         </Typography>
         <FormControl style={{ marginRight: "50px", width: "150px" }}>
@@ -97,7 +95,7 @@ const CommitteeManagementMUI = () => {
             <MenuItem value="inactive">Inactive</MenuItem>
           </Select>
         </FormControl>
-      </div>
+      </ContentHeader>
 
       {loading ? (
         <Box
@@ -147,7 +145,7 @@ const CommitteeManagementMUI = () => {
           )}
         </Grid2>
       )}
-    </div>
+    </RightContent>
   );
 };
 

@@ -1,17 +1,3 @@
-.roomHeader {
-  /* width: calc(100vw - 100px); */
-  width: 100vw;
-  height: 50px;
-  background-color: #fff;
-  /* position: fixed; */
-  margin-left: 10px;
-  border-radius: 100px 10px;
-  padding-left: 20px;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  z-index: 10;
-}
 
 .cardBox {
   position: relative;
@@ -19,5 +5,7 @@
 }
 
 .right-content {
-  position: relative;
+  padding: 0 15px; /* Remove the vertical padding */
+  overflow-y: auto; /* Enable scrolling for the content area */
 }
+

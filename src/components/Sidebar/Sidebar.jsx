@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Sidebar.css";
 import { Button, styled } from "@mui/material";
-import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { adminSideBarData, userSideBarData } from "../../data";
 import { Link, NavLink, useNavigate } from "react-router-dom";
@@ -34,20 +34,11 @@ const LogoutIcon = styled("span")(({ theme }) => ({
   marginRight: "20px",
 }));
 
-const ArrowIcon = styled("span")(({ theme }) => ({
-  marginLeft: "auto",
-  width: "25px",
-  height: "25px",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}));
-
 const Sidebar = () => {
   const navigate = useNavigate();
   const [openSubMenu, setOpenSubMenu] = useState(null);
 
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user); 
   const isAdmin = user?.isAdmin;
 
   const menuToBeRendered = isAdmin ? adminSideBarData : userSideBarData;
@@ -98,7 +89,7 @@ const Sidebar = () => {
                       openSubMenu === item.id ? "rotate" : ""
                     }`}
                   >
-                    <ArrowCircleRightOutlinedIcon />
+                    <ArrowForwardIosIcon fontSize="12px" />
                   </span>
                 )}
               </Button>
@@ -128,9 +119,6 @@ const Sidebar = () => {
               <PowerSettingsNewOutlinedIcon />
             </LogoutIcon>
             Logout
-            <ArrowIcon>
-              <ArrowCircleRightOutlinedIcon />
-            </ArrowIcon>
           </LogoutButton>
         </li>
       </ul>

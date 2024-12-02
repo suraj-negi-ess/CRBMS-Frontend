@@ -14,11 +14,17 @@ import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import roomImage from "./assets/Images/room.jpg";
 
 export const adminSideBarData = [
+  // {
+  //   id: 1,
+  //   name: "Dashboard",
+  //   icon: DashboardOutlinedIcon,
+  //   path: "/home",
+  // },
   {
     id: 1,
-    name: "Dashboard",
-    icon: DashboardOutlinedIcon,
-    path: "/home",
+    name: "Dashboard", //MY Meetings
+    icon: LaptopMacIcon,
+    path: "/meeting-calendar",
   },
   {
     id: 2,
@@ -65,15 +71,15 @@ export const adminSideBarData = [
 export const userSideBarData = [
   {
     id: 1,
-    name: "Book A Room",
-    icon: MeetingRoomOutlinedIcon,
-    path: "/rooms",
-  },
-  {
-    id: 2,
     name: "My Meeting", //MY Meetings
     icon: LaptopMacIcon,
     path: "/meeting-calendar",
+  },
+  {
+    id: 2,
+    name: "Book A Room",
+    icon: MeetingRoomOutlinedIcon,
+    path: "/rooms",
   },
   {
     id: 3,
@@ -362,5 +368,53 @@ export const roomCardData = [
     bookedBy: null,
     nextAvailable: "2024-10-21T12:00:00",
     description: "Mid-size room with a large screen for visual presentations.",
+  },
+];
+
+export const meetings = [
+  {
+    id: 1,
+    title: "Project Kickoff",
+    startTime: "09:00:00",
+    endTime: "09:45:00", // 45 minutes duration
+    duration: "45 minutes",
+    organizerName: "John Doe",
+    status: "Completed",
+  },
+  {
+    id: 2,
+    title: "Team Sync",
+    startTime: "10:00:00", // 15 min gap after previous meeting
+    endTime: "10:30:00", // 30 minutes duration
+    duration: "30 minutes",
+    organizerName: "Jane Smith",
+    status: "Completed",
+  },
+  {
+    id: 3,
+    title: "Client Demo",
+    startTime: "10:45:00", // 15 min gap
+    endTime: "11:15:00", // 30 minutes duration
+    duration: "30 minutes",
+    organizerName: "Alice Johnson",
+    status: "In Progress",
+  },
+  {
+    id: 4,
+    title: "Sprint Planning",
+    startTime: "11:30:00", // 15 min gap
+    endTime: "12:30:00", // 1 hour duration
+    duration: "1 hour",
+    organizerName: "Bob Lee",
+    status: "Scheduled",
+  },
+  {
+    id: 5,
+    title: "All Hands Meeting",
+    startTime: "12:45:00", // 15 min gap
+    endTime: "13:30:00", // 45 minutes duration
+    duration: "45 minutes",
+    organizerName: "Cathy Brown",
+    status: "Scheduled",
   },
 ];
