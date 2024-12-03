@@ -25,8 +25,8 @@ const FormWrapper = styled(Paper)(({ theme }) => ({
   marginTop: "10px",
 }));
 
-const UpdateMemberForm = () => {
-  const { id } = useParams();
+const UpdateMemberForm = ({id}) => {
+  //const { id } = useParams();
   const [availableCommittees, setAvailableCommittees] = useState([]);
   const [userCommittees, setUserCommittees] = useState([]);
 
@@ -122,13 +122,8 @@ const UpdateMemberForm = () => {
   });
 
   return (
-    <div className="right-content w-100">
-      <FormWrapper>
+    <div className="pop-content w-100">
         <Box component="form" onSubmit={formik.handleSubmit}>
-          <Typography variant="h6" component="h2">
-            Update Member Profile
-          </Typography>
-
           <TextField
             label="Full Name"
             name="fullname"
@@ -201,7 +196,6 @@ const UpdateMemberForm = () => {
             </Button>
           </Box>
         </Box>
-      </FormWrapper>
     </div>
   );
 };

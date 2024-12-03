@@ -6,78 +6,83 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/Images/logo.webp";
 
 // MUI
-import { Badge, Button, ListItemIcon, Menu, MenuItem } from "@mui/material";
+import {
+  Badge,
+  Button,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Popover,
+} from "@mui/material";
 
 // ICONS
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import MenuIcon from "@mui/icons-material/Menu";
+import MenuOutlined from "@mui/icons-material/MenuOutlined";
 import SearchBox from "../SearchBox/SearchBox";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import { Logout, MenuOutlined, PersonAdd, Settings } from "@mui/icons-material";
-import PrivacyTipOutlinedIcon from "@mui/icons-material/PrivacyTipOutlined";
 import FullscreenOutlinedIcon from "@mui/icons-material/FullscreenOutlined";
 import FullscreenExitOutlinedIcon from "@mui/icons-material/FullscreenExitOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import PrivacyTipOutlinedIcon from "@mui/icons-material/PrivacyTipOutlined";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import Logout from "@mui/icons-material/Logout";
+
+// Context and State Management
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import axios from "axios";
-// import { MyContext } from "../../App";
+import { MyContext } from "../Layout/Layout";
+
+// Notifications Menu Component
+import NotificationsMenu from "../Notifications/NotificationsMenu";
+import { notifications } from "../../data";
 
 const Header = () => {
-  // const context = useContext(MyContext);
+  const context = useContext(MyContext);
   const { user } = useSelector((state) => state.user);
 
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [notificationsAnchor, setNotificationsAnchor] = useState(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const navigate = useNavigate();
 
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+  // Common Function to Toggle Menus
+  const handleMenuToggle = (anchorSetter) => (event) => {
+    anchorSetter((prevAnchor) => (prevAnchor ? null : event.currentTarget));
   };
 
+  // Handle Fullscreen Toggle
   const handleFullScreen = () => {
-    const elem = document.documentElement; // Target the whole page for full-screen
+    const elem = document.documentElement;
 
     if (!isFullScreen) {
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
-      } else if (elem.mozRequestFullScreen) {
-        elem.mozRequestFullScreen();
       } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) {
-        elem.msRequestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
       }
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
       } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
       }
     }
-    setIsFullScreen(!isFullScreen); // Toggle the state
+    setIsFullScreen(!isFullScreen); // Toggle State
   };
 
+  // Logout Handler
   const handleLogout = async () => {
     try {
       const response = await axios.post(
         `/api/v1/user/logout`,
         {},
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       if (response.status === 200) {
         toast.success("User Logged Out");
@@ -87,135 +92,143 @@ const Header = () => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "An error occurred");
-      console.log(error);
+      console.error(error);
     }
   };
-  console.log(user);
-  console.log(user.avatarPath);
+
 
   return (
-    <>
-      <header>
-        <div className="container-fluid w-100">
-          <div className="row d-flex flex-row align-items-center">
-            <div className="col-sm-2 col-xs-3 part1">
-              <Link
-                to={"/home"}
-                className="d-flex align-items-center logo gap-2"
-              >
-                <img src={logo} alt="logo" />
-                <span>Harambee</span>
-              </Link>
-            </div>
+    <header>
+      <div className="container-fluid w-100">
+        <div className="row d-flex flex-row align-items-center">
+          {/* Logo Section */}
+          <div className="col-sm-2 col-xs-3 part1">
+            <Link to={"/home"} className="d-flex align-items-center logo gap-2">
+              <img src={logo} alt="logo" />
+              <span>Harambee</span>
+            </Link>
+          </div>
 
-            <div className="col-sm-3 col-xs-3 d-flex align-items-center gap-5 part2">
-              <Button
-                className="rounded-circle"
-                // onClick={context.setIsSidebarVisible(!context.isSidebarVisible)}/
-              >
-                <MenuOpenIcon />
-                {/* {context.isSidebarVisible ? <MenuOpenIcon /> : <MenuOutlined />} */}
-              </Button>
-              <SearchBox />
-            </div>
+          {/* Sidebar and Search */}
+          <div className="col-sm-3 col-xs-3 d-flex align-items-center gap-5 part2">
+            <Button
+              className="rounded-circle"
+              onClick={() =>
+                context.setIsSidebarVisible(!context.isSidebarVisible)
+              }
+            >
+              {context.isSidebarVisible ? <MenuOpenIcon /> : <MenuOutlined />}
+            </Button>
+            <SearchBox />
+          </div>
 
-            <div className="col-sm-7 col-xs-3 d-flex align-items-center justify-content-end gap-2">
-              <Button className="rounded-circle">
-                <LightModeOutlinedIcon />
-              </Button>
-              <Button className="rounded-circle">
-                <Badge badgeContent={4} color="error">
-                  <NotificationsOutlinedIcon />
-                </Badge>
-              </Button>
-              <Button className="rounded-circle" onClick={handleFullScreen}>
+          {/* Action Buttons */}
+          <div className="col-sm-7 col-xs-3 d-flex align-items-center justify-content-end gap-2">
+            {/* Light Mode Button */}
+            <Button className="rounded-circle">
+              <LightModeOutlinedIcon />
+            </Button>
+
+            {/* Notifications Button */}
+            <Button
+              className="rounded-circle"
+              onClick={handleMenuToggle(setNotificationsAnchor)}
+            >
+              <Badge badgeContent={4} color="error">
+                <NotificationsOutlinedIcon />
+              </Badge>
+            </Button>
+
+            {/* Fullscreen Button */}
+            <Button className="rounded-circle" onClick={handleFullScreen}>
+              {isFullScreen ? (
+                <FullscreenExitOutlinedIcon />
+              ) : (
                 <FullscreenOutlinedIcon />
-              </Button>
+              )}
+            </Button>
 
-              <Button className="myAccWrapper" onClick={handleClick}>
-                <div className="profileImage">
-                  <span className="profilePhoto">
-                    <img
-                      src={`http://localhost:9000/${user?.avatarPath}` || ""}
-                      alt="My Pic"
-                    />{" "}
-                  </span>
+            {/* Profile Button */}
+            <Button
+              className="myAccWrapper"
+              onClick={handleMenuToggle(setMenuAnchor)}
+            >
+              <div className="profileImage">
+                <span className="profilePhoto">
+                  <img
+                    src={`http://localhost:9000/${user?.avatarPath}` || ""}
+                    alt="My Pic"
+                  />
+                </span>
+              </div>
+              <div className="myAcc d-flex align-items-center">
+                <div className="userInfo">
+                  <h4>{user?.fullname}</h4>
+                  <p className="mb-0">{user?.username || ""}</p>
                 </div>
-
-                <div className="myAcc d-flex align-items-center">
-                  <div className="userInfo">
-                    <h4>{user?.fullname}</h4>
-                    <p className="mb-0">{user?.username || ""}</p>
-                  </div>
-                </div>
-              </Button>
-              <Menu
-                anchorEl={anchorEl}
-                id="account-menu"
-                open={open}
-                onClose={handleClose}
-                onClick={handleClose}
-                slotProps={{
-                  paper: {
-                    elevation: 0,
-                    sx: {
-                      overflow: "visible",
-                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                      mt: 1.5,
-                      "& .MuiAvatar-root": {
-                        width: 32,
-                        height: 32,
-                        ml: -0.5,
-                        mr: 1,
-                      },
-                      "&::before": {
-                        content: '""',
-                        display: "block",
-                        position: "absolute",
-                        top: 0,
-                        right: 14,
-                        width: 10,
-                        height: 10,
-                        bgcolor: "background.paper",
-                        transform: "translateY(-50%) rotate(45deg)",
-                        zIndex: 0,
-                      },
-                    },
-                  },
-                }}
-                transformOrigin={{ horizontal: "right", vertical: "top" }}
-                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-              >
-                <MenuItem onClick={handleClose} sx={{ color: "green" }}>
-                  <ListItemIcon>
-                    <PersonOutlineOutlinedIcon
-                      fontSize="small"
-                      sx={{ color: "green" }}
-                    />
-                  </ListItemIcon>
-                  Profile
-                </MenuItem>
-                <MenuItem onClick={handleClose} sx={{ color: "blue" }}>
-                  <ListItemIcon>
-                    <PrivacyTipOutlinedIcon
-                      fontSize="small"
-                      sx={{ color: "blue" }}
-                    />
-                  </ListItemIcon>
-                  Reset Password
-                </MenuItem>
-                <MenuItem onClick={handleLogout} sx={{ color: "red" }}>
-                  <ListItemIcon>
-                    <Logout fontSize="small" sx={{ color: "red" }} />
-                  </ListItemIcon>
-                  Logout
-                </MenuItem>
-              </Menu>
-            </div>
+              </div>
+            </Button>
           </div>
         </div>
-      </header>
-    </>
+      </div>
+
+      {/* Profile Menu */}
+      <Menu
+        anchorEl={menuAnchor}
+        open={Boolean(menuAnchor)}
+        onClose={handleMenuToggle(setMenuAnchor)}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem
+          onClick={handleMenuToggle(setMenuAnchor)}
+          sx={{ color: "green" }}
+        >
+          <ListItemIcon>
+            <PersonOutlineOutlinedIcon
+              fontSize="small"
+              sx={{ color: "green" }}
+            />
+          </ListItemIcon>
+          Profile
+        </MenuItem>
+        <MenuItem
+          onClick={handleMenuToggle(setMenuAnchor)}
+          sx={{ color: "blue" }}
+        >
+          <ListItemIcon>
+            <PrivacyTipOutlinedIcon fontSize="small" sx={{ color: "blue" }} />
+          </ListItemIcon>
+          Reset Password
+        </MenuItem>
+        <MenuItem onClick={handleLogout} sx={{ color: "red" }}>
+          <ListItemIcon>
+            <Logout fontSize="small" sx={{ color: "red" }} />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+      </Menu>
+
+      {/* Notifications Menu */}
+      <Popover
+        open={Boolean(notificationsAnchor)}
+        anchorEl={notificationsAnchor}
+        onClose={handleMenuToggle(setNotificationsAnchor)}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <NotificationsMenu
+          notifications={notifications}
+          onViewAll={() => alert("View All Notifications clicked!")}
+        />
+      </Popover>
+    </header>
   );
 };
 

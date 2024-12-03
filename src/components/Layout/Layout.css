@@ -8,7 +8,20 @@
   transition: all 0.3s ease-in-out;
 }
 
+.sidebarWrapper-toggle {
+  width: 0;
+  flex: 0 0 0;
+  transition: all 0.3s ease-in-out;
+}
+
 .content {
   width: 80%;
   flex: 0 0 80%;
+  transition: all 0.3s ease-in-out;
+}
+
+.contentToggle {
+  width: 100%;
+  flex: 0 0 100%;
+  transition: all 0.3s ease-in-out;
 }

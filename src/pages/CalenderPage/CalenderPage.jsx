@@ -100,7 +100,7 @@ const CalenderPage = () => {
             startAccessor="start"
             endAccessor="end"
             style={{
-              height: 500,
+              height: "calc(100vh - 70px)",
               background: "#fff",
               padding: "10px",
               borderRadius: "10px",

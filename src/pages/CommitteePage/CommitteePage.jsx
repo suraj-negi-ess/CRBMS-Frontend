@@ -46,7 +46,6 @@ const CommitteeManagementMUI = () => {
       const response = await axios.get("/api/v1/committee/committees");
       if (response.data?.data?.committees) {
         setCommitteeData(response.data.data.committees);
-        console.log(response.data.data.committees);
       } else {
         console.error("Unexpected data structure:", response.data);
         setError("Invalid data structure received from server");

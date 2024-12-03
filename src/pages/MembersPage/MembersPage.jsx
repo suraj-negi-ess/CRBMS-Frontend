@@ -4,6 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import BlockIcon from '@mui/icons-material/Block';
 import toast from "react-hot-toast";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,7 +15,11 @@ import {
   CircleRounded,
   PersonAddAlt1Rounded,
 } from "@mui/icons-material";
-
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import PopupModals from "../../components/Modals/PopupModals";
+import AddMemberForm from "./AddMemberForm";
+import UpdateMemberForm from "./UpdateMemberForm";
+import ViewMember from "./ViewMember";
 const UserListWrapper = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   color: theme.palette.text.secondary,
@@ -32,14 +37,16 @@ const MembersPage = () => {
   const [open, setOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [showDeleted, setShowDeleted] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [updatedId, setUpdatedId] = useState('');
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [viewId, setViewId] = useState('');
   const navigate = useNavigate();
   const filteredUsers = users.filter((user) =>
     showDeleted ? true : !user.deletedAt
   );
-
-  const addMember = () => {
-    navigate("/add-member");
-  };
+  
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -70,6 +77,16 @@ const MembersPage = () => {
     setOpen(false);
     setDeleteId(null);
   };
+
+  const handleEdit=(id)=>{
+    setUpdatedId(id);
+    setIsEditOpen(true);
+  }
+
+  const handleView=(id)=>{
+    setViewId(id);
+    setIsViewOpen(true);
+  }
 
   const handleDelete = async () => {
     try {
@@ -128,16 +145,16 @@ const MembersPage = () => {
       headerName: "Avatar",
       width: 100,
       renderCell: (params) => (
-        <img
+        params.value?<img
           src={`http://localhost:9000/${params.value}`}
           alt="avatar"
-          style={{ width: "45px", height: "45px", borderRadius: "50%" }}
-        />
+          style={{ width: "35px", height: "35px", borderRadius: "50%" }}
+        />:<AccountCircleRoundedIcon style={{ width: "35px", height: "35px", borderRadius: "50%" }} />
       ),
     },
-    { field: "fullname", headerName: "Full Name", width: 150 },
-    { field: "email", headerName: "Email", width: 200 },
-    { field: "phoneNumber", headerName: "Phone Number", width: 150 },
+    { field: "fullname", headerName: "Full Name", width: 330 },
+    { field: "email", headerName: "Email", width: 330 },
+    { field: "phoneNumber", headerName: "Phone Number", width: 200 },
     // {
     //   field: "status",
     //   headerName: "Status",
@@ -161,43 +178,58 @@ const MembersPage = () => {
       width: 200,
       renderCell: (params) => (
         <div style={{ display: "flex", gap: "10px" }}>
-          <Link to={`/edit/${params.id}`}>
-            <EditOutlinedIcon color="success" />
-          </Link>
-          <Link to={`/view/${params.id}`}>
-            <VisibilityOutlinedIcon color="secondary" />
-          </Link>
+            <EditOutlinedIcon 
+            className="cursor" 
+            color="success" 
+            onClick={()=>handleEdit(params.id)} 
+            />
+
+            <VisibilityOutlinedIcon 
+            color="secondary" 
+            className="cursor" 
+            onClick={()=>handleView(params.id)} 
+            />
           <div className="delete">
             <DeleteOutlineOutlinedIcon
               color="error"
               onClick={() => handleOpen(params.id)}
             />
           </div>
+          <div className="delete">
+            <BlockIcon
+              color={params.row.isBlocked ? "success" : "error"}
+              
+              onClick={() =>
+                handleBlockStatusChange(params.row.id, params.row.isBlocked)
+              }
+              disabled={loading}
+            />
+          </div>
         </div>
       ),
-    },
-    {
-      field: "isBlocked",
-      headerName: "Block Status",
-      width: 150,
-      renderCell: (params) => (
-        <Button
-          variant="contained"
-          color={params.row.isBlocked ? "success" : "error"}
-          onClick={() =>
-            handleBlockStatusChange(params.row.id, params.row.isBlocked)
-          }
-          disabled={loading}
-        >
-          {params.row.isBlocked ? "Unblock" : "Block"}
-        </Button>
-      ),
-    },
+     },
+    // {
+    //   field: "isBlocked",
+    //   headerName: "Block Status",
+    //   width: 150,
+    //   renderCell: (params) => (
+    //     <Button
+    //       variant="contained"
+    //       color={params.row.isBlocked ? "success" : "error"}
+    //       onClick={() =>
+    //         handleBlockStatusChange(params.row.id, params.row.isBlocked)
+    //       }
+    //       disabled={loading}
+    //     >
+    //       {params.row.isBlocked ? "Unblock" : "Block"}
+    //     </Button>
+    //   ),
+    // }
   ];
 
   return (
     <div className="right-content w-100">
-      <UserListWrapper>
+       <UserListWrapper>
         <div className="legendWrapper">
           <div className="legends">
             <div className="legendAdmin">
@@ -216,20 +248,8 @@ const MembersPage = () => {
             >
               {showDeleted ? "Hide Deleted" : "Show Deleted"}
             </Button>
-            <Button variant="contained" color="success">
-              <Link
-                to="/add-member"
-                style={{
-                  textDecoration: "none",
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "5px",
-                }}
-              >
+            <Button variant="contained" color="success" onClick={()=>setIsOpen(true)}>
                 <PersonAddAlt1Rounded /> Add User
-              </Link>
             </Button>
           </div>
         </div>
@@ -238,6 +258,7 @@ const MembersPage = () => {
             showCellVerticalBorder
             showColumnVerticalBorder
             rows={filteredUsers}
+            rowHeight={40}
             columns={[...columns]}
             loading={loading}
             initialState={{
@@ -270,6 +291,29 @@ const MembersPage = () => {
         onClose={handleClose}
         onDeleteConfirm={handleDelete}
       />
+      <PopupModals
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        title={'Add New Member'}
+        modalBody={
+          <AddMemberForm />
+        } />
+
+      <PopupModals
+        isOpen={isEditOpen}
+        setIsOpen={setIsEditOpen}
+        title={'Update Member Profile'}
+        modalBody={
+          <UpdateMemberForm id={updatedId} />
+        } />
+
+      <PopupModals
+        isOpen={isViewOpen}
+        setIsOpen={setIsViewOpen}
+        title={'View Member Profile'}
+        modalBody={
+          <ViewMember id={viewId} />
+        } />
     </div>
   );
 };

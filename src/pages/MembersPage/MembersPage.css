@@ -1,6 +1,11 @@
 .right-content {
-  padding: 90px 15px;
+  padding: 13px 15px;
 }
+
+.pop-content {
+  padding: 15px 15px;
+}
+
 
 .cardFilters .col h4 {
   font-size: 16px;
@@ -58,12 +63,11 @@
 }
 
 .admin-row {
-  background-color: rgba(4, 224, 34, 0.603) !important;
+  background-color: rgba(4, 224, 34, 0.1) !important;
 }
 
 .delete-row {
-  background-color: rgba(211, 20, 14, 0.589) !important;
-  color: grey;
+  background-color: rgba(211, 20, 14, 0.1) !important;
 }
 
 .legendWrapper {
@@ -105,4 +109,9 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+}
+
+.cursor{
+  cursor: pointer;
+  margin-top: 8px;
 }

@@ -14,15 +14,9 @@ import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import roomImage from "./assets/Images/room.jpg";
 
 export const adminSideBarData = [
-  // {
-  //   id: 1,
-  //   name: "Dashboard",
-  //   icon: DashboardOutlinedIcon,
-  //   path: "/home",
-  // },
   {
     id: 1,
-    name: "Dashboard", //MY Meetings
+    name: "Dashboard",
     icon: LaptopMacIcon,
     path: "/meeting-calendar",
   },
@@ -31,40 +25,24 @@ export const adminSideBarData = [
     name: "Users",
     icon: Groups2OutlinedIcon,
     path: "/members",
-    subMenu: [
-      { name: "User List", path: "/members" },
-      { name: "Add User", path: "/add-member" },
-    ],
   },
   {
     id: 3,
     name: "Committee",
     icon: Groups2OutlinedIcon,
     path: "/committee",
-    subMenu: [
-      { name: "Committee List", path: "/committee" },
-      { name: "Add Committee", path: "/add-committee" },
-    ],
   },
   {
     id: 4,
     name: "Amenities",
     icon: CalendarMonthOutlinedIcon,
     path: "/amenities",
-    subMenu: [
-      { name: "Amenities List", path: "/amenities" },
-      { name: "Add Amenity", path: "/add-amenity" },
-    ],
   },
   {
     id: 5,
     name: "Rooms",
     icon: MeetingRoomOutlinedIcon,
     path: "/rooms",
-    subMenu: [
-      { name: "Room List", path: "/rooms" },
-      { name: "Add Room", path: "/add-room" },
-    ],
   },
 ];
 
@@ -416,5 +394,32 @@ export const meetings = [
     duration: "45 minutes",
     organizerName: "Cathy Brown",
     status: "Scheduled",
+  },
+];
+
+export const notifications = [
+  {
+    avatar:
+      "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    name: "Mahmudul",
+    action: "requested",
+    item: "Conference Room Hall 12",
+    time: "Few seconds ago",
+  },
+  {
+    avatar:
+      "https://images.pexels.com/photos/16002545/pexels-photo-16002545/free-photo-of-very-happy-blonde-woman.jpeg",
+    name: "Mahmudul",
+    action: "cancelled meeting in",
+    item: "Conference Room Hall 18",
+    time: "1 hour ago",
+  },
+  {
+    avatar:
+      "https://images.pexels.com/photos/4584579/pexels-photo-4584579.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    name: "Mahmudul",
+    action: "started meeting in",
+    item: "Conference Hall 15",
+    time: "3 hours ago",
   },
 ];

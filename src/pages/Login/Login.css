@@ -1,6 +1,6 @@
 .authWrapper {
   min-height: 100vh;
-  background-image: url("../../assets/Images/crbmswallpaper.jpg");
+  background-image: linear-gradient(rgba(0, 0, 255, 0.5), rgba(255, 255, 0, 0.5)),url("../../assets/Images/crbmswallpaper.jpg");
   background-size: cover; /* Ensures the entire image fits */
   background-position: center; /* Centers the image */
   background-repeat: no-repeat; /* Prevents tiling */
@@ -10,6 +10,7 @@
   position: relative;
   overflow: hidden;
   padding: 8px;
+  backdrop-filter: blur(10px);
 }
 
 .userLogin {

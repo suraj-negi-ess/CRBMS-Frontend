@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Sidebar.css";
 import { Button, styled } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -8,6 +8,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { MyContext } from "../Layout/Layout";
 
 // Styled components for the logout button
 const LogoutButton = styled(Button)(({ theme }) => ({
@@ -35,10 +36,11 @@ const LogoutIcon = styled("span")(({ theme }) => ({
 }));
 
 const Sidebar = () => {
+  const { isSidebarVisible, setIsSidebarVisible } = useContext(MyContext);
   const navigate = useNavigate();
   const [openSubMenu, setOpenSubMenu] = useState(null);
 
-  const { user } = useSelector((state) => state.user); 
+  const { user } = useSelector((state) => state.user);
   const isAdmin = user?.isAdmin;
 
   const menuToBeRendered = isAdmin ? adminSideBarData : userSideBarData;
@@ -69,11 +71,23 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
+    <div
+      className={`${isSidebarVisible === true ? "sidebar-toggle" : "sidebar"}`}
+    >
       <ul>
         {menuToBeRendered.map((item) => (
           <li key={item.id} className="menu-item">
-            <NavLink to={item.path} className="nav-link">
+            <NavLink
+              to={item.path}
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "active-link" : ""}`
+              }
+              style={({ isActive }) =>
+                isActive
+                  ? { backgroundColor: "#e0f7fa"} // Add your desired background color and styles here
+                  : {}
+              }
+            >
               <Button
                 className="button"
                 fullWidth
@@ -94,21 +108,6 @@ const Sidebar = () => {
                 )}
               </Button>
             </NavLink>
-            {item.subMenu && isAdmin && (
-              <div
-                className={`subMenuWrapper ${
-                  openSubMenu === item.id ? "open" : ""
-                }`}
-              >
-                <ul className="subMenu">
-                  {item.subMenu.map((subItem, idx) => (
-                    <li key={idx}>
-                      <Link to={subItem.path}>{subItem.name}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </li>
         ))}
       </ul>

@@ -114,13 +114,8 @@ const AddMemberForm = () => {
   });
 
   return (
-    <div className="right-content w-100">
-      <FormWrapper>
+    <div className="pop-content w-100">
         <Box component="form" onSubmit={formik.handleSubmit}>
-          <Typography variant="h6" component="h2">
-            Add New Member
-          </Typography>
-
           {/*Full Name */}
           <Box display="flex" justifyContent="space-between" mb={2}>
             <TextField
@@ -264,7 +259,6 @@ const AddMemberForm = () => {
             </Button>
           </Box>
         </Box>
-      </FormWrapper>
     </div>
   );
 };

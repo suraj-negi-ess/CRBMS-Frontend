@@ -12,6 +12,9 @@ import axios from "axios";
 import { setLoginEmail } from "../../Redux/verifyEmailSlicer";
 import ebizLogo from "../../assets/Images/ebizlogo.png";
 import toast from "react-hot-toast";
+import {
+  Button,
+} from "@mui/material";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
@@ -87,36 +90,34 @@ const UserLogin = () => {
               <p className="error">{error}</p>
             )} */}
             <div className="loginButtonBox">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                // whileTap={{ scale: 1 }}
-                className="loginButton"
-                type="submit"
-                // disabled={isLoading}
-              >
-                {/* {isLoading ? <RotateLeftIcon className="loaderIcon" /> : "Login"} */}
-                {/* <RotateLeftIcon className="loaderIcon" /> */}
-                Login
-              </motion.button>
+            <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mb: 2, width:"50%" }}
+          >
+            Login
+          </Button>
             </div>
           </form>
-        </div>
-        <div
+          <div
           style={{
             display: "flex",
             justifyContent: "flex-end",
             height: "100%",
             alignItems: "center",
             gap: 5,
+
           }}
         >
-          <b>
             <i>powered by</i>
-          </b>
           <div style={{ objectFit: "cover", width: "75px", height: "40px" }}>
             <img src={ebizLogo} style={{ borderRadius: "10px" }} />
           </div>
         </div>
+        </div>
+       
       </motion.div>
     </div>
   );

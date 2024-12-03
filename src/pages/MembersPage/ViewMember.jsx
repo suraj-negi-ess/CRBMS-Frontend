@@ -21,8 +21,8 @@ const FormWrapper = styled(Paper)(({ theme }) => ({
   width: "100%",
 }));
 
-const ViewMember = () => {
-  const { id } = useParams();
+const ViewMember = ({id}) => {
+  //const { id } = useParams();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -31,8 +31,6 @@ const ViewMember = () => {
       try {
         const response = await axios.get(`/api/v1/user/${id}`);
         const result = response.data.data;
-
-        console.log(result);
 
         // Format data (directly mapping committees since it's already an array)
         const formattedData = {
@@ -85,8 +83,7 @@ const ViewMember = () => {
   }
 
   return (
-    <div className="right-content w-100">
-      <FormWrapper>
+    <div className="pop-content w-100">
         <Box
           display="flex"
           flexDirection="column"
@@ -158,7 +155,6 @@ const ViewMember = () => {
             )}
           </Box>
         </Box>
-      </FormWrapper>
     </div>
   );
 };

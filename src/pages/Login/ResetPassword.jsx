@@ -8,6 +8,9 @@ import axios from "axios";
 import { hideLoading, showLoading } from "../../Redux/alertSlicer";
 import { useDispatch } from "react-redux";
 import './Login.css'
+import {
+  Button,
+} from "@mui/material";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -76,17 +79,16 @@ const ResetPassword = () => {
               required
             />
             <div className="loginButtonBox">
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="loginButton"
-              type="submit"
-              // disabled={isLoading}
-              >
-              {/* {isLoading ? "Resetting..." : "Set New Password"} */}
-              Set New Password
-            </motion.button>
+            <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mb: 2, width:"50%" }}
+          >
+            Set New Password
+          </Button>
+           
                 </div>
           </form>
         </div>

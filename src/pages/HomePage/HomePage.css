@@ -1,5 +1,8 @@
 .right-content {
-  padding: 90px 15px;
+  /* padding: 70px  15px; */
+  padding-top: 70px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .homePageWrapper {

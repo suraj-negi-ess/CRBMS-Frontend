@@ -1,11 +1,11 @@
-
 .cardBox {
   position: relative;
   top: 10px;
 }
 
 .right-content {
-  padding: 0 15px; /* Remove the vertical padding */
-  overflow-y: auto; /* Enable scrolling for the content area */
+  /* padding: 70px  15px; */
+  padding-top: 70px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
-

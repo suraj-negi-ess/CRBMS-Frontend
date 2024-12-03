@@ -9,11 +9,11 @@ import {
   CardContent,
   Chip,
   IconButton,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import {
   PersonAdd as PersonAddIcon,
-  PersonRemove as PersonRemoveIcon,
   ChevronRight as ChevronRightIcon,
   DeleteOutline,
   People,
@@ -36,11 +36,11 @@ const CommitteeCard = ({ committee, onDelete }) => {
         showLoading();
         await axios.delete(`/api/v1/committee/committees/${committee.id}`);
         onDelete(committee.id);
-        toast.success("Committee deleted successfully!"); // Optional notification
+        toast.success("Committee deleted successfully!");
         hideLoading();
       } catch (error) {
         console.error("Error deleting committee:", error);
-        toast.error("Failed to delete committee. Please try again."); // Optional notification
+        toast.error("Failed to delete committee. Please try again.");
       }
     }
   };
@@ -85,34 +85,62 @@ const CommitteeCard = ({ committee, onDelete }) => {
           <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
             {committee.description}
           </Typography>
-          {/* <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <AvatarGroup max={4}>
-            {members.map((member) => (
-              <Avatar
-                key={member.id}
-                alt={member.name}
-                sx={{ bgcolor: "primary.main" }}
-              >
-                {member.name.charAt(0)}
-              </Avatar>
-            ))}
-          </AvatarGroup>
-          <IconButton
-            color="primary"
-            size="small"
-            onClick={() =>
-              console.log(`View details of committee ${committee.id}`)
-            }
+
+          {/* Avatar Group */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
-            <ChevronRightIcon />
-          </IconButton>
-        </Box> */}
+            {committee.members && committee.members.length > 0 ? (
+              <AvatarGroup max={4}>
+                {committee.members.map((member, index) => (
+                  <Tooltip
+                    key={index}
+                    title={
+                      <Box
+                        component="img"
+                        src={
+                          `http://localhost:9000/${member?.avatarPath}` || ""
+                        }
+                        alt={member.fullname || "Unknown"}
+                        sx={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    }
+                    placement="top"
+                    arrow
+                  >
+                    <Avatar
+                      alt={member.fullname || "Unknown"}
+                      src={member.avatar || ""}
+                      sx={{ bgcolor: "primary.main" }}
+                    >
+                      {member.fullname ? member.fullname.charAt(0) : "?"}
+                    </Avatar>
+                  </Tooltip>
+                ))}
+              </AvatarGroup>
+            ) : (
+              // Fallback message if no members are available
+              <Typography variant="body2" color="text.secondary">
+                None
+              </Typography>
+            )}
+            <IconButton
+              color="primary"
+              size="small"
+              onClick={() => handleView()}
+            >
+              <ChevronRightIcon />
+            </IconButton>
+          </Box>
         </CardContent>
         <CardActions
           sx={{

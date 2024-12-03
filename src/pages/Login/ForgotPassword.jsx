@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { motion } from "framer-motion";
-import FloatingShapes from "../../components/FloatingShapes/FloatingShapes";
 import ebizLogo from "../../assets/Images/ebizlogo.png";
 import Input from "../../components/Input/Input";
 import axios from "axios";
@@ -10,6 +9,9 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { hideLoading, showLoading } from "../../Redux/alertSlicer";
 import { ArrowLeft, Mail } from "@mui/icons-material";
+import {
+  Button,
+} from "@mui/material";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -72,13 +74,15 @@ const ForgotPassword = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <div className="loginButtonBox">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  className="loginButton"
-                  type="submit"
-                >
-                  Send Reset Link
-                </motion.button>
+              <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mb: 2, width:"50%" }}
+          >
+             Send Reset Link
+          </Button>
               </div>
             </form>
           ) : (
