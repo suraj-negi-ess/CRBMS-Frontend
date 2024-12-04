@@ -19,7 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import PopupModals from "../Modals/PopupModals";
 import RoomGallery from "./RoomGallery";
 import RoomAmenities from "./RoomAmenities";
-import EditRoom from "./EditRoom";
+import EditRoomForm from "./EditRoom";
 
 const RoomsCard = ({ room }) => {
   const navigate = useNavigate();
@@ -291,7 +291,7 @@ const RoomsCard = ({ room }) => {
         setIsOpen={setIsEditOpen}
         title={'Room Edit'}
         modalBody={
-          <EditRoom 
+          <EditRoomForm 
           room={room}/>
         } />
 </>
