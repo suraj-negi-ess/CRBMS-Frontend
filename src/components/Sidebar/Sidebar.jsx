@@ -10,6 +10,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { MyContext } from "../Layout/Layout";
 
+
 // Styled components for the logout button
 const LogoutButton = styled(Button)(({ theme }) => ({
   color: "red",
@@ -21,7 +22,7 @@ const LogoutButton = styled(Button)(({ theme }) => ({
   fontFamily: "Poppins",
   fontSize: "large",
   "&:hover": {
-    backgroundColor: theme.palette.error.dark,
+    backgroundColor: theme.palette.error.light,
     color: "black",
   },
 }));
@@ -80,21 +81,10 @@ const Sidebar = () => {
               <NavLink to={item.path}>
                 <span className="icon">{React.createElement(item.icon)}</span>
                 <span className="text">{item.name}</span>
-                {/* {item.name} */}
               </NavLink>
             </li>
           );
         })}
-      </ul>
-      <ul>
-        <li className="logout">
-          <LogoutButton fullWidth onClick={handleLogout}>
-            <LogoutIcon>
-              <PowerSettingsNewOutlinedIcon />
-            </LogoutIcon>
-            Logout
-          </LogoutButton>
-        </li>
       </ul>
     </div>
   );

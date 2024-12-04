@@ -36,6 +36,8 @@ import MeetingForm from "./pages/MeetingPage/MeetingForm";
 import Loader from "./components/Loader/Loader";
 import TodaysMeetings from "./pages/SinglePage/TodaysMeetings";
 import Layout from "./components/Layout/Layout";
+import LocationPage from "./pages/LocationPage/LocationPage";
+import MeetingLogs from "./pages/MeetingLogs/MeetingLogs";
 
 axios.defaults.baseURL = "http://localhost:9000";
 axios.defaults.withCredentials = true;
@@ -140,6 +142,8 @@ function App() {
           <Route path="/committee" element={<CommitteeManagementMUI />} />
           <Route path="/add-committee" element={<AddCommitteeForm />} />
           <Route path="/book-meeting/:id" element={<MeetingForm />} />
+          <Route path="/location" element={<LocationPage />} />
+          <Route path="/logs" element={<MeetingLogs />} />
           <Route
             path="/view-committee/:committeeId"
             element={<CommitteeMemberList />}

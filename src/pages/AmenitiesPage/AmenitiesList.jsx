@@ -13,9 +13,7 @@ import { Link } from "react-router-dom";
 import "./Amenities.css";
 import PopupModals from "../../components/Modals/PopupModals";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import {
-  PersonAddAlt1Rounded,
-} from "@mui/icons-material";
+import { PersonAddAlt1Rounded } from "@mui/icons-material";
 import AmenitiesAdd from "./AmenitiesAdd";
 import DeleteModal from "../MembersPage/DeleteModal";
 import AmenitiesEdit from "./AmenitiesEdit";
@@ -33,7 +31,7 @@ const AmenitiesList = () => {
   const [amenities, setAmenities] = useState([]);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [updatedId, setUpdatedId] = useState('');
+  const [updatedId, setUpdatedId] = useState("");
   const [open, setOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
@@ -42,7 +40,7 @@ const AmenitiesList = () => {
       try {
         const response = await axios.get("/api/v1/amenity/get-all-amenities");
         setAmenities(response.data.data.roomAmenities); // Assuming response data has 'amenities' array
-       // toast.success("Amenities fetched successfully!");
+        // toast.success("Amenities fetched successfully!");
       } catch (error) {
         toast.error("Failed to fetch amenities!");
         console.error("Error fetching amenities:", error);
@@ -83,10 +81,10 @@ const AmenitiesList = () => {
     setOpen(true);
   };
 
-  const handleEdit=(id)=>{
+  const handleEdit = (id) => {
     setUpdatedId(id);
     setIsEditOpen(true);
-  }
+  };
 
   const handleDelete = async () => {
     try {
@@ -130,14 +128,14 @@ const AmenitiesList = () => {
     {
       field: "action",
       headerName: "Action",
-      flex:0.5,
+      flex: 0.5,
       renderCell: (params) => (
         <Box display="flex" alignItems="center" gap={1}>
-           <EditOutlinedIcon 
-            className="cursor" 
-            color="success" 
-            onClick={()=>handleEdit(params.id)} 
-            />
+          <EditOutlinedIcon
+            className="cursor"
+            color="success"
+            onClick={() => handleEdit(params.id)}
+          />
           {/* <Link to={`/view/${params.id}`}>
             <ViewIcon color="secondary" />
           </Link> */}
@@ -153,13 +151,16 @@ const AmenitiesList = () => {
 
   return (
     <div className="right-content w-100">
-     
       <DataGridWrapper>
-      <div className="buttonWrapper">
-       <Button variant="contained" color="success" onClick={()=>setIsAddOpen(true)}>
-                <PersonAddAlt1Rounded /> Add Amenities
-            </Button>
-            </div>
+        <div className="buttonWrapper">
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => setIsAddOpen(true)}
+          >
+            <PersonAddAlt1Rounded /> Add Amenities
+          </Button>
+        </div>
         <DataGrid
           rows={amenities}
           columns={columns}
@@ -167,8 +168,8 @@ const AmenitiesList = () => {
           rowHeight={40}
           rowsPerPageOptions={[5]}
           disableSelectionOnClick
-          getRowClassName={(params) =>
-            params.row.quantity < 5  && ''//? "low-row" : ""
+          getRowClassName={
+            (params) => params.row.quantity < 5 && "" //? "low-row" : ""
           }
         />
       </DataGridWrapper>
@@ -176,18 +177,16 @@ const AmenitiesList = () => {
       <PopupModals
         isOpen={isAddOpen}
         setIsOpen={setIsAddOpen}
-        title={'Add Amenity'}
-        modalBody={
-          <AmenitiesAdd />
-        } />
+        title={"Add Amenity"}
+        modalBody={<AmenitiesAdd />}
+      />
 
       <PopupModals
         isOpen={isEditOpen}
         setIsOpen={setIsEditOpen}
-        title={'Edit Amenities'}
-        modalBody={
-          <AmenitiesEdit id={updatedId} />
-        } />
+        title={"Edit Amenities"}
+        modalBody={<AmenitiesEdit id={updatedId} />}
+      />
 
       <DeleteModal
         open={open}
