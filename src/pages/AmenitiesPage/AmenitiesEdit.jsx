@@ -20,7 +20,7 @@ const FormWrapper = styled(Paper)(({ theme }) => ({
   marginTop: "10px",
 }));
 
-const AmenitiesAdd = () => {
+const AmenitiesEdit = ({id}) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -107,4 +107,4 @@ const AmenitiesAdd = () => {
   );
 };
 
-export default AmenitiesAdd;
+export default AmenitiesEdit;

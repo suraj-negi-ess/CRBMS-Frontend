@@ -7,11 +7,9 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import BlockIcon from '@mui/icons-material/Block';
 import toast from "react-hot-toast";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
 import DeleteModal from "./DeleteModal";
 import "./MembersPage.css";
 import {
-  AddCircleOutlineOutlined,
   CircleRounded,
   PersonAddAlt1Rounded,
 } from "@mui/icons-material";
@@ -42,7 +40,6 @@ const MembersPage = () => {
   const [updatedId, setUpdatedId] = useState('');
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [viewId, setViewId] = useState('');
-  const navigate = useNavigate();
   const filteredUsers = users.filter((user) =>
     showDeleted ? true : !user.deletedAt
   );
@@ -143,7 +140,7 @@ const MembersPage = () => {
     {
       field: "avatarPath",
       headerName: "Avatar",
-      width: 100,
+      flex: 0.25,
       renderCell: (params) => (
         params.value?<img
           src={`http://localhost:9000/${params.value}`}
@@ -152,9 +149,9 @@ const MembersPage = () => {
         />:<AccountCircleRoundedIcon style={{ width: "35px", height: "35px", borderRadius: "50%" }} />
       ),
     },
-    { field: "fullname", headerName: "Full Name", width: 330 },
-    { field: "email", headerName: "Email", width: 330 },
-    { field: "phoneNumber", headerName: "Phone Number", width: 200 },
+    { field: "fullname", headerName: "Full Name",flex: 1 },
+    { field: "email", headerName: "Email",flex: 1.5 },
+    { field: "phoneNumber", headerName: "Phone Number",flex: 1 },
     // {
     //   field: "status",
     //   headerName: "Status",
@@ -174,8 +171,8 @@ const MembersPage = () => {
     // },
     {
       field: "action",
+      flex: 0.5,
       headerName: "Action",
-      width: 200,
       renderCell: (params) => (
         <div style={{ display: "flex", gap: "10px" }}>
             <EditOutlinedIcon 

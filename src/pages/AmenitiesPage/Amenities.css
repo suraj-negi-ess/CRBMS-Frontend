@@ -1,3 +1,21 @@
 .low-row {
-  background-color: rgba(252, 0, 0, 0.5) !important;
+  background-color: rgba(252, 0, 0, 0.1) !important;
+}
+
+
+.pop-content {
+  padding: 15px 15px;
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  padding-bottom: 20px;
+  gap: 10px;
+}
+
+.cursor{
+  cursor: pointer;
+  margin-top: 1px;
 }
