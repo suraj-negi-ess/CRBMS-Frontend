@@ -9,6 +9,7 @@ import logo from "../../assets/Images/logo.webp";
 import {
   Badge,
   Button,
+  Divider,
   ListItemIcon,
   Menu,
   MenuItem,
@@ -23,9 +24,9 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import FullscreenOutlinedIcon from "@mui/icons-material/FullscreenOutlined";
 import FullscreenExitOutlinedIcon from "@mui/icons-material/FullscreenExitOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import PrivacyTipOutlinedIcon from "@mui/icons-material/PrivacyTipOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import Logout from "@mui/icons-material/Logout";
+import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 
 // Context and State Management
 import { useSelector } from "react-redux";
@@ -96,7 +97,6 @@ const Header = () => {
     }
   };
 
-
   return (
     <header>
       <div className="container-fluid w-100">
@@ -161,12 +161,12 @@ const Header = () => {
                   />
                 </span>
               </div>
-              <div className="myAcc d-flex align-items-center">
+              {/* <div className="myAcc d-flex align-items-center">
                 <div className="userInfo">
                   <h4>{user?.fullname}</h4>
                   <p className="mb-0">{user?.username || ""}</p>
                 </div>
-              </div>
+              </div> */}
             </Button>
           </div>
         </div>
@@ -180,6 +180,11 @@ const Header = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
+        <div className="userInfo">
+          <h4>Welcome,</h4>
+          <p className="mb-0">{user?.fullname}</p>
+        </div>
+        <Divider variant="middle" component="li" />
         <MenuItem
           onClick={handleMenuToggle(setMenuAnchor)}
           sx={{ color: "green" }}
@@ -197,7 +202,7 @@ const Header = () => {
           sx={{ color: "blue" }}
         >
           <ListItemIcon>
-            <PrivacyTipOutlinedIcon fontSize="small" sx={{ color: "blue" }} />
+            <KeyOutlinedIcon fontSize="small" sx={{ color: "blue" }} />
           </ListItemIcon>
           Reset Password
         </MenuItem>

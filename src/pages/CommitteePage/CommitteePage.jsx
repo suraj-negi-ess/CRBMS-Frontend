@@ -22,7 +22,6 @@ const CardWrapper = styled(Paper)(({ theme }) => ({
   width: "100%",
   height: "100%",
   lineHeight: "60px",
-  border: "2px solid #0858f7",
   boxShadow: theme.shadows[1],
   transition: "box-shadow 0.3s ease-in-out",
   cursor: "pointer",
@@ -75,11 +74,11 @@ const CommitteeManagementMUI = () => {
 
   return (
     <RightContent>
-      <ContentHeader elevation={8}>
-        <Typography variant="h6" component="h6" sx={{ marginRight: "20px" }}>
+      <ContentHeader sx={{ position: "static" }} elevation={4}>
+        <Typography variant="h5" component="h5" sx={{ marginRight: "20px" }}>
           Committee Management
         </Typography>
-        <FormControl style={{ marginRight: "50px", width: "150px" }}>
+        <FormControl style={{ marginRight: "5 px", width: "150px" }}>
           <InputLabel id="filter-select-label">Show</InputLabel>
           <Select
             labelId="filter-select-label"

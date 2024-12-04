@@ -23,7 +23,6 @@ const CardWrapper = styled(Paper)(({ theme }) => ({
   width: "100%",
   height: "100%",
   lineHeight: "60px",
-  border: "2px solid #0858f7",
   boxShadow: theme.shadows[1],
   transition: "box-shadow 0.3s ease-in-out",
   cursor: "pointer",

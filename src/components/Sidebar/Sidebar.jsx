@@ -4,7 +4,7 @@ import { Button, styled } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { adminSideBarData, userSideBarData } from "../../data";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -69,47 +69,22 @@ const Sidebar = () => {
       console.log(error);
     }
   };
-
+  const location = useLocation();
   return (
-    <div
-      className={`${isSidebarVisible === true ? "sidebar-toggle" : "sidebar"}`}
-    >
-      <ul>
-        {menuToBeRendered.map((item) => (
-          <li key={item.id} className="menu-item">
-            <NavLink
-              to={item.path}
-              className={({ isActive }) =>
-                `nav-link ${isActive ? "active-link" : ""}`
-              }
-              style={({ isActive }) =>
-                isActive
-                  ? { backgroundColor: "#e0f7fa"} // Add your desired background color and styles here
-                  : {}
-              }
-            >
-              <Button
-                className="button"
-                fullWidth
-                onClick={() =>
-                  item.subMenu && isAdmin && handleSubMenuToggle(item.id)
-                }
-              >
+    <div className={`sidebar ${isSidebarVisible ? "close" : ""}`}>
+      <ul className="menu-item">
+        {menuToBeRendered.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <li key={item.id} className={isActive ? "active" : ""}>
+              <NavLink to={item.path}>
                 <span className="icon">{React.createElement(item.icon)}</span>
-                {item.name}
-                {item.subMenu && isAdmin && (
-                  <span
-                    className={`arrow ${
-                      openSubMenu === item.id ? "rotate" : ""
-                    }`}
-                  >
-                    <ArrowForwardIosIcon fontSize="12px" />
-                  </span>
-                )}
-              </Button>
-            </NavLink>
-          </li>
-        ))}
+                <span className="text">{item.name}</span>
+                {/* {item.name} */}
+              </NavLink>
+            </li>
+          );
+        })}
       </ul>
       <ul>
         <li className="logout">

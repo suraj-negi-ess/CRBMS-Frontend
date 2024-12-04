@@ -39,7 +39,6 @@ const RoomsPage = () => {
       setRoomsData(response.data.data.rooms);
       // toast.success("Room Fetched Successfully");
       // console.log(response.data.data.rooms);
-      
     } catch (error) {
       toast.error("Something Went Wrong");
       console.error("Error fetching room data:", error);
@@ -120,7 +119,7 @@ const RoomsPage = () => {
 
   return (
     <MainContainer>
-      <ContentHeader elevation="8">
+      <ContentHeader sx={{ position: "sticky" }} elevation="8">
         <DatePicker
           value={selectedDate}
           onChange={(newValue) => setSelectedDate(newValue)}

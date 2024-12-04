@@ -5,26 +5,23 @@ import {
   Button,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   Chip,
-  IconButton,
   Tooltip,
   Typography,
 } from "@mui/material";
 import {
   PersonAdd as PersonAddIcon,
-  ChevronRight as ChevronRightIcon,
   DeleteOutline,
-  People,
+  People as PeopleIcon,
 } from "@mui/icons-material";
 import React from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import PeopleIcon from "@mui/icons-material/People";
 import { useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../../Redux/alertSlicer";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 
 const CommitteeCard = ({ committee, onDelete }) => {
   const navigate = useNavigate();
@@ -64,13 +61,17 @@ const CommitteeCard = ({ committee, onDelete }) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-start",
-              mb: 2,
+              marginBottom: "2px",
             }}
           >
             <Typography variant="h6" component="h2">
               {committee.name}
             </Typography>
-            {user?.isAdmin ? (
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <VisibilityOutlinedIcon color="success" onClick={handleView} />
+              {user?.isAdmin && (
+                <DeleteOutline color="error" onClick={handleDelete} />
+              )}
               <Chip
                 label={`${committee.memberCount}`}
                 size="large"
@@ -78,15 +79,11 @@ const CommitteeCard = ({ committee, onDelete }) => {
                 variant="filled"
                 icon={<PeopleIcon />}
               />
-            ) : (
-              ""
-            )}
+            </Box>
           </Box>
           <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
             {committee.description}
           </Typography>
-
-          {/* Avatar Group */}
           <Box
             sx={{
               display: "flex",
@@ -94,86 +91,47 @@ const CommitteeCard = ({ committee, onDelete }) => {
               justifyContent: "space-between",
             }}
           >
-            {committee.members && committee.members.length > 0 ? (
-              <AvatarGroup max={4}>
-                {committee.members.map((member, index) => (
-                  <Tooltip
-                    key={index}
-                    title={
-                      <Box
-                        component="img"
-                        src={
-                          `http://localhost:9000/${member?.avatarPath}` || ""
-                        }
-                        alt={member.fullname || "Unknown"}
-                        sx={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    }
-                    placement="top"
-                    arrow
+            <AvatarGroup max={4}>
+              {(committee.members || []).map((member, index) => (
+                <Tooltip
+                  key={index}
+                  title={
+                    <Box
+                      component="img"
+                      src={`http://localhost:9000/${member?.avatarPath || "https://icon-library.com/images/no-image-available-icon/no-image-available-icon-2.jpg"}`}
+                      alt={member?.fullname || "Unknown"}
+                      sx={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                        boxShadow: "0 0 8px rgba(0,0,0,0.3)",
+                      }}
+                    />
+                  }
+                  slotProps={{
+                    tooltip: {
+                      sx: {
+                        padding: 0,
+                        bgcolor: "transparent",
+                        boxShadow: "none",
+                      },
+                    },
+                  }}
+                  placement="top"
+                  arrow
+                >
+                  <Avatar
+                    alt={member?.fullname || "Unknown"}
+                    src={member?.avatar || ""}
+                    sx={{ bgcolor: "primary.main" }}
                   >
-                    <Avatar
-                      alt={member.fullname || "Unknown"}
-                      src={member.avatar || ""}
-                      sx={{ bgcolor: "primary.main" }}
-                    >
-                      {member.fullname ? member.fullname.charAt(0) : "?"}
-                    </Avatar>
-                  </Tooltip>
-                ))}
-              </AvatarGroup>
-            ) : (
-              // Fallback message if no members are available
-              <Typography variant="body2" color="text.secondary">
-                None
-              </Typography>
-            )}
-            <IconButton
-              color="primary"
-              size="small"
-              onClick={() => handleView()}
-            >
-              <ChevronRightIcon />
-            </IconButton>
+                    {member?.fullname ? member.fullname.charAt(0) : "?"}
+                  </Avatar>
+                </Tooltip>
+              ))}
+            </AvatarGroup>
           </Box>
         </CardContent>
-        <CardActions
-          sx={{
-            mt: "auto",
-            borderTop: 1,
-            borderColor: "divider",
-            justifyContent: "space-between",
-            gap: 1,
-          }}
-        >
-          <Button
-            size="medium"
-            startIcon={<PersonAddIcon />}
-            color="success"
-            onClick={handleView}
-            variant="outlined"
-          >
-            View Members
-          </Button>
-          {user?.isAdmin ? (
-            <Button
-              size="medium"
-              startIcon={<DeleteOutline />}
-              color="error"
-              onClick={handleDelete}
-              variant="contained"
-            >
-              Delete Committee
-            </Button>
-          ) : (
-            ""
-          )}
-        </CardActions>
       </CardActionArea>
     </Card>
   );

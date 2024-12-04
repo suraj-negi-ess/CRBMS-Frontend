@@ -9,8 +9,8 @@
 }
 
 .sidebarWrapper-toggle {
-  width: 0;
-  flex: 0 0 0;
+  width: 60px;
+  flex: 0 0 60px;
   transition: all 0.3s ease-in-out;
 }
 
@@ -21,7 +21,7 @@
 }
 
 .contentToggle {
-  width: 100%;
-  flex: 0 0 100%;
+  width: calc(100% - 60px);
+  flex: 0 0 calc(100% - 60px);
   transition: all 0.3s ease-in-out;
 }
