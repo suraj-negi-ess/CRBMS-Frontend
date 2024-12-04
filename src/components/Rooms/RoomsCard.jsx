@@ -9,19 +9,43 @@ import {
 } from "@mui/material";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import CollectionsIcon from '@mui/icons-material/Collections';
+import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PopupModals from "../Modals/PopupModals";
+import RoomGallery from "./RoomGallery";
+import RoomAmenities from "./RoomAmenities";
+import EditRoom from "./EditRoom";
 
 const RoomsCard = ({ room }) => {
   const navigate = useNavigate();
   const [hover, setHover] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [isAmenitiesOpen, setIsAmenitiesOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
   const handleCardClick = () => {
     navigate(`/rooms/${room.id}`);
   };
 
+  const handleGallery=()=>{
+    setIsGalleryOpen(true);
+  }
+
+  const handleAmenities=()=>{
+    setIsAmenitiesOpen(true)
+  }
+
+  const handleRoomEdit=()=>{
+    setIsEditOpen(true)
+  }
+
   return (
+    <>
     <Paper
       elevation={hover ? 20 : 4}
       sx={{
@@ -155,16 +179,71 @@ const RoomsCard = ({ room }) => {
               fullWidth
               variant="contained"
               onClick={handleCardClick}
+              title="View Room"
               sx={{
                 borderRadius: "0 0 0px 10px",
                 flex: 2,
               }}
               size="small"
             >
-              View Room
+              <VisibilityOutlinedIcon 
+            color="white" 
+            className="cursor" 
+            />
             </Button>
             <Button
               fullWidth
+              variant="contained"
+              title="Room Gallery"
+              onClick={handleGallery}
+              sx={{
+                background: "white",
+                color:"black",
+                flex: 1,
+              }}
+              size="small"
+            >
+              <CollectionsIcon 
+            color="white" 
+            className="cursor" 
+            />
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              title="Room Amenities"
+              onClick={handleAmenities}
+              sx={{
+                background: "white",
+                color:"black",
+                flex: 1,
+              }}
+              size="small"
+            >
+              <Groups2OutlinedIcon 
+            color="white" 
+            className="cursor" 
+            />
+            </Button>
+            <Button
+              variant="contained"
+              title="Edit Room"
+              onClick={handleRoomEdit}
+              sx={{
+                background: "white",
+                color:"black",
+                flex: 1,
+              }}
+              size="small"
+            >
+              <EditOutlinedIcon 
+            color="white" 
+            className="cursor" 
+            />
+            </Button>
+            <Button
+              fullWidth
+              title="Delete Room"
               variant="contained"
               onClick={handleCardClick}
               sx={{
@@ -191,6 +270,31 @@ const RoomsCard = ({ room }) => {
         )}
       </CardActions>
     </Paper>
+    <PopupModals
+        isOpen={isGalleryOpen}
+        setIsOpen={setIsGalleryOpen}
+        title={'Room Gallery'}
+        modalBody={
+          <RoomGallery 
+          room={room}/>
+        } />
+        <PopupModals
+        isOpen={isAmenitiesOpen}
+        setIsOpen={setIsAmenitiesOpen}
+        title={'Room Amenities'}
+        modalBody={
+          <RoomAmenities 
+          room={room}/>
+        } />
+        <PopupModals
+        isOpen={isEditOpen}
+        setIsOpen={setIsEditOpen}
+        title={'Room Edit'}
+        modalBody={
+          <EditRoom 
+          room={room}/>
+        } />
+</>
   );
 };
 

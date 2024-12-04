@@ -1,26 +1,30 @@
 import React, { useState, useEffect } from "react";
 import RoomsCard from "../../components/Rooms/RoomsCard";
 import {
-  Chip,
-  FormControl,
-  FormControlLabel,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Radio,
-  RadioGroup,
-  Select,
   Box,
+  styled,
+  Paper,
   Button,
-  Checkbox,
-  ListItemText,
+  Grid,
+  Typography,
 } from "@mui/material";
-import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { PersonAddAlt1Rounded } from "@mui/icons-material";
 import "./RoomsPage.css";
-import { ContentHeader, MainContainer, RightContent } from "../../Style";
+import { MainContainer, RightContent } from "../../Style";
+import PopupModals from "../../components/Modals/PopupModals";
+import AddRoomForm from "./AddRoomForm";
+import RoomFilter from "./RoomFilter";
+
+const DataGridWrapper = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  color: theme.palette.text.secondary,
+  width: "100%",
+  padding: "15px",
+  borderRadius: "20px",
+}));
 
 const RoomsPage = () => {
   const [roomsData, setRoomsData] = useState([]); // State for rooms data
@@ -28,7 +32,7 @@ const RoomsPage = () => {
   const [isAvailable, setIsAvailable] = useState("all"); // Default to 'all'
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [amenitiesList, setAmenitiesList] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(dayjs()); // For date filter
+  const [isAddOpen, setIsAddOpen] = useState(false);
   const [meetingStartTime, setMeetingStartTime] = useState(null); // For start time filter
   const [meetingEndingTime, setMeetingEndingTime] = useState(null); // For end time filter
 
@@ -79,14 +83,7 @@ const RoomsPage = () => {
     setIsAvailable(event.target.value);
   };
 
-  // Handle Start Time Change
-  const handleStartTimeChange = (newStartTime) => {
-    setMeetingStartTime(newStartTime);
 
-    // Auto-select one hour later for ending time
-    const autoEndTime = newStartTime.add(1, "hour");
-    setMeetingEndingTime(autoEndTime);
-  };
 
   // Filter rooms based on the selected filters
   const filteredRooms = roomsData.filter((room) => {
@@ -118,96 +115,59 @@ const RoomsPage = () => {
   });
 
   return (
-    <MainContainer>
-      <ContentHeader sx={{ position: "sticky" }} elevation="8">
-        <DatePicker
-          value={selectedDate}
-          onChange={(newValue) => setSelectedDate(newValue)}
-          format="DD-MM-YYYY"
-          disablePast
-          sx={{
-            "& .MuiInputBase-root": {
-              fontSize: "16px", // Adjust font size
-              height: "40px", // Adjust input height
-            },
-          }}
-        />
-        <TimePicker
-          value={meetingStartTime}
-          onChange={handleStartTimeChange}
-          defaultValue={dayjs(Date.now())}
-          sx={{
-            "& .MuiInputBase-root": {
-              fontSize: "16px",
-              height: "40px",
-            },
-          }}
-        />
-        <TimePicker
-          value={meetingEndingTime}
-          onChange={(newValue) => setMeetingEndingTime(newValue)}
-          sx={{
-            "& .MuiInputBase-root": {
-              fontSize: "16px",
-              height: "40px",
-            },
-          }}
-        />
-        <FormControl sx={{ width: 300 }} size="small">
-          <InputLabel id="demo-multiple-checkbox-label">Amenities</InputLabel>
-          <Select
-            labelId="demo-multiple-checkbox-label"
-            id="demo-multiple-checkbox"
-            multiple
-            value={selectedAmenities}
-            onChange={handleChangeAmenities}
-            input={<OutlinedInput label="Amenities" />}
-            renderValue={(selected) => (
-              <Box sx={{ display: "flex", gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} size="small" />
-                ))}
-              </Box>
-            )}
+    <div className="right-content w-100">
+      <DataGridWrapper>
+        <Grid xs={12} container sx={{ padding: "5px 0" }}>
+          <Grid
+            container
+            item
+            xs={6}
+            direction="column"
+            sx={{ paddingLeft: "10px" }}
           >
-            {amenitiesList.map((item, index) => (
-              <MenuItem key={index} value={item}>
-                <Checkbox checked={selectedAmenities.includes(item)} />
-                <ListItemText primary={item} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl sx={{ marginRight: "10px", minWidth: 100 }} size="small">
-          <InputLabel id="demo-select-small-label">Seats</InputLabel>
-          <Select
-            labelId="demo-select-small-label"
-            id="demo-select-small"
-            value={capacity}
-            onChange={handleChangeCapacity}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>10+</MenuItem>
-            <MenuItem value={20}>20+</MenuItem>
-            <MenuItem value={30}>30+</MenuItem>
-          </Select>
-        </FormControl>
-      </ContentHeader>
-      <RightContent>
-        <div className="cardBox row w-100">
-          {filteredRooms.map((room, index) => (
-            <div
-              className="col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 mb-4"
-              key={index}
-            >
-              <RoomsCard room={room} />
+            <Typography variant="h5" component="h5">
+              Manage Room
+            </Typography>
+          </Grid>
+          <Grid >
+            <Box display="flex" justifyContent="flex-end">
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => setIsAddOpen(true)}
+                sx={{float:"right"}}
+              >
+                <PersonAddAlt1Rounded />
+                Add Room
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+
+        <MainContainer>
+          <RoomFilter />
+          <RightContent>
+            <div className="cardBox row w-100">
+              {filteredRooms.map((room, index) => (
+                <div
+                  className="col-xs-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 mb-4"
+                  key={index}
+                >
+                  <RoomsCard room={room} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </RightContent>
-    </MainContainer>
+          </RightContent>
+        </MainContainer>
+      </DataGridWrapper>
+      <PopupModals
+        isOpen={isAddOpen}
+        setIsOpen={setIsAddOpen}
+        title={'Add New Room'}
+        modalBody={
+          <AddRoomForm />
+        } />
+    </div>
   );
 };
 

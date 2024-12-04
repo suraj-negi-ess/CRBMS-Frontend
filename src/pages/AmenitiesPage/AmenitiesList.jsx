@@ -25,7 +25,6 @@ const DataGridWrapper = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
   width: "100%",
   padding: "15px",
-  marginTop: "10px",
   borderRadius: "20px",
 }));
 

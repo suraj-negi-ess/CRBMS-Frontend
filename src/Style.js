@@ -27,7 +27,7 @@ export const MainContainer = styled("div")(({ theme }) => ({
 }));
 
 export const RightContent = styled("div")(({ theme }) => ({
-  marginTop: "80px",
+  marginTop: "10px",
   padding: "0 15px",
   //   overflowY: "auto",
 }));

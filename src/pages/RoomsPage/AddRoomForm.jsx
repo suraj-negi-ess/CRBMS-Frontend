@@ -143,12 +143,9 @@ const AddRoomForm = () => {
   };
 
   return (
-    <div className="right-content w-100">
+    <div className="pop-content w-100">
       <FormWrapper>
         <Box component="form" onSubmit={formik.handleSubmit}>
-          <Typography variant="h6" component="h2">
-            Add New Room
-          </Typography>
           <Box display="flex" justifyContent="space-between">
             <TextField
               label="Room Name"
@@ -187,8 +184,8 @@ const AddRoomForm = () => {
               style={{ marginRight: 8, flex: 1 }}
             />
             <TextField
-              label="Sanitation Time"
-              name="Sanitation Time"
+              label="Tolerance Period"
+              name="tolerancePeriod"
               margin="normal"
               type="number"
               // value={formik.values.Sanitation Time}
@@ -198,20 +195,6 @@ const AddRoomForm = () => {
               size="small"
               style={{ marginRight: 8, flex: 1 }}
             />
-            {/* <TextField
-              label="Password"
-              name="password"
-              margin="normal"
-              type="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-              size="small"
-              style={{ flex: 1 }}
-              fullWidth
-              mb={2}
-            /> */}
           </Box>
           <TextField
             label="Description"
@@ -270,11 +253,11 @@ const AddRoomForm = () => {
             <label htmlFor="room-image-upload">
               <IconButton component="span">
                 <Avatar
-                  sx={{ width: 100, height: 100 }}
+                  sx={{ width: 50, height: 50 }}
                   src={roomImagePreview}
                   alt="Room Image Preview"
                 >
-                  <PhotoCameraIcon fontSize="large" />
+                  <PhotoCameraIcon fontSize="medium" />
                 </Avatar>
               </IconButton>
             </label>
