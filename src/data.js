@@ -4,7 +4,6 @@ import Groups2OutlinedIcon from "@mui/icons-material/Groups2Outlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
-import LaptopMacIcon from "@mui/icons-material/LaptopMac";
 import Diversity2Icon from "@mui/icons-material/Diversity2";
 import ChairOutlinedIcon from "@mui/icons-material/ChairOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
@@ -12,30 +11,33 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import RoomServiceOutlinedIcon from "@mui/icons-material/RoomServiceOutlined";
 import BeenhereOutlinedIcon from "@mui/icons-material/BeenhereOutlined";
 import roomImage from "./assets/Images/room.jpg";
-
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import ChairIcon from "@mui/icons-material/Chair";
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 export const adminSideBarData = [
   {
     id: 1,
     name: "Dashboard",
-    icon: LaptopMacIcon,
+    icon: DashboardOutlinedIcon,
     path: "/meeting-calendar",
   },
   {
     id: 2,
     name: "Users",
-    icon: Groups2OutlinedIcon,
+    icon: PersonOutlineOutlinedIcon,
     path: "/members",
   },
   {
     id: 3,
     name: "Committee",
-    icon: Groups2OutlinedIcon,
+    icon: Diversity2Icon,
     path: "/committee",
   },
   {
     id: 4,
     name: "Amenities",
-    icon: CalendarMonthOutlinedIcon,
+    icon: ChairIcon,
     path: "/amenities",
   },
   {
@@ -44,13 +46,25 @@ export const adminSideBarData = [
     icon: MeetingRoomOutlinedIcon,
     path: "/rooms",
   },
+  {
+    id: 6,
+    name: "Location",
+    icon: LocationOnOutlinedIcon,
+    path: "/location",
+  },
+  {
+    id: 7,
+    name: "Meeting Logs",
+    icon: HistoryOutlinedIcon,
+    path: "/logs",
+  },
 ];
 
 export const userSideBarData = [
   {
     id: 1,
     name: "My Meeting", //MY Meetings
-    icon: LaptopMacIcon,
+    icon: DashboardOutlinedIcon,
     path: "/meeting-calendar",
   },
   {

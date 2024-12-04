@@ -12,15 +12,6 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const FormWrapper = styled(Paper)(({ theme }) => ({
-  bgcolor: "#f4f6f8",
-  color: theme.palette.text.secondary,
-  borderRadius: "20px",
-  padding: "15px",
-  marginTop: "10px",
-  width: "100%",
-}));
-
 const ViewMember = ({id}) => {
   //const { id } = useParams();
   const [userData, setUserData] = useState(null);

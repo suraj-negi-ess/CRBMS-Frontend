@@ -31,3 +31,14 @@ export const RightContent = styled("div")(({ theme }) => ({
   padding: "0 15px",
   //   overflowY: "auto",
 }));
+
+export const PaperWrapper = styled(Paper)(({ theme }) => ({
+  bgcolor: "#f4f6f8",
+  color: theme.palette.text.secondary,
+  borderRadius: "20px 20px 0 0",
+  padding: "15px",
+  marginTop: "10px",
+  width: "100%",
+  // height: `calc(100vh - 80px)`,
+  height: "100%",
+}));
