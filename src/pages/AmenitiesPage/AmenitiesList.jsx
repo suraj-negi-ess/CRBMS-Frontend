@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, Paper, Box, styled } from "@mui/material";
+import { Button, Paper, Box, styled, Typography } from "@mui/material";
 import {
   Add,
   Remove,
@@ -17,6 +17,8 @@ import { PersonAddAlt1Rounded } from "@mui/icons-material";
 import AmenitiesAdd from "./AmenitiesAdd";
 import DeleteModal from "../MembersPage/DeleteModal";
 import AmenitiesEdit from "./AmenitiesEdit";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import { PaperWrapper, RightContent } from "../../Style";
 
 const DataGridWrapper = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -38,8 +40,7 @@ const AmenitiesList = () => {
     const fetchAmenities = async () => {
       try {
         const response = await axios.get("/api/v1/amenity/get-all-amenities");
-        setAmenities(response.data.data.roomAmenities); // Assuming response data has 'amenities' array
-        // toast.success("Amenities fetched successfully!");
+        setAmenities(response.data.data.roomAmenities); //
       } catch (error) {
         toast.error("Failed to fetch amenities!");
         console.error("Error fetching amenities:", error);
@@ -149,17 +150,27 @@ const AmenitiesList = () => {
   ];
 
   return (
-    <div className="right-content w-100">
-      <DataGridWrapper>
-        <div className="buttonWrapper">
+    <RightContent>
+      <PaperWrapper>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "10px",
+          }}
+        >
+          <Typography variant="h5" component="h5" sx={{ marginRight: "20px" }}>
+            Amenities
+          </Typography>
           <Button
             variant="contained"
             color="success"
             onClick={() => setIsAddOpen(true)}
           >
-            <PersonAddAlt1Rounded /> Add Amenities
+            <AddOutlinedIcon /> Amenity
           </Button>
-        </div>
+        </Box>
         <DataGrid
           rows={amenities}
           columns={columns}
@@ -171,28 +182,27 @@ const AmenitiesList = () => {
             (params) => params.row.quantity < 5 && "" //? "low-row" : ""
           }
         />
-      </DataGridWrapper>
+        <PopupModals
+          isOpen={isAddOpen}
+          setIsOpen={setIsAddOpen}
+          title={"Add Amenity"}
+          modalBody={<AmenitiesAdd />}
+        />
 
-      <PopupModals
-        isOpen={isAddOpen}
-        setIsOpen={setIsAddOpen}
-        title={"Add Amenity"}
-        modalBody={<AmenitiesAdd />}
-      />
+        <PopupModals
+          isOpen={isEditOpen}
+          setIsOpen={setIsEditOpen}
+          title={"Edit Amenities"}
+          modalBody={<AmenitiesEdit id={updatedId} />}
+        />
 
-      <PopupModals
-        isOpen={isEditOpen}
-        setIsOpen={setIsEditOpen}
-        title={"Edit Amenities"}
-        modalBody={<AmenitiesEdit id={updatedId} />}
-      />
-
-      <DeleteModal
-        open={open}
-        onClose={handleClose}
-        onDeleteConfirm={handleDelete}
-      />
-    </div>
+        <DeleteModal
+          open={open}
+          onClose={handleClose}
+          onDeleteConfirm={handleDelete}
+        />
+      </PaperWrapper>
+    </RightContent>
   );
 };
 

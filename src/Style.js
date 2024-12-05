@@ -27,7 +27,7 @@ export const MainContainer = styled("div")(({ theme }) => ({
 }));
 
 export const RightContent = styled("div")(({ theme }) => ({
-  marginTop: "10px",
+  marginTop: "80px",
   padding: "0 15px",
   //   overflowY: "auto",
 }));
@@ -35,7 +35,7 @@ export const RightContent = styled("div")(({ theme }) => ({
 export const PaperWrapper = styled(Paper)(({ theme }) => ({
   bgcolor: "#f4f6f8",
   color: theme.palette.text.secondary,
-  borderRadius: "20px 20px 0 0",
+  borderRadius: "20px",
   padding: "15px",
   marginTop: "10px",
   width: "100%",

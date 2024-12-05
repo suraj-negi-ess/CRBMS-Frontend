@@ -1,27 +1,29 @@
 import { Box, Button, TextField } from "@mui/material";
+import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const LocationAdd = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    name: "", // Key must match the name attribute of the TextField
   });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value, // Dynamically update the correct key
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("api/v1/amenity/add-amenity", formData);
-      toast.success("Amenity added Successfully");
-      setFormData({ name: "", description: "", quantity: 1 });
+      const response = await axios.post("api/v1/location/locations", formData);
+      toast.success("Location added Successfully");
+      setFormData({ name: "" }); // Reset formData after submission
     } catch (err) {
-      toast.error(err.response?.data?.message);
-      console.error("Error adding amenity:", err);
+      toast.error(err.response?.data?.message || "An error occurred");
+      console.error("Error adding location:", err);
     }
   };
 
@@ -38,8 +40,8 @@ const LocationAdd = () => {
       >
         <TextField
           label="Location Name"
-          name="location"
-          value={formData.location}
+          name="name" // Match the key in formData
+          value={formData.name} // Access the correct value
           onChange={handleChange}
           fullWidth
           required

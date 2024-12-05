@@ -9,17 +9,6 @@ import {
 } from "@mui/material";
 import toast from "react-hot-toast";
 
-const FormWrapper = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  color: theme.palette.text.secondary,
-  height: "100%",
-  width: "100%",
-  lineHeight: "60px",
-  borderRadius: "20px",
-  padding: "15px",
-  marginTop: "10px",
-}));
-
 const AmenitiesEdit = ({id}) => {
   const [formData, setFormData] = useState({
     name: "",

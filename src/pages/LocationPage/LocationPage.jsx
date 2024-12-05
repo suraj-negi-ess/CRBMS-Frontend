@@ -1,58 +1,96 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PaperWrapper, RightContent } from "../../Style";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import PopupModals from "../../components/Modals/PopupModals";
 import LocationAdd from "./LocationAdd";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
-  Add,
-  Remove,
   DeleteOutlineOutlined as DeleteIcon,
-  VisibilityOutlined as ViewIcon,
+  ToggleOffOutlined as ToggleOffIcon,
+  ToggleOnOutlined as ToggleOnIcon,
 } from "@mui/icons-material";
-import ToggleOffOutlinedIcon from "@mui/icons-material/ToggleOffOutlined";
-import ToggleOnOutlinedIcon from "@mui/icons-material/ToggleOnOutlined";
+import axios from "axios";
+import toast from "react-hot-toast";
+import LocationEdit from "./LocationEdit";
 
 const LocationPage = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [location, setLocation] = useState([]);
+  const [updatedId, setUpdatedId] = useState(null);
+
+  // Fetch locations on mount
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await axios.get("/api/v1/location/locations");
+
+        // Add serial numbers to the fetched data
+        const locationsWithSerial = response.data.data.locations.map(
+          (location, index) => ({
+            ...location,
+            serial: index + 1, // Serial number starts at 1
+          })
+        );
+
+        setLocation(locationsWithSerial);
+        toast.success("Locations Fetched Successfully");
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      }
+    };
+
+    fetchLocations();
+  }, []);
+
+  // Handle Edit Popup
   const handleEdit = (id) => {
     setUpdatedId(id);
     setIsEditOpen(true);
   };
 
-  const handleDelete = async () => {
+  // Handle Successful Update
+  const handleUpdateSuccess = (updatedLocation) => {
+    setLocation((prev) =>
+      prev.map((loc) => (loc.id === updatedLocation.id ? updatedLocation : loc))
+    );
+    setIsEditOpen(false);
+  };
+
+  // Handle Status Change
+  const handleStatusChange = async (id) => {
     try {
-      await axios.delete(`/api/v1/amenity/delete/${deleteId}`);
-      setAmenities((prevAmenities) =>
-        prevAmenities.filter((amenity) => amenity.id !== deleteId)
+      const response = await axios.patch(
+        `/api/v1/location/locations/${id}/status`
       );
-      toast.success("Amenity deleted successfully!");
+      const updatedLocation = response.data.data.location;
+
+      setLocation((prev) =>
+        prev.map((loc) =>
+          loc.id === id ? { ...loc, status: updatedLocation.status } : loc
+        )
+      );
+
+      toast.success(
+        `Location status changed to ${updatedLocation.status ? "Active" : "Inactive"}`
+      );
     } catch (error) {
-      toast.error("Failed to delete amenity!");
-      console.error("Error deleting amenity:", error);
+      console.error("Error changing status:", error);
+      toast.error("Failed to change location status!");
     }
   };
-  // Fake data for the DataGrid
-  const rows = [
-    { id: 1, serialNo: 1, name: "Location A", status: "Active" },
-    { id: 2, serialNo: 2, name: "Location B", status: "Inactive" },
-    { id: 3, serialNo: 3, name: "Location C", status: "Active" },
-  ];
 
-  // Columns for the DataGrid
+  // DataGrid Columns
   const columns = [
     {
-      field: "serialNo",
-      headerName: "Serial No.",
-      width: 100,
+      field: "serial",
+      headerName: "No.",
+      width: 70,
     },
     {
-      field: "name",
+      field: "locationName",
       headerName: "Name",
       flex: 1,
       minWidth: 150,
@@ -60,29 +98,45 @@ const LocationPage = () => {
     {
       field: "status",
       headerName: "Status",
-      width: 120,
+      flex: 0.5,
+      renderCell: (params) => (
+        <>
+          {params.row.status ? (
+            <ToggleOnIcon
+              color="success"
+              fontSize="large"
+              onClick={() => handleStatusChange(params.row.id)}
+              cursor="pointer"
+            />
+          ) : (
+            <ToggleOffIcon
+              color="error"
+              fontSize="large"
+              onClick={() => handleStatusChange(params.row.id)}
+              cursor="pointer"
+            />
+          )}
+        </>
+      ),
     },
     {
       field: "action",
       headerName: "Action",
       flex: 0.5,
+
       renderCell: (params) => (
         <Box display="flex" alignItems="center" gap={1}>
           <EditOutlinedIcon
             className="cursor"
             color="success"
-            onClick={() => handleEdit(params.id)}
+            onClick={() => handleEdit(params.row.id)}
+            style={{ cursor: "pointer" }}
           />
           <DeleteIcon
             color="error"
-            onClick={() => handleOpen(params.id)}
             style={{ cursor: "pointer" }}
+            onClick={() => console.log("Handle delete here")}
           />
-          {status === "Inactive" ? (
-            <ToggleOffOutlinedIcon />
-          ) : (
-            <ToggleOnOutlinedIcon />
-          )}
         </Box>
       ),
     },
@@ -91,33 +145,52 @@ const LocationPage = () => {
   return (
     <RightContent>
       <PaperWrapper>
-        {/* Add Button */}
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => setIsAddOpen(true)}
-          style={{ marginBottom: "15px" }}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "10px",
+          }}
         >
-          <AddOutlinedIcon /> Location
-        </Button>
-
-        {/* DataGrid */}
+          <Typography variant="h5" component="h5" sx={{ marginRight: "20px" }}>
+            Location
+          </Typography>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => setIsAddOpen(true)}
+          >
+            <AddOutlinedIcon /> Location
+          </Button>
+        </Box>
         <DataGrid
-          rows={rows}
+          rows={location}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
           disableSelectionOnClick
           rowHeight={40}
-        
         />
-
-        {/* Popup Modal */}
         <PopupModals
           isOpen={isAddOpen}
           setIsOpen={setIsAddOpen}
           title={"Add Location"}
           modalBody={<LocationAdd />}
+        />
+        <PopupModals
+          isOpen={isEditOpen}
+          setIsOpen={setIsEditOpen}
+          title={"Edit Location"}
+          modalBody={
+            <LocationEdit
+              id={updatedId}
+              locationName={
+                location.find((loc) => loc.id === updatedId)?.locationName || ""
+              }
+              onSuccess={handleUpdateSuccess}
+            />
+          }
         />
       </PaperWrapper>
     </RightContent>
