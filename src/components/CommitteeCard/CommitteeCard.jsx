@@ -15,15 +15,18 @@ import {
   DeleteOutline,
   People as PeopleIcon,
 } from "@mui/icons-material";
-import React from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../../Redux/alertSlicer";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import { PaperWrapper } from "../../Style";
 
 const CommitteeCard = ({ committee, onDelete }) => {
+  const [hover, setHover] = useState(false);
+
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
 
@@ -43,18 +46,27 @@ const CommitteeCard = ({ committee, onDelete }) => {
   };
 
   const handleView = () => {
-    navigate(`/view-committee/${committee.id}`);
+    navigate(`/view-committee/${committee.id}`, { state: { committee } });
   };
 
   return (
     <Card
+      elevation={hover ? 2 : 1}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       sx={{
-        height: "100%",
+        height: "400",
         display: "flex",
         flexDirection: "column",
+        width: "32%",
+        background: "#fafafa80",
       }}
     >
-      <CardActionArea>
+      <CardActionArea
+        sx={{
+          height: "100%",
+        }}
+      >
         <CardContent>
           <Box
             sx={{
@@ -62,23 +74,28 @@ const CommitteeCard = ({ committee, onDelete }) => {
               justifyContent: "space-between",
               alignItems: "flex-start",
               marginBottom: "2px",
+              gap: "10px",
             }}
           >
             <Typography variant="h6" component="h2">
               {committee.name}
             </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <VisibilityOutlinedIcon color="success" onClick={handleView} />
+            <Box
+              sx={{
+                background: "#ff0000c2",
+                borderRadius: "50%",
+                padding: "5px",
+              }}
+            >
               {user?.isAdmin && (
-                <DeleteOutline color="error" onClick={handleDelete} />
+                <Tooltip title="Delete Committee">
+                  <DeleteOutline
+                    onClick={handleDelete}
+                    sx={{ cursor: "pointer", color: "white" }}
+                    fontSize="medium"
+                  />
+                </Tooltip>
               )}
-              <Chip
-                label={`${committee.memberCount}`}
-                size="large"
-                color="primary"
-                variant="filled"
-                icon={<PeopleIcon />}
-              />
             </Box>
           </Box>
           <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
@@ -123,13 +140,28 @@ const CommitteeCard = ({ committee, onDelete }) => {
                   <Avatar
                     alt={member?.fullname || "Unknown"}
                     src={member?.avatar || ""}
-                    sx={{ bgcolor: "primary.main" }}
+                    sx={{
+                      bgcolor: "primary.main",
+                      width: "30px",
+                      height: "30px",
+                    }}
                   >
                     {member?.fullname ? member.fullname.charAt(0) : "?"}
                   </Avatar>
                 </Tooltip>
               ))}
             </AvatarGroup>
+            <Tooltip title="View all members">
+              <Chip
+                label={`${committee.memberCount}`}
+                size="large"
+                color="success"
+                variant="outlined"
+                icon={<PeopleIcon />}
+                onClick={handleView}
+                sx={{ cursor: "pointer", padding: "5px" }}
+              />
+            </Tooltip>
           </Box>
         </CardContent>
       </CardActionArea>

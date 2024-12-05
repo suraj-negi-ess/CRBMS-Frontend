@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import { toast } from "react-hot-toast";
-import { useParams } from "react-router-dom";
-import { Button, Paper, styled } from "@mui/material";
+import { useLocation, useParams } from "react-router-dom";
+import { Box, Button, Paper, styled, Typography } from "@mui/material";
+import PersonRemoveOutlinedIcon from "@mui/icons-material/PersonRemoveOutlined";
+import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
+import PopupModals from "../../components/Modals/PopupModals";
+import AddMembersToCommittee from "./AddMembersToCommittee";
 
 const DataGridWrapper = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -17,6 +21,9 @@ const DataGridWrapper = styled(Paper)(({ theme }) => ({
 const CommitteeMemberList = () => {
   const [members, setMembers] = useState([]);
   const { committeeId } = useParams();
+  const location = useLocation();
+  const { committee } = location.state || {};
+  const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -55,7 +62,7 @@ const CommitteeMemberList = () => {
       }
       console.error("Error removing user from committee:", error);
     }
-  };  
+  };
 
   const columns = [
     {
@@ -66,37 +73,37 @@ const CommitteeMemberList = () => {
         <img
           src={`http://localhost:9000/${params.value}`}
           alt="avatar"
-          style={{ width: "45px", height: "45px", borderRadius: "50%" }}
+          style={{ width: "35px", height: "35px", borderRadius: "50%" }}
         />
       ),
     },
     {
       field: "fullname",
       headerName: "Full Name",
-      width: 250,
+      flex: 0.7,
     },
     {
       field: "email",
       headerName: "Email",
-      width: 250,
+      flex: 1,
     },
     {
       field: "phoneNumber",
       headerName: "Phone Number",
-      width: 200,
+      flex: 0.7,
     },
     {
       field: "Actions",
       headerName: "Action",
-      width: 175,
+      flex: 0.3,
       renderCell: (params) => (
-        <Button
-          variant="contained"
-          // color={params.row.isBlocked ? "success" : "error"}
-          onClick={() => removeUserFromCommittee(params.row.memberid)}
-        >
-          Remove User
-        </Button>
+        <>
+          <PersonRemoveOutlinedIcon
+            onClick={() => removeUserFromCommittee(params.row.memberid)}
+            sx={{ cursor: "pointer", color: "error.light" }}
+            fontSize="medium"
+          />
+        </>
       ),
     },
   ];
@@ -104,16 +111,43 @@ const CommitteeMemberList = () => {
   return (
     <div className="right-content w-100">
       <DataGridWrapper>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "10px",
+          }}
+        >
+          <Typography variant="h5" component="h5" sx={{ marginRight: "20px" }}>
+            {committee.name + " Members" || "Committee Members"}
+          </Typography>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => setIsAddMemberOpen(true)}
+          >
+            <PersonAddAltOutlinedIcon />
+          </Button>
+        </Box>
         <DataGrid
           rows={members}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
-          autoHeight
+          rowHeight={40}
           disableSelectionOnClick
-          getRowId={(row) => row.memberid} // Specify memberid as the unique row ID
+          getRowId={(row) => row.memberid}
         />
       </DataGridWrapper>
+      <PopupModals
+        modalBody={<AddMembersToCommittee members={members} id={committeeId} />}
+        isOpen={isAddMemberOpen}
+        // title={`Add Members to ${committee.name || "Committee"}`}
+        title={`Add New Members`}
+        setIsOpen={setIsAddMemberOpen}
+        width={500}
+      />
     </div>
   );
 };

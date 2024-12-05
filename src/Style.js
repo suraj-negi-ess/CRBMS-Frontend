@@ -13,10 +13,7 @@ export const ContentHeader = styled(Paper)(({ theme }) => ({
   alignItems: "center",
   zIndex: 10,
   gap: 3,
-  // position: "sticky",
   top: 80,
-  //   background: theme.palette.background.default,
-  //   boxShadow: theme.shadows[2],
 }));
 
 export const MainContainer = styled("div")(({ theme }) => ({

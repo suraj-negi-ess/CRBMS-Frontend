@@ -4,16 +4,13 @@ import { DataGrid } from "@mui/x-data-grid";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import BlockIcon from '@mui/icons-material/Block';
+import BlockIcon from "@mui/icons-material/Block";
 import toast from "react-hot-toast";
 import axios from "axios";
 import DeleteModal from "./DeleteModal";
 import "./MembersPage.css";
-import {
-  CircleRounded,
-  PersonAddAlt1Rounded,
-} from "@mui/icons-material";
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import { CircleRounded, PersonAddAlt1Rounded } from "@mui/icons-material";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import PopupModals from "../../components/Modals/PopupModals";
 import AddMemberForm from "./AddMemberForm";
 import UpdateMemberForm from "./UpdateMemberForm";
@@ -37,13 +34,13 @@ const MembersPage = () => {
   const [showDeleted, setShowDeleted] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [updatedId, setUpdatedId] = useState('');
+  const [updatedId, setUpdatedId] = useState("");
   const [isViewOpen, setIsViewOpen] = useState(false);
-  const [viewId, setViewId] = useState('');
+  const [viewId, setViewId] = useState("");
   const filteredUsers = users.filter((user) =>
     showDeleted ? true : !user.deletedAt
   );
-  
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
@@ -75,15 +72,15 @@ const MembersPage = () => {
     setDeleteId(null);
   };
 
-  const handleEdit=(id)=>{
+  const handleEdit = (id) => {
     setUpdatedId(id);
     setIsEditOpen(true);
-  }
+  };
 
-  const handleView=(id)=>{
+  const handleView = (id) => {
     setViewId(id);
     setIsViewOpen(true);
-  }
+  };
 
   const handleDelete = async () => {
     try {
@@ -141,17 +138,22 @@ const MembersPage = () => {
       field: "avatarPath",
       headerName: "Avatar",
       flex: 0.25,
-      renderCell: (params) => (
-        params.value?<img
-          src={`http://localhost:9000/${params.value}`}
-          alt="avatar"
-          style={{ width: "35px", height: "35px", borderRadius: "50%" }}
-        />:<AccountCircleRoundedIcon style={{ width: "35px", height: "35px", borderRadius: "50%" }} />
-      ),
+      renderCell: (params) =>
+        params.value ? (
+          <img
+            src={`http://localhost:9000/${params.value}`}
+            alt="avatar"
+            style={{ width: "35px", height: "35px", borderRadius: "50%" }}
+          />
+        ) : (
+          <AccountCircleRoundedIcon
+            style={{ width: "35px", height: "35px", borderRadius: "50%" }}
+          />
+        ),
     },
-    { field: "fullname", headerName: "Full Name",flex: 1 },
-    { field: "email", headerName: "Email",flex: 1.5 },
-    { field: "phoneNumber", headerName: "Phone Number",flex: 1 },
+    { field: "fullname", headerName: "Full Name", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1.5 },
+    { field: "phoneNumber", headerName: "Phone Number", flex: 1 },
     // {
     //   field: "status",
     //   headerName: "Status",
@@ -175,17 +177,17 @@ const MembersPage = () => {
       headerName: "Action",
       renderCell: (params) => (
         <div style={{ display: "flex", gap: "10px" }}>
-            <EditOutlinedIcon 
-            className="cursor" 
-            color="success" 
-            onClick={()=>handleEdit(params.id)} 
-            />
+          <EditOutlinedIcon
+            className="cursor"
+            color="success"
+            onClick={() => handleEdit(params.id)}
+          />
 
-            <VisibilityOutlinedIcon 
-            color="secondary" 
-            className="cursor" 
-            onClick={()=>handleView(params.id)} 
-            />
+          <VisibilityOutlinedIcon
+            color="secondary"
+            className="cursor"
+            onClick={() => handleView(params.id)}
+          />
           <div className="delete">
             <DeleteOutlineOutlinedIcon
               color="error"
@@ -195,7 +197,6 @@ const MembersPage = () => {
           <div className="delete">
             <BlockIcon
               color={params.row.isBlocked ? "success" : "error"}
-              
               onClick={() =>
                 handleBlockStatusChange(params.row.id, params.row.isBlocked)
               }
@@ -204,7 +205,7 @@ const MembersPage = () => {
           </div>
         </div>
       ),
-     },
+    },
     // {
     //   field: "isBlocked",
     //   headerName: "Block Status",
@@ -226,7 +227,7 @@ const MembersPage = () => {
 
   return (
     <div className="right-content w-100">
-       <UserListWrapper>
+      <UserListWrapper>
         <div className="legendWrapper">
           <div className="legends">
             <div className="legendAdmin">
@@ -245,8 +246,12 @@ const MembersPage = () => {
             >
               {showDeleted ? "Hide Deleted" : "Show Deleted"}
             </Button>
-            <Button variant="contained" color="success" onClick={()=>setIsOpen(true)}>
-                <PersonAddAlt1Rounded /> Add User
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => setIsOpen(true)}
+            >
+              <PersonAddAlt1Rounded /> Add User
             </Button>
           </div>
         </div>
@@ -291,26 +296,23 @@ const MembersPage = () => {
       <PopupModals
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        title={'Add New Member'}
-        modalBody={
-          <AddMemberForm />
-        } />
+        title={"Add New Member"}
+        modalBody={<AddMemberForm />}
+      />
 
       <PopupModals
         isOpen={isEditOpen}
         setIsOpen={setIsEditOpen}
-        title={'Update Member Profile'}
-        modalBody={
-          <UpdateMemberForm id={updatedId} />
-        } />
+        title={"Update Member Profile"}
+        modalBody={<UpdateMemberForm id={updatedId} />}
+      />
 
       <PopupModals
         isOpen={isViewOpen}
         setIsOpen={setIsViewOpen}
-        title={'View Member Profile'}
-        modalBody={
-          <ViewMember id={viewId} />
-        } />
+        title={"View Member Profile"}
+        modalBody={<ViewMember id={viewId} />}
+      />
     </div>
   );
 };

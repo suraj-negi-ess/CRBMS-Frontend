@@ -37,7 +37,7 @@ const PopupModals = ({
             >
               <Dialog.Panel className="dialogPanel">
                 <Dialog.Title className="dialogTitle">
-                  <h1>{title}</h1>
+                  <h2>{title}</h2>
                   <CloseIcon className="closeIcons" onClick={closeDialog} />
                 </Dialog.Title>
                 <div>{modalBody}</div>

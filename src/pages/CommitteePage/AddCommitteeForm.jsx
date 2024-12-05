@@ -24,7 +24,7 @@ const FormWrapper = styled(Paper)(({ theme }) => ({
   marginTop: "10px",
 }));
 
-const AddCommitteeForm = () => {
+const AddCommitteeForm = ({ onAddCommittee }) => {
   const { user } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
@@ -49,65 +49,47 @@ const AddCommitteeForm = () => {
       );
       toast.success("Committee added Successfully");
       setFormData({ name: "", description: "" });
+      onAddCommittee(response.data.data.committee);
     } catch (err) {
       toast.error(err.response?.data?.message);
       console.error("Error adding Committee:", err);
     }
   };
-  // api/v1/committee/committees
+
   return (
-    <div className="right-content w-100">
-      <FormWrapper>
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{
-            maxWidth: 500,
-            margin: "auto",
-            mt: 5,
-            p: 3,
-            border: "2px solid #ddd",
-            borderRadius: 3,
-            background: "lightGrey",
-          }}
-        >
-          <Typography variant="h4" gutterBottom align="center">
-            Add Committee
-          </Typography>
+    <div className="pop-content w-100">
+      <TextField
+        label="Committee Name"
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        fullWidth
+        required
+        margin="normal"
+        size="small"
+      />
+      <TextField
+        label="Description"
+        name="description"
+        value={formData.description}
+        onChange={handleChange}
+        fullWidth
+        required
+        margin="normal"
+        multiline
+        rows={4}
+      />
 
-          <TextField
-            label="Committee Name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            fullWidth
-            required
-            margin="normal"
-            size="small"
-          />
-          <TextField
-            label="Description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            fullWidth
-            required
-            margin="normal"
-            multiline
-            rows={4}
-          />
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-          >
-            Add Committee
-          </Button>
-        </Box>
-      </FormWrapper>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        sx={{ mt: 2 }}
+        onClick={handleSubmit}
+      >
+        Add Committee
+      </Button>
     </div>
   );
 };

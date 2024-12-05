@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
-
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import unknownUser from "../../assets/Images/unknownUser.PNG";
 // Images
 import logo from "../../assets/Images/logo.webp";
 
@@ -101,7 +102,6 @@ const Header = () => {
     <header>
       <div className="container-fluid w-100">
         <div className="row d-flex flex-row align-items-center">
-          {/* Logo Section */}
           <div className="col-sm-2 col-xs-3 part1">
             <Link to={"/home"} className="d-flex align-items-center logo gap-2">
               <img src={logo} alt="logo" />
@@ -156,7 +156,11 @@ const Header = () => {
               <div className="profileImage">
                 <span className="profilePhoto">
                   <img
-                    src={`http://localhost:9000/${user?.avatarPath}` || ""}
+                    src={
+                      user?.avatarPath
+                        ? `http://localhost:9000/${user?.avatarPath}`
+                        : unknownUser
+                    }
                     alt="My Pic"
                   />
                 </span>

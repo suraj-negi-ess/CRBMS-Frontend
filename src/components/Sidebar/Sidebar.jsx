@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import "./Sidebar.css";
-import { Button, styled } from "@mui/material";
+import { Button, styled, Tooltip } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { adminSideBarData, userSideBarData } from "../../data";
@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { MyContext } from "../Layout/Layout";
-
 
 // Styled components for the logout button
 const LogoutButton = styled(Button)(({ theme }) => ({
@@ -79,7 +78,9 @@ const Sidebar = () => {
           return (
             <li key={item.id} className={isActive ? "active" : ""}>
               <NavLink to={item.path}>
-                <span className="icon">{React.createElement(item.icon)}</span>
+                <Tooltip title={item.name}>
+                  <span className="icon">{React.createElement(item.icon)}</span>
+                </Tooltip>
                 <span className="text">{item.name}</span>
               </NavLink>
             </li>
