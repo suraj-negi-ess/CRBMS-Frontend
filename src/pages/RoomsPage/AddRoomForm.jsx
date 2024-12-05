@@ -53,6 +53,7 @@ const AddRoomForm = () => {
     return null;
   };
 
+  // Fetching the  list
   useEffect(() => {
     const fetchAmenities = async () => {
       try {

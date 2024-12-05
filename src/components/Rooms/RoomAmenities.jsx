@@ -19,6 +19,9 @@ import {
   randomId,
   randomArrayItem,
 } from '@mui/x-data-grid-generator';
+import { useState } from 'react';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 const roles = ['Market', 'Finance', 'Development'];
 const randomRole = () => {
@@ -65,7 +68,7 @@ function EditToolbar(props) {
     const id = randomId();
     setRows((oldRows) => [
       ...oldRows,
-      { id, name: '', age: '', role: '', isNew: true },
+      { id, name: '', quantity: '', isNew: true },
     ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
@@ -74,23 +77,42 @@ function EditToolbar(props) {
   };
 
   return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add Amenities Quanity
+    <GridToolbarContainer sx={{marginLeft:"auto",paddingRight:"10px"}}>
+      <Button variant="contained"
+                color="success" startIcon={<AddIcon />} onClick={handleClick}>
+        Add Quantity
       </Button>
     </GridToolbarContainer>
   );
 }
 
 export default function RoomAmenities() {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const [rows, setRows] = useState(initialRows);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [amenitiesList, setAmenitiesList] = useState([]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
     }
   };
+
+  useEffect(() => {
+    const fetchAmenities = async () => {
+      try {
+        const response = await axios.get("api/v1/amenity/get-all-amenities");
+        const amenities = response.data.data.roomAmenities.map(
+          (amenity) => amenity.name
+        );
+        setAmenitiesList(amenities);
+      } catch (error) {
+        toast.error("Failed to load amenities");
+        console.error("Error fetching amenities:", error);
+      }
+    };
+
+    fetchAmenities();
+  }, []);
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -127,7 +149,13 @@ export default function RoomAmenities() {
   };
 
   const columns = [
-    { field: 'name', headerName: 'Name', flex:1, editable: true },
+    {
+        field: 'name', 
+        headerName: 'Name', 
+        type:'singleSelect',
+        flex:1, 
+        editable: true,
+        valueOptions: amenitiesList, },
     {
       field: 'quantity',
       headerName: 'Quantity',

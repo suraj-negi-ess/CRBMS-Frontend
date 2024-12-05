@@ -5,7 +5,7 @@ import {
   styled,
   Paper,
   Button,
-  Grid,
+  Grid2,
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
@@ -117,8 +117,8 @@ const RoomsPage = () => {
   return (
     <div className="right-content w-100">
       <DataGridWrapper>
-        <Grid xs={12} container sx={{ padding: "5px 0" }}>
-          <Grid
+        <Grid2 xs={12} container sx={{ padding: "5px 0" }}>
+          <Grid2
             container
             item
             xs={6}
@@ -128,25 +128,21 @@ const RoomsPage = () => {
             <Typography variant="h5" component="h5">
               Manage Room
             </Typography>
-          </Grid>
-          <Grid >
-            <Box display="flex" justifyContent="flex-end">
+          </Grid2>
+          <Grid2 sx={{marginLeft:"auto",paddingRight:"10px"}}>
               <Button
                 variant="contained"
                 color="success"
                 onClick={() => setIsAddOpen(true)}
-                sx={{float:"right"}}
               >
                 <PersonAddAlt1Rounded />
                 Add Room
               </Button>
-            </Box>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
 
         <MainContainer>
           <RoomFilter />
-          <RightContent>
             <div className="cardBox row w-100">
               {filteredRooms.map((room, index) => (
                 <div
@@ -157,7 +153,6 @@ const RoomsPage = () => {
                 </div>
               ))}
             </div>
-          </RightContent>
         </MainContainer>
       </DataGridWrapper>
       <PopupModals

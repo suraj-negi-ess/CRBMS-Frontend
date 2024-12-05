@@ -182,7 +182,7 @@ const RoomsCard = ({ room }) => {
               title="View Room"
               sx={{
                 borderRadius: "0 0 0px 10px",
-                flex: 2,
+                flex: 1,
               }}
               size="small"
             >

@@ -47,7 +47,7 @@ const RoomFilter = () => {
 
 
   return (
-    <ContentHeader sx={{ position: "sticky" }} elevation="8">
+    <ContentHeader sx={{ position: "sticky", marginBottom:"20px" }} elevation="8">
             <DatePicker
               value={selectedDate}
               onChange={(newValue) => setSelectedDate(newValue)}
