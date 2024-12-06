@@ -153,7 +153,28 @@ console.log(room)
         >
           sanitationStatus:{room.sanitationStatus?"Yes" :"No"}
         </Typography>
-
+        <Typography
+          variant="body2"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            textTransform: "capitalize",
+          }}
+        >
+          Capacity:{room.capacity}
+        </Typography>
+<Typography
+          variant="body2"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            textTransform: "capitalize",
+          }}
+        >
+          Tolerance Period:{room.tolerancePeriod}
+        </Typography>
    
       </Box>
       <CardActions sx={{ p: 0 }}>

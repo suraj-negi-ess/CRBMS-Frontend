@@ -81,6 +81,7 @@ const AddRoomForm = () => {
       name: "",
       location: null,
       capacity: "",
+      tolerancePeriod:"",
       roomImage: "",
       // password: "",
       description: "",
@@ -97,6 +98,10 @@ const AddRoomForm = () => {
         .required("Capacity is required")
         .positive()
         .integer(),
+        tolerancePeriod: Yup.number()
+        .required("Tolerance Period is required")
+        .positive()
+        .integer(),   
       // password: Yup.string().required("Password is required"),
       description: Yup.string(),
     }),
@@ -106,6 +111,7 @@ const AddRoomForm = () => {
         const formData = new FormData();
         formData.append("name", values.name);
         formData.append("capacity", values.capacity);
+        formData.append("tolerancePeriod",values.tolerancePeriod);
         formData.append("description", values.description);
         formData.append("location", values.location.id);
         formData.append("sanitationStatus", formState.sanitationStatus);
@@ -157,7 +163,7 @@ const AddRoomForm = () => {
       [name]: checked, // Update state based on Switch value
     }));
   };
-  
+
   return (
     <div className="pop-content w-100">
       <FormWrapper>
