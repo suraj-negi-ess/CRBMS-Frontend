@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
+
+// Material UI IMPORTS
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, Paper, Box, styled, Typography } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import {
-  Add,
-  Remove,
   DeleteOutlineOutlined as DeleteIcon,
   VisibilityOutlined as ViewIcon,
 } from "@mui/icons-material";
-import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
-import "./Amenities.css";
-import PopupModals from "../../components/Modals/PopupModals";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { PersonAddAlt1Rounded } from "@mui/icons-material";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import {
+  ToggleOffOutlined as ToggleOffIcon,
+  ToggleOnOutlined as ToggleOnIcon,
+} from "@mui/icons-material";
+
+// Style Imports
+import "./Amenities.css";
+import { PaperWrapper, RightContent } from "../../Style";
+
+// Component Imports
 import AmenitiesAdd from "./AmenitiesAdd";
 import DeleteModal from "../MembersPage/DeleteModal";
 import AmenitiesEdit from "./AmenitiesEdit";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { PaperWrapper, RightContent } from "../../Style";
 
-const DataGridWrapper = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  color: theme.palette.text.secondary,
-  width: "100%",
-  padding: "15px",
-  borderRadius: "20px",
-}));
+import PopupModals from "../../components/Common Components/Modals/PopupModals";
+import CustomButton from "../../components/Common Components/CustomButton/CustomButton";
 
 const AmenitiesList = () => {
   const [amenities, setAmenities] = useState([]);
@@ -35,12 +35,21 @@ const AmenitiesList = () => {
   const [updatedId, setUpdatedId] = useState("");
   const [open, setOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [status, setStatus] = useState(false);
 
   useEffect(() => {
     const fetchAmenities = async () => {
       try {
         const response = await axios.get("/api/v1/amenity/get-all-amenities");
-        setAmenities(response.data.data.roomAmenities); //
+
+        const amenitiesWithSerial = response.data.data.roomAmenities.map(
+          (amenity, index) => ({
+            ...amenity,
+            serial: index + 1, // Serial number starts at 1
+          })
+        );
+
+        setAmenities(amenitiesWithSerial); //
       } catch (error) {
         toast.error("Failed to fetch amenities!");
         console.error("Error fetching amenities:", error);
@@ -49,27 +58,6 @@ const AmenitiesList = () => {
 
     fetchAmenities();
   }, []);
-
-  const handleQuantityChange = async (id, delta) => {
-    const updatedAmenities = amenities.map((amenity) =>
-      amenity.id === id
-        ? { ...amenity, quantity: Math.max(1, amenity.quantity + delta) }
-        : amenity
-    );
-    setAmenities(updatedAmenities);
-
-    try {
-      await axios.put("/api/v1/amenity/update-room-amenity-quantity", {
-        id,
-        quantity: updatedAmenities.find((amenity) => amenity.id === id)
-          .quantity,
-      });
-      toast.success("Quantity updated successfully!");
-    } catch (error) {
-      toast.error("Failed to update quantity!");
-      console.error("Error updating quantity:", error);
-    }
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -99,51 +87,45 @@ const AmenitiesList = () => {
     }
   };
 
+  const handleStatusChange = () => {
+    setStatus((prevStatus) => !prevStatus);
+  };
+
   const columns = [
+    { field: "serial", headerName: "#", flex: 0.3 },
     { field: "name", headerName: "Amenity Name", flex: 1 },
     { field: "description", headerName: "Description", flex: 1.5 },
-    // {
-    //   field: "quantity",
-    //   headerName: "Quantity",
-    //   flex: 1,
-    //   renderCell: (params) => (
-    //     <Box display="flex" alignItems="center">
-    //       <Button
-    //         size="small"
-    //         onClick={() => handleQuantityChange(params.row.id, -1)}
-    //         disabled={params.row.quantity <= 1}
-    //       >
-    //         <Remove />
-    //       </Button>
-    //       <Box mx={1}>{params.row.quantity}</Box>
-    //       <Button
-    //         size="small"
-    //         onClick={() => handleQuantityChange(params.row.id, 1)}
-    //       >
-    //         <Add />
-    //       </Button>
-    //     </Box>
-    //   ),
-    // },
     {
       field: "action",
       headerName: "Action",
       flex: 0.5,
       renderCell: (params) => (
-        <Box display="flex" alignItems="center" gap={1}>
+        <Box height={"40px"} display="flex" alignItems="center" gap={2}>
           <EditOutlinedIcon
-            className="cursor"
+            style={{ cursor: "pointer" }}
             color="success"
             onClick={() => handleEdit(params.id)}
           />
-          {/* <Link to={`/view/${params.id}`}>
-            <ViewIcon color="secondary" />
-          </Link> */}
           <DeleteIcon
             color="error"
             onClick={() => handleOpen(params.id)}
             style={{ cursor: "pointer" }}
           />
+          {status ? (
+            <ToggleOnIcon
+              color="success"
+              fontSize="large"
+              onClick={() => handleStatusChange(params.row.index)}
+              cursor="pointer"
+            />
+          ) : (
+            <ToggleOffIcon
+              color="error"
+              fontSize="large"
+              onClick={() => handleStatusChange(params.row.index)}
+              cursor="pointer"
+            />
+          )}
         </Box>
       ),
     },
@@ -160,27 +142,42 @@ const AmenitiesList = () => {
             marginBottom: "10px",
           }}
         >
-          <Typography variant="h5" component="h5" sx={{ marginRight: "20px" }}>
+          <Typography
+            variant="h1"
+            component="h1"
+            sx={{
+              marginRight: "20px",
+              fontSize: "22px",
+              fontWeight: 500,
+              lineHeight: 1.5,
+              color: "#2E2E2E",
+            }}
+          >
             Amenities
           </Typography>
-          <Button
-            variant="contained"
-            color="success"
+          <CustomButton
             onClick={() => setIsAddOpen(true)}
-          >
-            <AddOutlinedIcon /> Amenity
-          </Button>
+            title={"Add New Amenity"}
+            placement={"left"}
+            Icon={AddOutlinedIcon}
+            fontSize={"medium"}
+            background={"rgba(3, 176, 48, 0.68)"}
+          />
         </Box>
         <DataGrid
           rows={amenities}
           columns={columns}
           pageSize={5}
           rowHeight={40}
-          rowsPerPageOptions={[5]}
+          rowsPerPageOptions={[7]}
           disableSelectionOnClick
-          getRowClassName={
-            (params) => params.row.quantity < 5 && "" //? "low-row" : ""
-          }
+          sx={{
+            "& .MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+          }}
+          showCellVerticalBorder
+          showColumnVerticalBorder
         />
         <PopupModals
           isOpen={isAddOpen}
@@ -195,7 +192,6 @@ const AmenitiesList = () => {
           title={"Edit Amenities"}
           modalBody={<AmenitiesEdit id={updatedId} />}
         />
-
         <DeleteModal
           open={open}
           onClose={handleClose}

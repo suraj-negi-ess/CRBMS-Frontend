@@ -78,7 +78,7 @@ const Sidebar = () => {
           return (
             <li key={item.id} className={isActive ? "active" : ""}>
               <NavLink to={item.path}>
-                <Tooltip title={item.name}>
+                <Tooltip title={item.name} placement="right">
                   <span className="icon">{React.createElement(item.icon)}</span>
                 </Tooltip>
                 <span className="text">{item.name}</span>

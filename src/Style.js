@@ -39,3 +39,16 @@ export const PaperWrapper = styled(Paper)(({ theme }) => ({
   // height: `calc(100vh - 80px)`,
   height: "100%",
 }));
+
+export const PopContent = styled(Paper)(({ theme }) => ({
+  padding: "15px",
+}));
+
+// Data Grid CSS
+// sx={{
+//   "& .MuiDataGrid-cell:focus": {
+//     outline: "none",
+//   },
+// }}
+// showCellVerticalBorder
+// showColumnVerticalBorder

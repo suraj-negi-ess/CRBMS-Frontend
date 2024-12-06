@@ -33,7 +33,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import MyCommitteePage from "./pages/CommitteePage/MyCommitteePage";
 import MeetingForm from "./pages/MeetingPage/MeetingForm";
-import Loader from "./components/Loader/Loader";
+import Loader from "./components/Common Components/Loader/Loader";
 import TodaysMeetings from "./pages/SinglePage/TodaysMeetings";
 import Layout from "./components/Layout/Layout";
 import LocationPage from "./pages/LocationPage/LocationPage";
@@ -49,12 +49,7 @@ function App() {
   const isAdmin = user?.isAdmin;
   return (
     <BrowserRouter>
-      {loading && (
-        // <div className="spinner-parent">
-        //   <div className="spinner-border text-primary" role="status"></div>
-        // </div>
-        <Loader />
-      )}
+      {loading && <Loader />}
       <Toaster
         position="top-center"
         reverseOrder={false}

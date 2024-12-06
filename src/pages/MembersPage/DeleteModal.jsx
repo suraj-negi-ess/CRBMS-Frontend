@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Modal } from "@mui/material";
+import { Box, Button, Divider, Modal, Typography } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -7,9 +7,9 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  borderRadius: "10px",
 };
 
 const DeleteModal = ({ open, onClose, onDeleteConfirm }) => {
@@ -21,10 +21,34 @@ const DeleteModal = ({ open, onClose, onDeleteConfirm }) => {
       aria-describedby="child-modal-description"
     >
       <Box sx={{ ...style, width: 400 }}>
-        <h2 id="child-modal-title">Confirm Deletion</h2>
-        <p id="child-modal-description">
+        <Typography
+          variant="h4"
+          component="h4"
+          id="child-modal-title"
+          sx={{
+            fontSize: "22px",
+            fontWeight: "500",
+            lineHeight: "1.4",
+            color: "#2e2e2e",
+          }}
+        >
+          Confirm Deletion
+        </Typography>
+        <Divider sx={{ mb: 2, background: "black" }} variant="fullWidth" />
+        <Typography
+          variant="p"
+          component="p"
+          id="child-modal-description"
+          sx={{
+            fontSize: "16px",
+            fontWeight: "400",
+            lineHeight: "1.6",
+            color: "#4F4F4F",
+            mb: 5,
+          }}
+        >
           Are you sure you want to delete this item?
-        </p>
+        </Typography>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Button variant="contained" color="error" onClick={onDeleteConfirm}>
             Delete

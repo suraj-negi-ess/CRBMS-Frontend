@@ -6,7 +6,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { Box, Button, Paper, styled, Typography } from "@mui/material";
 import PersonRemoveOutlinedIcon from "@mui/icons-material/PersonRemoveOutlined";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import PopupModals from "../../components/Modals/PopupModals";
+import PopupModals from "../../components/Common Components/Modals/PopupModals";
 import AddMembersToCommittee from "./AddMembersToCommittee";
 
 const DataGridWrapper = styled(Paper)(({ theme }) => ({

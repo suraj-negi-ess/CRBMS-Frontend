@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Paper, styled, Button } from "@mui/material";
+import { Box, Paper, styled, Button, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -11,10 +11,15 @@ import DeleteModal from "./DeleteModal";
 import "./MembersPage.css";
 import { CircleRounded, PersonAddAlt1Rounded } from "@mui/icons-material";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import PopupModals from "../../components/Modals/PopupModals";
+import PopupModals from "../../components/Common Components/Modals/PopupModals";
 import AddMemberForm from "./AddMemberForm";
 import UpdateMemberForm from "./UpdateMemberForm";
 import ViewMember from "./ViewMember";
+import CustomButton from "../../components/Common Components/CustomButton/CustomButton";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
 const UserListWrapper = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   color: theme.palette.text.secondary,
@@ -154,23 +159,6 @@ const MembersPage = () => {
     { field: "fullname", headerName: "Full Name", flex: 1 },
     { field: "email", headerName: "Email", flex: 1.5 },
     { field: "phoneNumber", headerName: "Phone Number", flex: 1 },
-    // {
-    //   field: "status",
-    //   headerName: "Status",
-    //   width: 100,
-    //   renderCell: (params) => {
-    //     const isActive =
-    //       dayjs().diff(dayjs(params.row.lastLoggedIn), "day") <= 30; // Active if last login is within 30 days
-    //     return (
-    //       <Box display="flex" alignItems="center">
-    //         <FiberManualRecordIcon
-    //           sx={{ color: isActive ? "green" : "red", fontSize: 16, mr: 1 }}
-    //         />
-    //         {isActive ? "Active" : "Inactive"}
-    //       </Box>
-    //     );
-    //   },
-    // },
     {
       field: "action",
       flex: 0.5,
@@ -206,55 +194,55 @@ const MembersPage = () => {
         </div>
       ),
     },
-    // {
-    //   field: "isBlocked",
-    //   headerName: "Block Status",
-    //   width: 150,
-    //   renderCell: (params) => (
-    //     <Button
-    //       variant="contained"
-    //       color={params.row.isBlocked ? "success" : "error"}
-    //       onClick={() =>
-    //         handleBlockStatusChange(params.row.id, params.row.isBlocked)
-    //       }
-    //       disabled={loading}
-    //     >
-    //       {params.row.isBlocked ? "Unblock" : "Block"}
-    //     </Button>
-    //   ),
-    // }
   ];
 
   return (
     <div className="right-content w-100">
       <UserListWrapper>
-        <div className="legendWrapper">
-          <div className="legends">
-            <div className="legendAdmin">
-              <CircleRounded color="success" />
-              <p className="legendText">Admins</p>
-            </div>
-            <div className="legendDeleted">
-              <CircleRounded color="error" />
-              <p className="legendText">Deleted Members</p>
-            </div>
-          </div>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "10px",
+          }}
+        >
+          <Typography
+            variant="h1"
+            component="h1"
+            sx={{
+              marginRight: "20px",
+              fontSize: "22px",
+              fontWeight: 500,
+              lineHeight: 1.5,
+              color: "#2E2E2E",
+            }}
+          >
+            Users
+          </Typography>
           <div className="buttonWrapper">
-            <Button
-              variant="contained"
+            <CustomButton
               onClick={() => setShowDeleted(!showDeleted)}
-            >
-              {showDeleted ? "Hide Deleted" : "Show Deleted"}
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
+              title={
+                showDeleted
+                  ? "Hide All Deleted Users"
+                  : "Show All Deleted Users"
+              }
+              Icon={showDeleted ? VisibilityIcon : VisibilityOffIcon}
+              fontSize="medium"
+              background={"#1976d291"}
+              placement={"left"}
+            />
+            <CustomButton
               onClick={() => setIsOpen(true)}
-            >
-              <PersonAddAlt1Rounded /> Add User
-            </Button>
+              title={"Add New User"}
+              Icon={PersonAddAlt1Rounded}
+              fontSize="medium"
+              background={"rgba(3, 176, 48, 0.68)"}
+              placement={"bottom"}
+            />
           </div>
-        </div>
+        </Box>
         <Box sx={{ width: "100%" }}>
           <DataGrid
             showCellVerticalBorder
@@ -318,3 +306,16 @@ const MembersPage = () => {
 };
 
 export default MembersPage;
+
+{
+  /* <div className="legends">
+<div className="legendAdmin">
+  <CircleRounded color="success" />
+  <p className="legendText">Admins</p>
+</div>
+<div className="legendDeleted">
+  <CircleRounded color="error" />
+  <p className="legendText">Deleted Members</p>
+</div>
+</div> */
+}

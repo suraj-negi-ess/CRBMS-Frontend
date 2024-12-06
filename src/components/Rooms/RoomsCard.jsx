@@ -16,7 +16,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
-import PopupModals from "../Modals/PopupModals";
+import PopupModals from "../Common Components/Modals/PopupModals";
 import RoomGallery from "./RoomGallery";
 import RoomAmenities from "./RoomAmenities";
 import EditRoomForm from "./EditRoom";

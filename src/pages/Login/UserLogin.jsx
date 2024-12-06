@@ -1,20 +1,26 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+
+// Styles
 import "./Login.css";
 import { motion } from "framer-motion";
+
+// Material UI IMPORTS
 import { Lock, Mail } from "@mui/icons-material";
-import { Link, useNavigate } from "react-router-dom";
-import RotateLeftIcon from "@mui/icons-material/RotateLeft";
-import Input from "../../components/Input/Input";
-import FloatingShapes from "../../components/FloatingShapes/FloatingShapes";
+import { Button } from "@mui/material";
+
+// REDUX
 import { useDispatch, useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../../Redux/alertSlicer";
-import axios from "axios";
+
+//Components
 import { setLoginEmail } from "../../Redux/verifyEmailSlicer";
+import Input from "../../components/Common Components/Input/Input";
+
+// Assests Import
 import ebizLogo from "../../assets/Images/ebizlogo.png";
-import toast from "react-hot-toast";
-import {
-  Button,
-} from "@mui/material";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
@@ -90,34 +96,32 @@ const UserLogin = () => {
               <p className="error">{error}</p>
             )} */}
             <div className="loginButtonBox">
-            <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mb: 2, width:"50%" }}
-          >
-            Login
-          </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ mb: 2, width: "50%" }}
+              >
+                Login
+              </Button>
             </div>
           </form>
           <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            height: "100%",
-            alignItems: "center",
-            gap: 5,
-
-          }}
-        >
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              height: "100%",
+              alignItems: "center",
+              gap: 5,
+            }}
+          >
             <i>powered by</i>
-          <div style={{ objectFit: "cover", width: "75px", height: "40px" }}>
-            <img src={ebizLogo} style={{ borderRadius: "10px" }} />
+            <div style={{ objectFit: "cover", width: "75px", height: "40px" }}>
+              <img src={ebizLogo} style={{ borderRadius: "10px" }} />
+            </div>
           </div>
         </div>
-        </div>
-       
       </motion.div>
     </div>
   );

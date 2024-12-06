@@ -3,7 +3,7 @@ import { PaperWrapper, RightContent } from "../../Style";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { Box, Button, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import PopupModals from "../../components/Modals/PopupModals";
+import PopupModals from "../../components/Common Components/Modals/PopupModals";
 import LocationAdd from "./LocationAdd";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {
@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import toast from "react-hot-toast";
 import LocationEdit from "./LocationEdit";
+import CustomButton from "../../components/Common Components/CustomButton/CustomButton";
 
 const LocationPage = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -153,16 +154,27 @@ const LocationPage = () => {
             marginBottom: "10px",
           }}
         >
-          <Typography variant="h5" component="h5" sx={{ marginRight: "20px" }}>
+          <Typography
+            variant="h1"
+            component="h1"
+            sx={{
+              marginRight: "20px",
+              fontSize: "22px",
+              fontWeight: 500,
+              lineHeight: 1.5,
+              color: "#2E2E2E",
+            }}
+          >
             Location
           </Typography>
-          <Button
-            variant="contained"
-            color="success"
+          <CustomButton
             onClick={() => setIsAddOpen(true)}
-          >
-            <AddOutlinedIcon /> Location
-          </Button>
+            title={"Add New Room"}
+            placement={"left"}
+            Icon={AddOutlinedIcon}
+            fontSize={"medium"}
+            background={"rgba(3, 176, 48, 0.68)"}
+          />
         </Box>
         <DataGrid
           rows={location}

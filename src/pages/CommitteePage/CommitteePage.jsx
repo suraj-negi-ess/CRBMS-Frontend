@@ -15,8 +15,10 @@ import {
 import axios from "axios";
 import CommitteeCard from "../../components/CommitteeCard/CommitteeCard";
 import { ContentHeader, PaperWrapper, RightContent } from "../../Style";
-import PopupModals from "../../components/Modals/PopupModals";
+import PopupModals from "../../components/Common Components/Modals/PopupModals";
 import AddCommitteeForm from "./AddCommitteeForm";
+import CustomButton from "../../components/Common Components/CustomButton/CustomButton";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 
 // Styled component for the card wrapper
 const CardWrapper = styled(Paper)(({ theme }) => ({
@@ -85,11 +87,17 @@ const CommitteeManagementMUI = () => {
         <PaperWrapper>
           <ContentHeader sx={{ position: "static" }} elevation={4}>
             <Typography
-              variant="h5"
-              component="h5"
-              sx={{ marginRight: "20px" }}
+              variant="h1"
+              component="h1"
+              sx={{
+                marginRight: "20px",
+                fontSize: "22px",
+                fontWeight: 500,
+                lineHeight: 1.5,
+                color: "#2E2E2E",
+              }}
             >
-              Committee Management
+              Committee
             </Typography>
             <Box
               display="flex"
@@ -97,7 +105,7 @@ const CommitteeManagementMUI = () => {
               justifyContent="center"
               gap={2}
             >
-              <FormControl style={{ marginRight: "5 px", width: "150px" }}>
+              <FormControl style={{ marginRight: "5 px", width: "100px" }}>
                 <InputLabel id="filter-select-label">Show</InputLabel>
                 <Select
                   labelId="filter-select-label"
@@ -112,12 +120,14 @@ const CommitteeManagementMUI = () => {
                   <MenuItem value="inactive">Inactive</MenuItem>
                 </Select>
               </FormControl>
-              <Button
-                variant="contained"
+              <CustomButton
                 onClick={() => setIsAddCommittee(true)}
-              >
-                Add Committee
-              </Button>
+                title={"Add New Committee"}
+                placement={"bottom"}
+                Icon={AddOutlinedIcon}
+                fontSize={"medium"}
+                background={"rgba(3, 176, 48, 0.68)"}
+              />
             </Box>
           </ContentHeader>
           {loading ? (
