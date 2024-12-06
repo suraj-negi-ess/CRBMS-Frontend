@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import "./Header.css";
 import { Link, useNavigate } from "react-router-dom";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import unknownUser from "../../assets/Images/unknownUser.PNG";
 // Images
 import logo from "../../assets/Images/logo.webp";
@@ -11,6 +10,7 @@ import {
   Badge,
   Button,
   Divider,
+  FormControlLabel,
   ListItemIcon,
   Menu,
   MenuItem,
@@ -38,6 +38,7 @@ import { MyContext } from "../Layout/Layout";
 // Notifications Menu Component
 import NotificationsMenu from "../Notifications/NotificationsMenu";
 import { notifications } from "../../data";
+import { MaterialUISwitch } from "../../Style";
 
 const Header = () => {
   const context = useContext(MyContext);
@@ -125,10 +126,12 @@ const Header = () => {
           {/* Action Buttons */}
           <div className="col-sm-7 col-xs-3 d-flex align-items-center justify-content-end gap-2">
             {/* Light Mode Button */}
-            <Button className="rounded-circle">
+            {/* <Button className="rounded-circle">
               <LightModeOutlinedIcon />
-            </Button>
-
+            </Button> */}
+            <FormControlLabel
+              control={<MaterialUISwitch sx={{ margin: 0 }} defaultChecked />}
+            />
             {/* Notifications Button */}
             <Button
               className="rounded-circle"

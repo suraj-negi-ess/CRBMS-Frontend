@@ -19,17 +19,7 @@ import CustomButton from "../../components/Common Components/CustomButton/Custom
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-
-const UserListWrapper = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  color: theme.palette.text.secondary,
-  height: "100%",
-  width: "100%",
-  lineHeight: "60px",
-  borderRadius: "20px",
-  padding: "15px",
-  marginTop: "10px",
-}));
+import { PaperWrapper, RightContent } from "../../Style";
 
 const MembersPage = () => {
   const [users, setUsers] = useState([]);
@@ -197,8 +187,8 @@ const MembersPage = () => {
   ];
 
   return (
-    <div className="right-content w-100">
-      <UserListWrapper>
+    <>
+      <PaperWrapper>
         <Box
           sx={{
             display: "flex",
@@ -243,8 +233,9 @@ const MembersPage = () => {
             />
           </div>
         </Box>
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%", height: "70vh" }}>
           <DataGrid
+            autoPageSize
             showCellVerticalBorder
             showColumnVerticalBorder
             rows={filteredUsers}
@@ -259,6 +250,7 @@ const MembersPage = () => {
               },
             }}
             pageSizeOptions={[10]}
+            height="100%"
             sx={{
               "& .MuiDataGrid-cell:focus": {
                 outline: "none",
@@ -275,7 +267,17 @@ const MembersPage = () => {
             }}
           />
         </Box>
-      </UserListWrapper>
+        <div className="legends">
+          <div className="legendAdmin">
+            <CircleRounded color="success" />
+            <p className="legendText">Admins</p>
+          </div>
+          <div className="legendDeleted">
+            <CircleRounded color="error" />
+            <p className="legendText">Deleted Members</p>
+          </div>
+        </div>
+      </PaperWrapper>
       <DeleteModal
         open={open}
         onClose={handleClose}
@@ -301,21 +303,8 @@ const MembersPage = () => {
         title={"View Member Profile"}
         modalBody={<ViewMember id={viewId} />}
       />
-    </div>
+    </>
   );
 };
 
 export default MembersPage;
-
-{
-  /* <div className="legends">
-<div className="legendAdmin">
-  <CircleRounded color="success" />
-  <p className="legendText">Admins</p>
-</div>
-<div className="legendDeleted">
-  <CircleRounded color="error" />
-  <p className="legendText">Deleted Members</p>
-</div>
-</div> */
-}

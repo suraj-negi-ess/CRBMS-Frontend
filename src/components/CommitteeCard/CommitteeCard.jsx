@@ -7,6 +7,7 @@ import {
   CardActionArea,
   CardContent,
   Chip,
+  Switch,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -21,11 +22,13 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../../Redux/alertSlicer";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { PaperWrapper } from "../../Style";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import PopupModals from "../Common Components/Modals/PopupModals";
+import AddCommitteeForm from "../../pages/CommitteePage/AddCommitteeForm";
 
 const CommitteeCard = ({ committee, onDelete }) => {
   const [hover, setHover] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
@@ -67,7 +70,14 @@ const CommitteeCard = ({ committee, onDelete }) => {
           height: "100%",
         }}
       >
-        <CardContent>
+        <CardContent
+          sx={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -77,26 +87,46 @@ const CommitteeCard = ({ committee, onDelete }) => {
               gap: "10px",
             }}
           >
-            <Typography variant="h6" component="h2">
-              {committee.name}
-            </Typography>
-            <Box
+            <Typography
+              variant="h5"
+              component="h5"
               sx={{
-                background: "#ff0000c2",
-                borderRadius: "50%",
-                padding: "5px",
+                fontSize: "18px",
+                fontWeight: 400,
+                lineHeight: "1.5",
+                color: "#2E2E2E",
               }}
             >
-              {user?.isAdmin && (
+              {committee.name}
+            </Typography>
+
+            {user?.isAdmin && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Tooltip title="Change Status">
+                  <Switch size="small" defaultChecked />
+                </Tooltip>
                 <Tooltip title="Delete Committee">
                   <DeleteOutline
                     onClick={handleDelete}
-                    sx={{ cursor: "pointer", color: "white" }}
+                    sx={{ cursor: "pointer" }}
                     fontSize="medium"
+                    color="error"
                   />
                 </Tooltip>
-              )}
-            </Box>
+                <Tooltip title="Edit Committee">
+                  <EditOutlinedIcon
+                    color="success"
+                    onClick={() => setIsEditOpen(true)}
+                  />
+                </Tooltip>
+              </Box>
+            )}
           </Box>
           <Typography color="text.secondary" variant="body2" sx={{ mb: 2 }}>
             {committee.description}
@@ -165,6 +195,12 @@ const CommitteeCard = ({ committee, onDelete }) => {
           </Box>
         </CardContent>
       </CardActionArea>
+      <PopupModals
+        isOpen={isEditOpen}
+        setIsOpen={setIsEditOpen}
+        title={"Edit Committee"}
+        modalBody={<AddCommitteeForm committeeId={committee.id} />}
+      />
     </Card>
   );
 };

@@ -6,7 +6,6 @@
   padding: 15px 15px;
 }
 
-
 .cardFilters .col h4 {
   font-size: 16px;
   font-weight: 600;
@@ -70,19 +69,13 @@
   background-color: rgba(211, 20, 14, 0.1) !important;
 }
 
-.legendWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0px;
-}
-
 .legends {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   flex-direction: row;
-  gap: 20px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .legendAdmin {
@@ -111,7 +104,7 @@
   gap: 10px;
 }
 
-.cursor{
+.cursor {
   cursor: pointer;
   margin-top: 8px;
 }

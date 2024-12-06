@@ -13,6 +13,7 @@ import {
   Box,
 } from "@mui/material";
 import "./CalendarPage.css";
+import { PaperWrapper } from "../../Style";
 
 const CalenderPage = () => {
   const localizer = dayjsLocalizer(dayjs);
@@ -89,7 +90,7 @@ const CalenderPage = () => {
   };
 
   return (
-    <div className="right-content w-100">
+    <PaperWrapper>
       {loading ? (
         <div>Loading events...</div>
       ) : (
@@ -100,9 +101,9 @@ const CalenderPage = () => {
             startAccessor="start"
             endAccessor="end"
             style={{
-              height: "calc(100vh - 70px)",
+              height: "100%",
               background: "#fff",
-              padding: "10px",
+              // padding: "5px",
               borderRadius: "10px",
             }}
             view={lastView}
@@ -179,7 +180,7 @@ const CalenderPage = () => {
           )}
         </>
       )}
-    </div>
+    </PaperWrapper>
   );
 };
 

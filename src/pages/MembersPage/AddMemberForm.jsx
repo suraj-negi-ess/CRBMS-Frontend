@@ -201,11 +201,11 @@ const AddMemberForm = () => {
 
           {/* Committee Selection */}
           <Autocomplete
+          disableCloseOnSelect
             multiple
             id="committee"
-            options={committees} // Committees fetched from the backend
-            getOptionLabel={(option) => option.name || option.id} // Show name if available, otherwise ID
-            value={
+            options={committees}
+            getOptionLabel={(option) => option.name || option.id}            value={
               committees.filter((committee) =>
                 formik.values.committee.includes(committee.id)
               ) // Match the selected IDs with options

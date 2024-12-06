@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 // Material UI IMPORTS
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, Box, Typography } from "@mui/material";
+import { Button, Box, Typography, Switch } from "@mui/material";
 import {
   DeleteOutlineOutlined as DeleteIcon,
   VisibilityOutlined as ViewIcon,
@@ -111,21 +111,10 @@ const AmenitiesList = () => {
             onClick={() => handleOpen(params.id)}
             style={{ cursor: "pointer" }}
           />
-          {status ? (
-            <ToggleOnIcon
-              color="success"
-              fontSize="large"
-              onClick={() => handleStatusChange(params.row.index)}
-              cursor="pointer"
-            />
-          ) : (
-            <ToggleOffIcon
-              color="error"
-              fontSize="large"
-              onClick={() => handleStatusChange(params.row.index)}
-              cursor="pointer"
-            />
-          )}
+          <Switch
+          checked={params.row.status}
+          onChange={() => handleStatusChange(params.row.id)}
+          />
         </Box>
       ),
     },
@@ -164,21 +153,23 @@ const AmenitiesList = () => {
             background={"rgba(3, 176, 48, 0.68)"}
           />
         </Box>
-        <DataGrid
-          rows={amenities}
-          columns={columns}
-          pageSize={5}
-          rowHeight={40}
-          rowsPerPageOptions={[7]}
-          disableSelectionOnClick
-          sx={{
-            "& .MuiDataGrid-cell:focus": {
-              outline: "none",
-            },
-          }}
-          showCellVerticalBorder
-          showColumnVerticalBorder
-        />
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <DataGrid
+            rows={amenities}
+            columns={columns}
+            pageSize={5}
+            rowHeight={40}
+            rowsPerPageOptions={[7]}
+            disableSelectionOnClick
+            sx={{
+              "& .MuiDataGrid-cell:focus": {
+                outline: "none",
+              },
+            }}
+            showCellVerticalBorder
+            showColumnVerticalBorder
+          />
+        </div>
         <PopupModals
           isOpen={isAddOpen}
           setIsOpen={setIsAddOpen}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PaperWrapper, RightContent } from "../../Style";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Switch, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import PopupModals from "../../components/Common Components/Modals/PopupModals";
 import LocationAdd from "./LocationAdd";
@@ -97,30 +97,6 @@ const LocationPage = () => {
       minWidth: 150,
     },
     {
-      field: "status",
-      headerName: "Status",
-      flex: 0.5,
-      renderCell: (params) => (
-        <>
-          {params.row.status ? (
-            <ToggleOnIcon
-              color="success"
-              fontSize="large"
-              onClick={() => handleStatusChange(params.row.id)}
-              cursor="pointer"
-            />
-          ) : (
-            <ToggleOffIcon
-              color="error"
-              fontSize="large"
-              onClick={() => handleStatusChange(params.row.id)}
-              cursor="pointer"
-            />
-          )}
-        </>
-      ),
-    },
-    {
       field: "action",
       headerName: "Action",
       flex: 0.5,
@@ -137,6 +113,11 @@ const LocationPage = () => {
             color="error"
             style={{ cursor: "pointer" }}
             onClick={() => console.log("Handle delete here")}
+          />
+
+          <Switch
+            checked={params.row.status}
+            onChange={() => handleStatusChange(params.row.id)}
           />
         </Box>
       ),
@@ -176,14 +157,16 @@ const LocationPage = () => {
             background={"rgba(3, 176, 48, 0.68)"}
           />
         </Box>
-        <DataGrid
-          rows={location}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          disableSelectionOnClick
-          rowHeight={40}
-        />
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <DataGrid
+            rows={location}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            disableSelectionOnClick
+            rowHeight={40}
+          />
+        </div>
         <PopupModals
           isOpen={isAddOpen}
           setIsOpen={setIsAddOpen}

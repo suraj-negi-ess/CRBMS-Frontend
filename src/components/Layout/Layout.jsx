@@ -21,7 +21,9 @@ const Layout = () => {
           <main
             className={`${isSidebarVisible === true ? "contentToggle" : "content"}`}
           >
-            <Outlet />
+            <div className="outlet-content" >
+              <Outlet />
+            </div>
           </main>
         </div>
       </MyContext.Provider>

@@ -83,109 +83,109 @@ const CommitteeManagementMUI = () => {
 
   return (
     <>
-      <RightContent>
-        <PaperWrapper>
-          <ContentHeader sx={{ position: "static" }} elevation={4}>
-            <Typography
-              variant="h1"
-              component="h1"
-              sx={{
-                marginRight: "20px",
-                fontSize: "22px",
-                fontWeight: 500,
-                lineHeight: 1.5,
-                color: "#2E2E2E",
-              }}
-            >
-              Committee
-            </Typography>
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              gap={2}
-            >
-              <FormControl style={{ marginRight: "5 px", width: "100px" }}>
-                <InputLabel id="filter-select-label">Show</InputLabel>
-                <Select
-                  labelId="filter-select-label"
-                  id="filter-select"
-                  value={filter} // Controlled filter state
-                  label="Show"
-                  onChange={(e) => setFilter(e.target.value)} // Update filter state
-                  size="small"
-                >
-                  <MenuItem value="all">All</MenuItem>
-                  <MenuItem value="active">Active</MenuItem>
-                  <MenuItem value="inactive">Inactive</MenuItem>
-                </Select>
-              </FormControl>
-              <CustomButton
-                onClick={() => setIsAddCommittee(true)}
-                title={"Add New Committee"}
-                placement={"bottom"}
-                Icon={AddOutlinedIcon}
-                fontSize={"medium"}
-                background={"rgba(3, 176, 48, 0.68)"}
-              />
-            </Box>
-          </ContentHeader>
-          {loading ? (
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              height="50vh"
-            >
-              <CircularProgress />
-            </Box>
-          ) : error ? (
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              height="50vh"
-            >
-              <Typography color="error">{error}</Typography>
-            </Box>
-          ) : (
-            <Grid2
-              container
-              columnSpacing={3}
-              rowSpacing={3}
-              sx={{
-                borderRadius: "20px",
-                position: "relative",
-                top: "30px",
-                paddingBottom: "30px",
-              }}
-            >
-              {filteredCommittees.length > 0 ? (
-                filteredCommittees.map((committee) => (
-                  <CommitteeCard
-                    key={committee.id}
-                    committee={committee}
-                    onDelete={handleDeleteCommittee}
-                  />
-                ))
-              ) : (
-                <Grid2 item xs={12}>
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    width="100%"
-                    p={3}
-                  >
-                    <Typography variant="h6" color="textSecondary">
-                      No committees found.
-                    </Typography>
-                  </Box>
-                </Grid2>
-              )}
-            </Grid2>
-          )}
-        </PaperWrapper>
-      </RightContent>
+      <PaperWrapper>
+        {" "}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "10px",
+          }}
+        >
+          <Typography
+            variant="h1"
+            component="h1"
+            sx={{
+              marginRight: "20px",
+              fontSize: "22px",
+              fontWeight: 500,
+              lineHeight: 1.5,
+              color: "#2E2E2E",
+            }}
+          >
+            Committee
+          </Typography>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            gap={2}
+          >
+            <FormControl style={{ marginRight: "5 px", width: "100px" }}>
+              <InputLabel id="filter-select-label">Show</InputLabel>
+              <Select
+                labelId="filter-select-label"
+                id="filter-select"
+                value={filter} // Controlled filter state
+                label="Show"
+                onChange={(e) => setFilter(e.target.value)} // Update filter state
+                size="small"
+              >
+                <MenuItem value="all">All</MenuItem>
+                <MenuItem value="active">Active</MenuItem>
+                <MenuItem value="inactive">Inactive</MenuItem>
+              </Select>
+            </FormControl>
+            <CustomButton
+              onClick={() => setIsAddCommittee(true)}
+              title={"Add New Committee"}
+              placement={"bottom"}
+              Icon={AddOutlinedIcon}
+              fontSize={"medium"}
+              background={"rgba(3, 176, 48, 0.68)"}
+            />
+          </Box>
+        </Box>
+        {loading ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="50vh"
+          >
+            <CircularProgress />
+          </Box>
+        ) : error ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="50vh"
+          >
+            <Typography color="error">{error}</Typography>
+          </Box>
+        ) : (
+          <Grid2
+            container
+            columnSpacing={3}
+            rowSpacing={3}
+            sx={{
+              borderRadius: "20px",
+              position: "relative",
+              top: "10px",
+            }}
+          >
+            {filteredCommittees.length > 0 ? (
+              filteredCommittees.map((committee) => (
+                <CommitteeCard
+                  key={committee.id}
+                  committee={committee}
+                  onDelete={handleDeleteCommittee}
+                />
+              ))
+            ) : (
+              <Grid2 item xs={12}>
+                <Box display="flex" justifyContent="center" width="100%" p={3}>
+                  <Typography variant="h6" color="textSecondary">
+                    No committees found.
+                  </Typography>
+                </Box>
+              </Grid2>
+            )}
+          </Grid2>
+        )}
+      </PaperWrapper>
       <PopupModals
         modalBody={<AddCommitteeForm onAddCommittee={handleAddCommittee} />}
         isOpen={isAddCommittee}
