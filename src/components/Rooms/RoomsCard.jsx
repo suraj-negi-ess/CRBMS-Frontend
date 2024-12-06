@@ -43,7 +43,7 @@ const RoomsCard = ({ room }) => {
   const handleRoomEdit=()=>{
     setIsEditOpen(true)
   }
-
+console.log(room)
   return (
     <>
     <Paper
@@ -140,7 +140,7 @@ const RoomsCard = ({ room }) => {
           }}
         >
           <LocationOnOutlinedIcon />
-          {room.location || "Unknown Location"}
+          {room.Location.locationName || "Unknown Location"}
         </Typography>
         <Typography
           variant="body2"
@@ -151,21 +151,10 @@ const RoomsCard = ({ room }) => {
             textTransform: "capitalize",
           }}
         >
-          {room.sanitationStatus || "Unknown Status"}
+          sanitationStatus:{room.sanitationStatus?"Yes" :"No"}
         </Typography>
 
-        {/* Amenities */}
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 1,
-          }}
-        >
-          {room.amenities.map((amenity, index) => (
-            <Chip key={index} label={amenity} size="small" />
-          ))}
-        </Box>
+   
       </Box>
       <CardActions sx={{ p: 0 }}>
         {user?.isAdmin ? (

@@ -90,11 +90,7 @@ const RoomsPage = () => {
     // Filter by capacity
     const capacityFilter = capacity ? room.capacity >= capacity : true;
 
-    // Filter by amenities
-    const amenitiesFilter =
-      selectedAmenities.length > 0
-        ? selectedAmenities.every((amenity) => room.amenities.includes(amenity))
-        : true;
+
 
     // Filter by date and time
     const timeFilter =
@@ -104,10 +100,10 @@ const RoomsPage = () => {
         : true;
 
     return (
-      availabilityFilter && capacityFilter && amenitiesFilter && timeFilter
+      availabilityFilter && capacityFilter  && timeFilter
     );
   });
-
+console.log(roomsData)
   return (
     <div className="right-content w-100">
       <DataGridWrapper>
