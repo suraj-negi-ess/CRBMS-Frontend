@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { PersonAddAlt1Rounded } from "@mui/icons-material";
 import "./RoomsPage.css";
 import { MainContainer, RightContent } from "../../Style";
-import PopupModals from "../../components/Common Components/Modals/PopupModals";
+import PopupModals from "../../components/Common Components/Modals/Popup/PopupModals";
 import AddRoomForm from "./AddRoomForm";
 import RoomFilter from "./RoomFilter";
 import CustomButton from "../../components/Common Components/CustomButton/CustomButton";
@@ -89,7 +89,7 @@ const RoomsPage = () => {
 
     // Filter by capacity
     const capacityFilter = capacity ? room.capacity >= capacity : true;
-    
+
     // Filter by date and time
     const timeFilter =
       meetingStartTime && meetingEndingTime
@@ -97,9 +97,7 @@ const RoomsPage = () => {
           dayjs(room.availableTo).isAfter(meetingEndingTime)
         : true;
 
-    return (
-      availabilityFilter && capacityFilter  && timeFilter
-    );
+    return availabilityFilter && capacityFilter && timeFilter;
   });
 
   return (
