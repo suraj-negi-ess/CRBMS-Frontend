@@ -4,10 +4,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import { toast } from "react-hot-toast";
 import { useLocation, useParams } from "react-router-dom";
 import { Box, Button, Paper, styled, Typography } from "@mui/material";
-import PersonRemoveOutlinedIcon from "@mui/icons-material/PersonRemoveOutlined";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
-import PopupModals from "../../components/Common Components/Modals/PopupModals";
+import PopupModals from "../../components/Common Components/Modals/Popup/PopupModals";
 import AddMembersToCommittee from "./AddMembersToCommittee";
+import RemoveCircleOutlinedIcon from "@mui/icons-material/RemoveCircleOutlined";
+import unknownUser from "../../assets/Images/unknownUser.png";
 
 const DataGridWrapper = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -71,7 +72,11 @@ const CommitteeMemberList = () => {
       width: 100,
       renderCell: (params) => (
         <img
-          src={`http://localhost:9000/${params.value}`}
+          src={
+            params?.value
+              ? `http://localhost:9000/${params?.value}`
+              : unknownUser
+          }
           alt="avatar"
           style={{ width: "35px", height: "35px", borderRadius: "50%" }}
         />
@@ -98,7 +103,7 @@ const CommitteeMemberList = () => {
       flex: 0.3,
       renderCell: (params) => (
         <>
-          <PersonRemoveOutlinedIcon
+          <RemoveCircleOutlinedIcon
             onClick={() => removeUserFromCommittee(params.row.memberid)}
             sx={{ cursor: "pointer", color: "error.light" }}
             fontSize="medium"
@@ -109,7 +114,7 @@ const CommitteeMemberList = () => {
   ];
 
   return (
-    <div className="right-content w-100">
+    <>
       <DataGridWrapper>
         <Box
           sx={{
@@ -148,7 +153,7 @@ const CommitteeMemberList = () => {
         setIsOpen={setIsAddMemberOpen}
         width={500}
       />
-    </div>
+    </>
   );
 };
 

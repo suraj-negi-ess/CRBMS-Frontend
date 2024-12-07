@@ -3,7 +3,7 @@ import { PaperWrapper, RightContent } from "../../Style";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { Box, Button, Switch, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import PopupModals from "../../components/Common Components/Modals/PopupModals";
+import PopupModals from "../../components/Common Components/Modals/Popup/PopupModals";
 import LocationAdd from "./LocationAdd";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import {

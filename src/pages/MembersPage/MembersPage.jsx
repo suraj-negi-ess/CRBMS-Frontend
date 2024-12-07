@@ -7,11 +7,11 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import BlockIcon from "@mui/icons-material/Block";
 import toast from "react-hot-toast";
 import axios from "axios";
-import DeleteModal from "./DeleteModal";
+import DeleteModal from "../../components/Common Components/Modals/Delete/DeleteModal";
 import "./MembersPage.css";
 import { CircleRounded, PersonAddAlt1Rounded } from "@mui/icons-material";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import PopupModals from "../../components/Common Components/Modals/PopupModals";
+import PopupModals from "../../components/Common Components/Modals/Popup/PopupModals";
 import AddMemberForm from "./AddMemberForm";
 import UpdateMemberForm from "./UpdateMemberForm";
 import ViewMember from "./ViewMember";

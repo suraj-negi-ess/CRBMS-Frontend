@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../../Redux/alertSlicer";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import PopupModals from "../Common Components/Modals/PopupModals";
+import PopupModals from "../Common Components/Modals/Popup/PopupModals";
 import AddCommitteeForm from "../../pages/CommitteePage/AddCommitteeForm";
 
 const CommitteeCard = ({ committee, onDelete }) => {

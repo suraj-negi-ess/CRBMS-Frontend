@@ -11,10 +11,6 @@ import {
 } from "@mui/icons-material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import {
-  ToggleOffOutlined as ToggleOffIcon,
-  ToggleOnOutlined as ToggleOnIcon,
-} from "@mui/icons-material";
 
 // Style Imports
 import "./Amenities.css";
@@ -22,10 +18,10 @@ import { PaperWrapper, RightContent } from "../../Style";
 
 // Component Imports
 import AmenitiesAdd from "./AmenitiesAdd";
-import DeleteModal from "../MembersPage/DeleteModal";
+import DeleteModal from "../../components/Common Components/Modals/Delete/DeleteModal";
 import AmenitiesEdit from "./AmenitiesEdit";
 
-import PopupModals from "../../components/Common Components/Modals/PopupModals";
+import PopupModals from "../../components/Common Components/Modals/Popup/PopupModals";
 import CustomButton from "../../components/Common Components/CustomButton/CustomButton";
 
 const AmenitiesList = () => {
@@ -112,8 +108,8 @@ const AmenitiesList = () => {
             style={{ cursor: "pointer" }}
           />
           <Switch
-          checked={params.row.status}
-          onChange={() => handleStatusChange(params.row.id)}
+            checked={params.row.status}
+            onChange={() => handleStatusChange(params.row.id)}
           />
         </Box>
       ),

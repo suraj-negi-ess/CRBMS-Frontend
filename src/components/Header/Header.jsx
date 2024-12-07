@@ -168,12 +168,6 @@ const Header = () => {
                   />
                 </span>
               </div>
-              {/* <div className="myAcc d-flex align-items-center">
-                <div className="userInfo">
-                  <h4>{user?.fullname}</h4>
-                  <p className="mb-0">{user?.username || ""}</p>
-                </div>
-              </div> */}
             </Button>
           </div>
         </div>
@@ -194,12 +188,12 @@ const Header = () => {
         <Divider variant="middle" component="li" />
         <MenuItem
           onClick={handleMenuToggle(setMenuAnchor)}
-          sx={{ color: "green" }}
+          sx={{ color: "blue" }}
         >
           <ListItemIcon>
             <PersonOutlineOutlinedIcon
               fontSize="small"
-              sx={{ color: "green" }}
+              sx={{ color: "blue" }}
             />
           </ListItemIcon>
           Profile

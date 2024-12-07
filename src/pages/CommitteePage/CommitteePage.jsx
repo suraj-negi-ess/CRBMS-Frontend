@@ -14,8 +14,8 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import CommitteeCard from "../../components/CommitteeCard/CommitteeCard";
-import { ContentHeader, PaperWrapper, RightContent } from "../../Style";
-import PopupModals from "../../components/Common Components/Modals/PopupModals";
+import { PaperWrapper } from "../../Style";
+import PopupModals from "../../components/Common Components/Modals/Popup/PopupModals";
 import AddCommitteeForm from "./AddCommitteeForm";
 import CustomButton from "../../components/Common Components/CustomButton/CustomButton";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
