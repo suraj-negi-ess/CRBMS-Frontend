@@ -106,39 +106,36 @@ const MeetingForm = () => {
   });
 
   return (
-    <div className="right-content w-100">
+    <div className="pop-content w-100">
       <FormWrapper>
         <Box component="form" onSubmit={formik.handleSubmit}>
-          <Typography variant="h6" component="h2">
-            Add New Meeting
-          </Typography>
-
-          {/* Meeting Title */}
-          <TextField
-            label="Meeting Title"
-            name="title"
-            margin="normal"
-            fullWidth
-            value={formik.values.title}
-            onChange={formik.handleChange}
-            error={formik.touched.title && Boolean(formik.errors.title)}
-            helperText={formik.touched.title && formik.errors.title}
-            size="small"
-          />
-
-          {/* Agenda */}
-          <TextField
-            label="Agenda"
-            name="agenda"
-            margin="normal"
-            fullWidth
-            value={formik.values.agenda}
-            onChange={formik.handleChange}
-            error={formik.touched.agenda && Boolean(formik.errors.agenda)}
-            helperText={formik.touched.agenda && formik.errors.agenda}
-            size="small"
-          />
-
+          <Box display="flex" justifyContent="space-between">
+            {/* Meeting Title */}
+            <TextField
+              label="Meeting Title"
+              name="title"
+              margin="normal"
+              fullWidth
+              value={formik.values.title}
+              onChange={formik.handleChange}
+              error={formik.touched.title && Boolean(formik.errors.title)}
+              helperText={formik.touched.title && formik.errors.title}
+              size="small"
+              style={{ marginRight: 8 }}
+            />
+            {/* Agenda */}
+            <TextField
+              label="Agenda"
+              name="agenda"
+              margin="normal"
+              fullWidth
+              value={formik.values.agenda}
+              onChange={formik.handleChange}
+              error={formik.touched.agenda && Boolean(formik.errors.agenda)}
+              helperText={formik.touched.agenda && formik.errors.agenda}
+              size="small"
+            />
+          </Box>
           {/* Date */}
           <Box
             display="flex"
@@ -229,15 +226,18 @@ const MeetingForm = () => {
                   width: "100%",
                 }}
               >
+                <div>
                 {/* Render the attendee's name */}
                 <span>{option.name}</span>
-
+                </div>
+                <div>
                 {/* Render a hardcoded Chip for availability */}
                 {option.id === "15b8126b-8ce7-443c-a231-007179da901a" ? ( // Example: Render based on id for hardcoded logic
                   <Chip label="Unavailable" color="error" size="small" />
                 ) : (
                   <Chip label="Available" color="success" size="small" />
                 )}
+                </div>
               </Box>
             )}
             renderInput={(params) => (

@@ -20,16 +20,22 @@ import PopupModals from "../Common Components/Modals/PopupModals";
 import RoomGallery from "./RoomGallery";
 import RoomAmenities from "./RoomAmenities";
 import EditRoomForm from "./EditRoom";
+import MeetingForm from "../../pages/MeetingPage/MeetingForm";
 
 const RoomsCard = ({ room }) => {
   const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [isBookNowOpen, setIsBookNowOpen] = useState(false);
   const [isAmenitiesOpen, setIsAmenitiesOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
   const handleCardClick = () => {
     navigate(`/rooms/${room.id}`);
+  };
+
+  const handleBookNowClick = () => {
+    setIsBookNowOpen(true);
   };
 
   const handleGallery=()=>{
@@ -267,6 +273,7 @@ console.log(room)
             </Button>
           </Box>
         ) : (
+          <>
           <Button
             fullWidth
             variant="contained"
@@ -275,8 +282,19 @@ console.log(room)
               borderRadius: "0 0 12px 12px",
             }}
           >
-            Book Now
+            View More
           </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={handleBookNowClick}
+            sx={{
+              borderRadius: "0 0 12px 12px",
+            }}
+          >
+            Book Now
+          </Button>  
+        </>
         )}
       </CardActions>
     </Paper>
@@ -302,6 +320,14 @@ console.log(room)
         title={'Room Edit'}
         modalBody={
           <EditRoomForm 
+          room={room}/>
+        } />
+        <PopupModals
+        isOpen={isBookNowOpen}
+        setIsOpen={setIsBookNowOpen}
+        title={'Add New Meeting'}
+        modalBody={
+          <MeetingForm 
           room={room}/>
         } />
 </>

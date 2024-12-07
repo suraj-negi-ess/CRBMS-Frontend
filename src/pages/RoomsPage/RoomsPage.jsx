@@ -89,9 +89,7 @@ const RoomsPage = () => {
 
     // Filter by capacity
     const capacityFilter = capacity ? room.capacity >= capacity : true;
-
-
-
+    
     // Filter by date and time
     const timeFilter =
       meetingStartTime && meetingEndingTime
@@ -103,7 +101,7 @@ const RoomsPage = () => {
       availabilityFilter && capacityFilter  && timeFilter
     );
   });
-console.log(roomsData)
+
   return (
     <div className="right-content w-100">
       <DataGridWrapper>
